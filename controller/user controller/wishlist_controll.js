@@ -44,6 +44,7 @@ const get_wishlist = async(req,res)=>{
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
+//add and remove from wish list
 const add_wishlist = async(req,res)=>{
     try {
         const { productId } = req.body; // Assuming you pass the product ID in the request body
@@ -59,22 +60,19 @@ const add_wishlist = async(req,res)=>{
           return res.render('error')
         }
       
-        const userWishlist = await wishlist.findOne({ User_Id: user._id });
-      
-        if (!userWishlist) {
-          // If the user's wishlist doesn't exist, create a new one
-          const newWishlist = new wishlist({
-            User_Id: user._id,
-            Products: [{ Product_id: productId }],
-          });
-          await newWishlist.save();
-        } else {
-          // If the user's wishlist exists, add the product to it using updateOne
-          userWishlist.Products.Pr
-          await wishlist.updateOne(
+        const userWishlist = await wishlist.findOne({$and:[{User_Id: user._id },{Products:{$elemMatch:{ Product_id:productId}}}]})
+        console.log('--------------------',userWishlist);
+        if (userWishlist) {
+           // If the user's wishlist exists, add the product to it using updateOne
+          
+           await wishlist.updateOne(
             { User_Id: user._id },
-            { $push: { Products: { Product_id: productId } } }
+            { $pull: { Products: { Product_id: productId } } }
           );
+        } else {
+         // If the user's wishlist doesn't exist, create a new one
+
+         await wishlist.updateOne({User_Id:user._id},{$push:{Products:{Product_id:productId}}},{upsert:true})
         }
       
         return res.status(200).json({ message: 'Product added to wishlist successfully' });

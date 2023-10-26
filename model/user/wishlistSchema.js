@@ -5,6 +5,7 @@ const WishListSchema = new mongoose.Schema({
     Products: [{
        Product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'products' }, // Reference to the Product model
     }],
+    
 });
 
 const wishlist = mongoose.model('Wishlist', WishListSchema);

@@ -45,3 +45,51 @@ function addWishlist(productId) {
           console.error('Wish List Deleting  Error:', error);
         });
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    
+    function toggleWishlist(button, productId) {
+      // Check if the button has the 'added' class
+      const isAdded = button.classList.contains('added');
+    
+      if (isAdded) {
+        // Remove item from the wishlist
+        // Perform an AJAX request to delete the item from the wishlist
+        fetch(`/delete-wishlist/${productId}`, {
+          method: 'DELETE',
+        })
+          .then((response) => {
+            if (response.ok) {
+              button.classList.remove('added'); // Remove the 'added' class
+            } else {
+              console.log('Error removing item from wishlist');
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      } else {
+        // Add item to the wishlist
+        // Perform an AJAX request to add the item to the wishlist
+        fetch('/add-wishlist', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ productId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.message) {
+              button.classList.add('added'); // Add the 'added' class
+            } else {
+              console.log('Error adding item to wishlist');
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      }
+    }
+    
