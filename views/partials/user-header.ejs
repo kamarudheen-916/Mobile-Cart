@@ -1,0 +1,70 @@
+<header id="header">
+    <nav  class="navbar  navbar-expand-lg navbar-dark bg-black">
+        <div id="nav" class="container-fluid d-flex justify-content-between ">
+          <a  class="navbar-brand col-md-2 text-warnig" href="#">
+           
+            <img id="logo" src="/static/images/logo3.png" alt="">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon  rounded "></span>
+          </button>
+          <div class="collapse navbar-collapse px-5" id="navbarSupportedContent">
+            <ul id="home_group" class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-light " aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">About Us</a>  
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+
+
+
+          <div class="collapse navbar-collapse px-5" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-light" aria-current="page" href="/wishlist"><i class="fa-regular fa-heart " style="color: #ffffff;font-size: x-large"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light " href="#"><i class="fa-solid fa-cart-shopping " style="color: #ffffff;font-size: x-large;"></i></a>  
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#"><i class="fa-solid fa-user" style="color: #ffffff;font-size: x-large"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#"><i class="fa-solid fa-wallet" style="color: #ffffff;font-size: x-large"></i></a>
+              </li>
+            </ul>
+          </div>
+          
+
+
+          <div class="search px-5 ">
+            <form class="d-flex" role="search">
+              <input class="form-control me-2 bg-black text-light border border-success" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+          <div class="login pb-4">
+            <li>
+              <div class="dropdown  " style="margin-right: 0px; ">
+                <button class="btn border border-success btn-secondary bg-black dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+               <%=username?username:"user"%>
+                </button>
+                <ul class="dropdown-menu  " style="width: 50%; background: #6d6a6a; color: #fcfcfc;">
+                  <%if(username){%>
+                    <li class="mr-5"><a class="dropdown-item "  style="width: 50%; background: #6d6a6a; color: #fcfcfc;" href="/logout">LogOut</a></li>
+                  <%}else{%>
+                  <li class="mr-5"><a class="dropdown-item "  style="width: 50%; background: #6d6a6a; color: #fcfcfc;" href="/login">LogIn</a></li>
+                  <%}%>
+                </ul>
+              </div>
+            </li> 
+          </div>
+        </div>
+      </nav>
+</header>   

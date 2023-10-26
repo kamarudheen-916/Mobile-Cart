@@ -1,0 +1,11 @@
+.error-container {
+    height: 20px; /* Set a fixed height for error containers */
+    margin-top: 5px; /* Adjust margin as needed */
+}
+
+.error-message {
+    height: 20px;
+    color: red;
+    font-size: 14px;
+    /* Add other styling properties as needed */
+}

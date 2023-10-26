@@ -1,0 +1,145 @@
+<%-include('../layout/head')-%>
+
+<!-- user header partial -->
+
+<header id="header">
+    <nav  class="navbar  navbar-expand-lg navbar-dark bg-black">
+        <div id="nav" class="container-fluid d-flex justify-content-between ">
+          <a  class="navbar-brand col-md-2 text-warnig" href="#">
+           
+            <img id="logo" src="/static/images/logo3.png" alt="">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon  rounded "></span>
+          </button>
+          <div class="collapse navbar-collapse px-5" id="navbarSupportedContent">
+            <ul id="home_group" class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-light " aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">About Us</a>  
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+
+
+
+          <div class="collapse navbar-collapse px-5" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-light" aria-current="page" href="#"><i class="fa-regular fa-heart " style="color: #ffffff;font-size: x-large"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light " href="#"><i class="fa-solid fa-cart-shopping " style="color: #ffffff;font-size: x-large;"></i></a>  
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#"><i class="fa-solid fa-user" style="color: #ffffff;font-size: x-large"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#"><i class="fa-solid fa-wallet" style="color: #ffffff;font-size: x-large"></i></a>
+              </li>
+            </ul>
+          </div>
+          
+
+
+          <div class="search px-5 ">
+            <form class="d-flex" role="search">
+              <input class="form-control me-2 bg-black text-light border border-success" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+          <div class="login pb-4">
+            <li>
+
+                  <div class="dropdown  " style="margin-right: 10px; ">
+                    <button class="btn border border-success btn-secondary bg-black dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                   User Login
+                    </button>
+                    <ul class="dropdown-menu  " style="width: 50%; background: #6d6a6a; color: #fcfcfc;">
+                                           
+                      <li class="mr-5"><a class="dropdown-item "  style="width: 50%; background: #6d6a6a; color: #fcfcfc;" href="/login">LogIn</a></li>
+                    
+                    </ul>
+                  </div>
+              
+              
+            </li> 
+          </div>
+        </div>
+      </nav>
+</header>   
+
+
+
+<!-- show banner -->
+<div class="row banner">
+     
+      <div class="col-md-12 video"><video autoplay muted loop  src="/static/images/apple15.mp4"></video></div>
+      <div class="col-md-12 detailes">
+        <h1>iPhone 15 Pro</h1>
+        <h3>Titanium. So Strong. So Light. So Pro</h3>
+      </div>
+  </div>
+<!-- show banner -->
+
+<!-- show products -->
+<div class="row banner">
+     
+  <div class="col-md-12 video"><video autoplay muted loop  src="/static/images/apple15.mp4"></video></div>
+  <div class="col-md-12 detailes">
+    <h1>iPhone 15 Pro</h1>
+    <h3>Titanium. So Strong. So Light. So Pro</h3>
+  </div>
+</div>
+<!-- show banner -->
+
+<!-- show products -->
+<div class="container mt-5">
+<section>
+<div class="row">
+  <%for(let i=0;i<products.length;i++){%>
+    <div class="col-md-3 mt-5  mb-5 ">
+          <div id="product_view" class="card d-flex align-items-center border border-0 shadow ">
+              
+                <a id="product_list_link" class="text-decoration-none text-dark " href="/userProductList/<%=products[i].category%>">
+                        <div id="image_user">
+                             <img id="image_" src="/static/uploads/<%=products[i].image[0]%>" class="card-img-top p-3" alt="image is not avilable"> 
+                        </div>
+                        <div  class="card-body ">
+                            <div id="product_name_homepage">
+                              <h6 class="card-title"><%=products[i].name%></h6>
+                            </div>
+                                  <!-- <p class="card-text"><%=products[i].description%></p> -->
+                            <div id="product_price_homepage">
+                              <h1 class="text-success"><span>₹</span><%=products[i].price%></h1>
+                            </div>
+                        </div>
+                </a>
+                <div id="home_Addtocart d-flex justify-content-between">
+                  <a href="#" class="btn btn-success">Add to cart</a>
+                  <!-- <a href="/add_wishlist"><i class="fa-regular fa-heart" style="color: #000000;"></i></a> -->
+                  <button id="add_wishlist" onclick="addWishlist('<%= products[i]._id %>')" class="btn btn-success" >
+                    <i class="fa-regular fa-heart" style="color: #000000;"></i>
+                  </button>
+                </div>
+                
+                
+          </div>
+    </div>                
+
+<%}%>
+</div>
+</section>
+</div>
+<!-- show products -->
+
+<!-- user footer partials -->
+<%-include('../partials/user-footer')-%>
+<!-- user footer partials -->
+
+<%-include('../layout/footer')-%>

@@ -1,0 +1,81 @@
+<%-include('../layout/head')-%>
+<%-include('../partials/user-header')-%>
+<div class="">
+    <div class="row d-flex flex-column align-items-center justify-content-center  "  >
+        <div class="rightPart d-flex justify-content-center align-items-center p-5" >
+            <form class="border-bottom border-success rounded p-5 mt-5"   action="/admin/add-new-products" method="post" enctype="multipart/form-data">
+                  <div class="d-flex ">
+                    <div class="mb-3 col-md-6 d-flex justify-content-center align-items-center">
+                      <div class="col-md-6 ">
+                        <%for(let i=0;i<products.image.length;i++){%>
+                          <div class="products_images p-2"  >
+                            <img  id="original_image" src="/static/uploads/<%=products.image[i]%>"  style="width: 20%;" alt="">
+                          </div>
+                          <%}%>
+                      </div>
+                   <div class="col-md-6">
+                    <div id="img-container" style=" z-index: 5; width: 400px;">
+                      <img  id="display_image" src="/static/uploads/<%=products.image[0]%>"  style="width: 50%;" alt="">
+                    </div>
+                        <div class="d-flex flex-column ">
+                          <div>
+                            <a href="" class="btn btn-outline-success border border-success border-3 m-3 fw-bold">Add to cart</a>
+
+                          </div>
+                          <!-- <div class=" w-25 ms-4">
+                            <button class="border border-success  text-light bg-success fw-bold fs-4 ">-</button>
+                          <input type="number" class="border border-success fs-4 w-25 " value="1">
+                          <button class="border border-success bg-success text-light fw-bold fs-4">+</button  >
+                          </div> -->
+                        </div>
+                      </div>
+                  </div>
+                    <div class="mb-3 col-md-6  d-flex flex-column  justify-content-center">
+                            <h3 id="previewName"><%=products.name%></h3>
+                            <h6 class="text-success">Extra 46000 off</h6>
+                            <h2> <span>₹ </span><%=products.price%></h2>
+                            <h6 style="text-decoration: underline;">Highlights</h6>
+                            <ul style="  list-style-type: square">
+                                <li><%=products.Highlight1%></li>
+                                <li>  <%=products.Highlight2%></li>
+                                <li> <%=products.Highlight3%></li>
+                                <li> <%=products.Highlight4%></li>
+                                <li><%=products.Highlight5%></li>
+                                <li><%=products.Highlight6%></li>
+                            </ul>
+                            <h4 style="text-decoration: underline;">Description</h4>
+                                <p><%=products.description%></p>
+
+
+                    </div>
+             </div>
+            </form>
+          </div>
+    </div>
+</div>
+<%-include('../partials/user-footer')-%>
+<script>
+ 
+  const originalImages = document.querySelectorAll("#original_image");
+
+ 
+  const displayImage = document.querySelector("#display_image");
+
+ 
+  originalImages.forEach((originalImage, index) => {
+    originalImage.addEventListener("mouseenter", () => {
+      
+      displayImage.src = originalImage.src;
+    });
+  });
+
+  //////////////////////////////////////////////////////////////////
+  var options = {
+    width: 300,
+    zoomWidth: 800,
+    offset: {vertical: 0, horizontal: 100}
+};
+new ImageZoom(document.getElementById("img-container"), options);
+</script>
+
+<%-include('../layout/footer')-%> 

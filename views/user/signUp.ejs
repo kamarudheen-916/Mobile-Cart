@@ -1,0 +1,41 @@
+<%-include('../layout/head')-%>
+<%-include('../partials/user-header')-%>
+
+<div class="row "  >
+  <div class="d-flex justify-content-center align-items-center " style="height: 100vh;"  >
+   
+      <form class=" p-3 rounded d-flex  flex-column  border border-success "   action="/signup" method="post">
+        <div>
+          <h2 class="text-success mb-3">SignUp...</h2>
+        </div>
+          <div class="mb-3">
+              <input type="text" style="width:100%;" name="username" class="form-control border border-success" id="username_signUp" placeholder="username" aria-describedby="emailHelp">
+              <span id="username_error_signUp" class="text-danger"><%=duplicateMessage%></span>
+            </div>
+          <div class="mb-3">
+             <input type="email" style="width:100%;" name="email" class="form-control border-bottem border border-success" id="email_signUp" placeholder="Email" aria-describedby="emailHelp">
+             <span id="email_error_signUp" class="text-danger"><%=duplicateMessage%></span>
+            </div>
+          <div class="mb-3">
+            <input type="password" style="width:100%;" name="password" class="form-control border border-success" placeholder="Password" id="password_signUp">
+            <span id="password_error_signUp" class="text-danger"></span>
+          </div>
+         <div class="mb-3">
+            <input type="password" style="width:100%;" name="ConformPassword" class="form-control border border-success" placeholder="Conform Password" id="ConformPassword_signUp">
+            <span id="ConformPassword_error_signUp" class="text-danger"></span>
+          </div>
+          
+          
+            <button type="submit" style="width:100%;" onclick="return signup_validation()" class="btn btn-success ">Submit</button>
+
+          <a href="/auth/google"><img class="py-4" style="width: 100%;" src="/static/images/Google SIgn up.png" alt=""></a>
+          <a href="/login" class="text-success px-4 text-decoration-none">&nbsp; &nbsp; &nbsp; Already Have an Account?  &nbsp; <span class="text-decoration-underline"> Log in</span> </a>
+        
+        </form>
+  </div>
+</div>
+
+
+
+
+<%-include('../layout/footer')-%>

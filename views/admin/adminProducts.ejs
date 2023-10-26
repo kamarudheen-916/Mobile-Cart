@@ -1,0 +1,111 @@
+
+<%-include('../layout/head')-%>
+
+<div>
+    <%-include('../partials/admin-header')-%>
+</div>
+<section style="padding-top: 100px;">
+    <div class="container ">
+        <div class="row">
+           <div class="d-flex justify-content-between">
+                <div class="add-products"   >
+                    <a href="/admin/add-new-products"><input type="submit" value="Add New Products" style="margin-bottom: 15px;" class=" btn btn-outline-success "></a>
+                </div>
+                <div>
+                  <form action="">
+                    <select name="category" required id="category" class="form-control border border-success rounded ">
+                      <option value="">View By All Category</option>
+                      <%categories.forEach((category)=>{%>                        
+                      <option name="category_name" value="<%=category.name%>"><%=category.name%></option>
+                     <%})%>
+                    </select>
+                  </form>
+                </div>
+                <div class="search   " style="width: 25%;" >
+                    <form class="d-flex "  action="/admin/products/search" method="post" role="search">
+                      <% if(searched){ %>
+                    <a href="/admin/products/refresh" class="m-2 text-success"> <i class="fa-solid fa-arrows-rotate fa-spin "></i></a>
+                      <%}%>
+                      <input class="form-control me-2 bg-light text-dark border border-success" name="search" type="search" placeholder="Search" aria-label="Search">
+                      <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+           </div>
+           <div class="table">
+            <table class="productTable  shadow-lg w-100">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Catogary</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Udated Date</th>
+                    <th scope="col">Edit/Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <%for(let i=0;i<products.length;i++){%>
+                  <tr  style="line-height:-100%;">
+                    <td ><%=i+1%></td>
+                    <td><%=products[i].name%></td>
+                    <td><%=products[i].stock%></td>
+                    <td id="products_category"><%=products[i].category%></td>
+                    <td><%=products[i].price%></td>
+                    <td><%=products[i].status%></td>
+                    <td style="width: 10%;"><span><img style="width: 50px; height: 50px;" src="/static/uploads/<%=products[i].image[0]%>" alt=""></span></td>
+                    <td>
+                      <% let dt=new Date(products[i].timeStamp)%>
+                      <%let day=["monday",'tuesday','wednesday','friday','satuarday','sunday']%>
+                      <%=dt.getDate()%>/<%=dt.getMonth()+1%>/<%=dt.getFullYear()%>  %>
+                    </td>
+                    <td class="d-flex">
+                      <a href="/admin/editProduct/<%= products[i]._id%>">
+                        <i class="fa-solid fa-pencil ps-2 pe-4 "  style="color: #000000;"></i>
+                      </a>
+                   <%if(!products[i].isDeleted){%>
+                      <a href="/admin/deleteProduct/<%= products[i]._id%>"
+                         onclick="return confirm('Are You Want To Delete :<%=products[i].name%>')">
+                        <i class="fa-solid fa-trash <%=products[i].isDeleted ? 'archiveButton' :'activeButton' %>" ></i>
+                      </a>
+                    <%}else{%>
+                      <a href="/admin/deleteProduct/<%= products[i]._id%>"
+                        onclick="return confirm('Are You Want To Retrieve :<%=products[i].name%>')">
+                       <i class="fa-solid fa-trash <%=products[i].isDeleted ? 'archiveButton' :'activeButton' %>" ></i>
+                     </a>
+                     <%}%>
+                    </td>
+                  </tr>
+                  <%}%>
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- <script>
+  // Get references to the select element and product rows
+  const categorySelect = document.getElementById('category');
+  const productRows = document.querySelectorAll('.productTable tbody tr');
+
+  // Add an event listener to the select element
+  categorySelect.addEventListener('change', function () {
+    const selectedCategory = categorySelect.value;
+
+    // Loop through product rows to show/hide them based on category
+    productRows.forEach((row) => {
+      const productCategory = row.querySelector('#products_category').textContent; // Adjust the id based on your table structure
+      if (selectedCategory === '' || selectedCategory === productCategory) {
+        row.style.display = 'table-row';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+</script> -->
+
+
+<%-include('../layout/footer')-%>

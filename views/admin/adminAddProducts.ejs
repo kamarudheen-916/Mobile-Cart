@@ -1,0 +1,142 @@
+
+
+<%-include('../layout/head')-%>
+
+
+<div>
+    <%-include('../partials/admin-header')-%>
+</div>
+
+<div class="container" >
+        <div class="row d-flex justify-content-center align-items-center  " style="height: 100vh;">
+          <!-- <div class="rightPart col-md-5">
+            <div class="border border-success rounded p-4" action="/admin/add-new-products" method="post" enctype="multipart/form-data">
+                  <div class="d-flex">
+                 <div class="d-flex flex-column">
+                  <div class="mb-3 col-md-6 d-flex flex-column" style="width: 200px; height: 400px;">
+                    <img  id="previewImage" src=""  style="width: 200px;" alt="">
+                </div>
+                <div>
+                  <button onclick="return preview()" class="btn btn-success" >Preview</button> 
+                </div>
+                 </div>
+                    
+                  <div class="mb-3 col-md-6">
+                  <h5 id="previewName"></h5>
+                  <h2 id="previewPrice"><span>₹</span></h2>
+                  <h6 style="text-decoration: underline;">Highlights</h6>
+                  <ul style="  list-style-type: square">
+                      <li id="preview_H1"></li>
+                      <li id="preview_H2"></li>
+                      <li id="preview_H3"></li>
+                      <li id="preview_H4"></li>
+                      <li id="preview_H5"></li>
+                  </ul>
+                </div>
+             </div>
+            </div>
+          </div> -->
+          <div class="leftPart col-md-6" style="margin-top: 3rem;" >
+            <form id="add_new_products" class="border border-success rounded m-4 p-4" action="/admin/add-new-products" method="post" enctype="multipart/form-data"    > 
+              <div class="">
+                <label for="name">Enter Product Name:</label>
+                  <input type="text" id="productname"  name="name"  placeholder="product Name" class="form-control border border-success rounded">
+                  <span id="name_error"></span>
+                </div>
+              <div class="">
+                <label for="category">Choose The Category:</label>
+
+                <select  required  name="category" id="category" class="form-control border border-success rounded ">
+                  <option id="choose" value="">Choose One.. ↓</option>
+                  <%categories.forEach((category)=>{%>
+                  <option value="<%=category.name%>"><%=category.name%></option>
+                 <%})%>
+                </select>
+                <span id="category_error"></span>
+                  <!-- <input type="text" name="category" placeholder="Catogary" class="form-control border border-success rounded"> -->
+                </div>
+                <div class="">
+                  <label for="Highlights">Enter Product Specifications:</label>
+                  <div class="d-flex mb-3">
+                    <input type="text" id="Highlight1" name="Highlight1" placeholder="Highlight-1" class="form-control border border-success rounded ">
+                    <input type="text" id="Highlight2" name="Highlight2" placeholder="Highlight-2" class="form-control border border-success rounded">
+                    <input type="text" id="Highlight3" name="Highlight3" placeholder="Highlight-3" class="form-control border border-success rounded">
+                  </div> 
+                  <div class="d-flex">
+                    <input type="text" id="Highlight4" name="Highlight4" placeholder="Highlight-4" class="form-control border border-success rounded">
+                    <input type="text" id="Highlight5" name="Highlight5" placeholder="Highlight-5" class="form-control border border-success rounded">
+                    <input type="text" id="Highlight6" name="Highlight6" placeholder="Highlight-6" class="form-control border border-success rounded">
+                  </div>        
+                 </div>
+              <div class="">
+                <label for="description">Enter Product Description</label>
+                  <input  type="text" id="description" name="description" placeholder="Description" class="form-control border border-success rounded">
+                </div>
+              <div class=" d-flex">
+                <div>
+                  <label for="price">Enter The Price</label>
+                  <input id="price"  type="number" name="price" placeholder="Price" class="form-control border border-success rounded" >
+                  <span id="price_error"></span>
+                </div>
+                <div>
+                  <label for="stock">Enter The Stock</label>
+                  <input id="stock"  type="number" name="stock" placeholder="Stock" class="form-control border border-success rounded" >
+                  <span id="stock_error"></span>
+                </div>
+                <div class=" mb-3 ">
+                  <label for="images">Please Select Images</label>
+                    <input  required  type="file" id="mainImage" name="images" multiple  placeholder="Select Main Image" accept="image/*" class="form-control border border-success rounded ">
+                    <span id="image_error"></span>
+                  </div>
+
+                </div>
+              
+                  <div class="d-flex justify-content-between">
+                    <button type="submit"  onclick="return validateForm()" class="btn btn-success">Submit</button>
+                  </div>
+              </form>
+              
+          </div>
+        </div>
+    </div>
+
+    <script>
+      function validateForm(){
+    
+       
+        const  productName = document.getElementById('productname').value
+        const name_error = document.getElementById('name_error')
+        const priceValue = document.getElementById('price').value
+        const price_error = document.getElementById('price_error')
+        const stockValue = document.getElementById('stock').value
+        const stock_error= document.getElementById('stock_error')
+       
+        
+       
+         name_error.innerHTML=''
+         price_error.innerHTML=''
+         stock_error.innerHTML=''
+       
+
+      if(productName === ''){
+        name_error.innerHTML='This field is required'
+        return false
+      }
+      if(priceValue <=0){
+        price_error.innerHTML='Must more than zero'
+        return false
+      }
+      if(stockValue <=0){
+        stock_error.innerHTML='Must more than zero'
+        return false
+      }
+    
+        return true
+      } 
+      
+      </script>
+      
+
+    
+
+<%-include('../layout/footer')-%>

@@ -1,0 +1,39 @@
+<%-include('../layout/head')-%>
+<%-include('../partials/user-header')-%>
+
+<div class="row "  >
+    <div class="d-flex justify-content-center align-items-center " style="height: 100vh;"  >
+        <form class=" p-4 rounded d-flex  flex-column  border border-success    "  action="/login" method="post">
+            <div>
+              <h2 class="text-success mb-3">Login...</h2>
+            </div>
+            <div class="mb-3">
+                     <input type="text"  name="username" class="form-control border border-success" id="username" placeholder="username" aria-describedby="emailHelp">
+                      <span class="text-danger" id="username_error"></span>
+                      <span id="username_err" class="isBlocked"><%=noUser_message?'Incorrect Username or Password':""%></span>
+            </div>
+            <div class="mb-3">
+                    <input type="password" name="password" class="form-control border border-success" placeholder="Password" id="password1" required>
+                    <span class="text-danger" id="password_error"></span>
+                    <span id="password_err" class="isBlocked"><%=noUser_message?'Incorrect Username or Password':""%></span>
+            </div>
+          
+            <button id="login_submit_button"  onclick="return all_validation()" type="submit" class="btn btn-success ">Submit</button>
+           <span id="submitError"></span>
+           <%if(googleExistingUser){%>
+            <span id="google_user_exist" class="text-danger">This user already exist, Pleace do Login...</span>
+            <%}%>
+            <span id="isBlocked_err" class="isBlocked"><%=isBlocked_message?'User is bloked':""%></span>
+            <br>
+            <a href='/auth/googleLogin'><img class="py-4" style="width: 100%;" src="/static/images/Google Login.jpg" alt=""></a>
+            
+            <a href="/login/forgetPassword" class="text-danger px-4 text-decoration-none"> &nbsp; &nbsp; &nbsp;forget your password ?   &nbsp; <span class="text-decoration-underline"> Click Here</span></a>
+            <br>
+            <a href="/signup" class="text-success px-4 text-decoration-none">  &nbsp; &nbsp; &nbsp;Create New Account ?  &nbsp; <span class="text-decoration-underline"> Sign Up</span></a>
+          </form>
+    </div>
+</div>
+
+
+
+<%-include('../layout/footer')-%>

@@ -1,0 +1,66 @@
+<%-include('../layout/head')-%>
+
+<!-- user header partial -->
+
+<%-include('../partials/user-header')-%>
+
+
+
+<!-- show banner -->
+<div class="row banner">
+     
+      <div class="col-md-12 video"><video autoplay muted loop  src="/static/images/apple15.mp4"></video></div>
+      <div class="col-md-12 detailes">
+        <h1>iPhone 15 Pro</h1>
+        <h3>Titanium. So Strong. So Light. So Pro</h3>
+      </div>
+  </div>
+<!-- show banner -->
+
+<!-- show products -->
+<div class="container mt-5">
+  <section>
+    <div class="row">
+      <%for(let i=0;i<products.length;i++){%>
+        <div class="col-md-3 mt-5  mb-5 ">
+              <div id="product_view" class="card d-flex align-items-center border border-0 shadow ">
+                  
+                    <a id="product_list_link" class="text-decoration-none text-dark " href="/userProductList/<%=products[i].category%>">
+                            <div id="image_user">
+                                 <img id="image_" src="/static/uploads/<%=products[i].image[0]%>" class="card-img-top p-3" alt="image is not avilable"> 
+                            </div>
+                            <div  class="card-body " >
+                                <div id="product_name_homepage">
+                                  <h6 class="card-title"><%=products[i].name%></h6>
+                                </div>
+                                      <!-- <p class="card-text"><%=products[i].description%></p> -->
+                                <div id="product_price_homepage">
+                                  <h1 class="text-success"><span>₹</span><%=products[i].price%></h1>
+                                </div>
+                            </div>
+                    </a>
+                    <div id="home_Addtocart d-flex justify-content-between">
+                      <a href="#" class="btn btn-success">Add to cart</a>
+                      <!-- <a href="/add_wishlist"><i class="fa-regular fa-heart" style="color: #000000;"></i></a> -->
+                      <button id="add_wishlist" onclick="addWishlist('<%= products[i]._id %>')" class="btn btn-success" >
+                        <i class="fa-regular fa-heart" style="color: #000000;"></i>
+                      </button>
+                    </div>
+                    
+                    
+              </div>
+        </div>                
+
+    <%}%>
+    </div>
+</section>
+</div>
+<!-- show products -->
+
+<!-- user footer partials -->
+<%-include('../partials/user-footer')-%>
+<!-- user footer partials -->
+
+
+
+<%-include('../layout/footer')-%>

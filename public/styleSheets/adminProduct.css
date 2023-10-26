@@ -1,0 +1,21 @@
+.archiveButton{
+    /* background-color: red; */
+    color: rgb(197, 8, 8);
+}
+.activeButton{
+    /* background-color: rgb(2, 159, 43); */
+    color: rgb(3, 139, 26);
+}
+.table{
+    overflow-y: scroll;
+    border: solid 1px;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+table > th,td{
+    padding: 20px;
+
+}

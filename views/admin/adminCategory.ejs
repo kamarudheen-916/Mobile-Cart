@@ -1,0 +1,75 @@
+
+<%-include('../layout/head')-%>
+
+<div>
+    <%-include('../partials/admin-header')-%>
+</div>
+
+<section style="padding-top: 100px;">
+    <div class="container ">
+        <div class="row">
+           <div class="d-flex justify-content-between">
+                         <div class="add-products"   >
+                             <a href="/admin/add-new-catogeries"><input type="submit" value="Add New Categories" style="margin-bottom: 15px;" class=" btn btn-outline-success "></a>
+                          </div>
+                        <div class="search   " style="width: 25%;" >
+                       <form class="d-flex "  action="/admin/categories/search" method="post" role="search">
+                        <% if(searched){ %>
+                       <a href="/admin/categories/refresh" class="m-2 text-success"> <i class="fa-solid fa-arrows-rotate fa-spin "></i></a>
+                        <%}%>
+                         <input class="form-control me-2 bg-light text-dark border border-success" name="search" type="search" placeholder="Search" aria-label="Search">
+                         <button class="btn btn-outline-success" type="submit">Search</button>
+                       </form>
+                     </div>
+           </div>
+           <div class="table ">
+            <table class="productTable  shadow-lg w-100">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Udated</th>
+                    <th scope="col">Delete</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                    <%for(let i=0;i<categories.length;i++){%>
+                  <tr  style="line-height:-100%;">
+                    <td ><%=i+1%></td>
+                    <td><%=categories[i].name%></td>
+                    <td><%=categories[i].description%></td>
+                    <td><%=categories[i].status%></td>
+                    <td>
+                      <% let dt=new Date(categories[i].timeStamp)%>
+                      <%let day=["monday",'tuesday','wednesday','friday','satuarday','sunday']%>
+                      <%=dt.getDate()%>/<%=dt.getMonth()+1%>/<%=dt.getFullYear()%>  %>
+                    </td>
+                    
+                    <td class="d-flex">
+                      <%if(!categories[i].isBlocked){%>
+                        <a href="/admin/blockCategory/<%= categories[i]._id%>"
+                          onclick="return confirm('Are You Want To block :<%=categories[i].name%>')">
+                          <i class="fa-solid fa-trash <%=categories[i].isBlocked ? 'archiveButton' :'activeButton' %>" ></i>
+                        </a>
+                        <%}else{%>
+                          <a href="/admin/blockCategory/<%= categories[i]._id%>" 
+                            onclick="return confirm('Are You Want To Unblock :<%=categories[i].name%>')">
+                            <i class="fa-solid fa-trash <%=categories[i].isBlocked ? 'archiveButton' :'activeButton' %>" ></i>
+                          </a>
+                       <%}%>   
+                      
+                    </td>
+                  </tr>
+                  <%}%>
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<%-include('../layout/footer')-%>

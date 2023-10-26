@@ -1,0 +1,71 @@
+<%-include('../layout/head')-%>
+
+<div>
+    <%-include('../partials/admin-header')-%>
+</div>
+
+<section style="padding-top: 100px;">
+    <div class="container ">
+        <div class="row">
+         
+          <div class="search" style="width: 25%; padding-bottom: 20px;" >
+            <form class="d-flex"  action="/admin/customers/search" method="post" role="search">
+              <input class="form-control me-2 bg-light text-dark border border-success" name="search" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+              <% if(searched){ %>
+                <a href="/admin/customers/refresh" class="m-2 text-success"> <i class="fa-solid fa-arrows-rotate fa-spin "></i></a>
+                 <%}%>
+            </form>
+        
+         </div>
+         
+           <div class="table ">
+            <table class="productTable shadow-lg w-100">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Orderes</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Created</th>
+                  <th scope="col">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <%for(let i=0;i<customers.length;i++){%>
+                <tr  style="line-height:-100%;">
+                  <td><%=i+1%></th>
+                  <td><%=customers[i].username%></td>
+                  <td><%=customers[i].phone%></td>
+                  <td><%=customers[i].orderes%></td>  
+                  <td><%=customers[i].status%></td>
+                  <td>
+                    <% let dt=new Date(customers[i].timeStamp)%>
+                    <%let day=["monday",'tuesday','wednesday','friday','satuarday','sunday']%>
+                    <%=dt.getDate()%>/<%=dt.getMonth()+1%>/<%=dt.getFullYear()%>  %>
+                  </td>
+                  <td>
+                    <%if(!customers[i].isBlocked){%>
+                      <a href="/admin/blockCustomers/<%= customers[i]._id%>"
+                         onclick="return confirm('Are You Want To Block :<%=customers[i].username%>')">
+                        <i class="fa-solid fa-trash <%=customers[i].isBlocked ? 'archiveButton' :'activeButton' %>" ></i>
+                      </a>
+                    <%}else{%>
+                      <a href="/admin/blockCustomers/<%= customers[i]._id%>"
+                        onclick="return confirm('Are You Want To Unblock :<%=customers[i].username%>')">
+                       <i class="fa-solid fa-trash <%=customers[i].isBlocked ? 'archiveButton' :'activeButton' %>" ></i>
+                     </a>
+                     <%}%>
+                  </td>
+                </tr>
+                <%}%>
+              </tbody>
+            </table>
+           </div>
+        </div>
+    </div>
+</section>
+
+
+<%-include('../layout/footer')-%>

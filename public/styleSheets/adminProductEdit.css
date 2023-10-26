@@ -1,0 +1,14 @@
+.preview_images{
+    width: 200px;
+    height: 200px;
+    
+    margin-top: 50px;
+}
+.image_container{
+    margin-right: 100px;
+    display: flex;
+    justify-content: space-between;
+}
+.image_subdiv{
+    margin-top: 10px;
+}

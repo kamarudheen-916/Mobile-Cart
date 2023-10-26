@@ -1,0 +1,39 @@
+<%-include('../layout/head')-%>
+
+<header id="header">
+    <nav  class="navbar  navbar-expand-lg navbar-dark bg-black">
+        <div id="nav" class="container-fluid d-flex justify-content-between ">
+          <a  class="navbar-brand col-md-2 text-warnig" href="#">
+            <img id="logo" src="/static/images/logo3.png" alt="">
+          </a>
+        </div>
+        <div style="width: 200px;">
+            <h4 class="text-light">Admin Login</h4>
+        </div>
+      </nav>
+</header>   
+
+
+<div>
+    <div class="row "  >
+        <div class="d-flex justify-content-center align-items-center " style="height: 100vh;"  >
+            <form class=" p-4 rounded d-flex  flex-column  border border-success  "  action="/admin/products" method="post">
+                
+                <div class="mb-3">
+                    
+                    <input type="text" name="username" class="form-control border border-success" id="exampleInputEmail1" placeholder="username" aria-describedby="emailHelp">
+                  </div>
+                
+                
+                <div class="mb-3">
+                  
+                 
+                  <input type="password" name="password" class="form-control border border-success" placeholder="Password" id="exampleInputPassword1">
+                </div>
+              
+                <button type="submit" class="btn btn-success ">Submit</button>
+                <br>
+    </div>
+</div>
+
+<%-include('../layout/footer')-%>

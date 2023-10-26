@@ -1,0 +1,38 @@
+{
+  "name": "week-7",
+  "version": "1.0.0",
+  "description": "week 7 project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "kamarudheen",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "express-fileupload": "^1.4.1",
+    "express-session": "^1.17.3",
+    "generator": "^0.0.4",
+    "hbs": "^4.2.0",
+    "js-image-zoom": "^0.7.0",
+    "mongoose": "^7.6.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nocache": "^4.0.0",
+    "nodemailer": "^6.9.6",
+    "nodemon": "^3.0.1",
+    "otp-generator": "^4.0.1",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
+    "two-step-auth": "^1.1.2"
+  }
+}
