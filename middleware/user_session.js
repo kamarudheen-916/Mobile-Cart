@@ -1,5 +1,6 @@
 const verifyuser = (req,res,next)=>{
-    if(req.session.logedIn){
+    if(req.session.logedIn){    
+        
         next();
     }else{
         res.redirect('/gustuser')

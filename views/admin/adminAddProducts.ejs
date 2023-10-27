@@ -41,18 +41,18 @@
               <div class="">
                 <label for="name">Enter Product Name:</label>
                   <input type="text" id="productname"  name="name"  placeholder="product Name" class="form-control border border-success rounded">
-                  <span id="name_error"></span>
+                  <span class="text-danger" id="name_error"></span>
                 </div>
               <div class="">
                 <label for="category">Choose The Category:</label>
 
                 <select  required  name="category" id="category" class="form-control border border-success rounded ">
-                  <option id="choose" value="">Choose One.. ↓</option>
+                  <option id="choose" value="">Choose One  ↓</option>
                   <%categories.forEach((category)=>{%>
                   <option value="<%=category.name%>"><%=category.name%></option>
                  <%})%>
                 </select>
-                <span id="category_error"></span>
+                <span class="text-danger" id="category_error"></span>
                   <!-- <input type="text" name="category" placeholder="Catogary" class="form-control border border-success rounded"> -->
                 </div>
                 <div class="">
@@ -76,17 +76,17 @@
                 <div>
                   <label for="price">Enter The Price</label>
                   <input id="price"  type="number" name="price" placeholder="Price" class="form-control border border-success rounded" >
-                  <span id="price_error"></span>
+                  <span class="text-danger" id="price_error"></span>
                 </div>
                 <div>
                   <label for="stock">Enter The Stock</label>
                   <input id="stock"  type="number" name="stock" placeholder="Stock" class="form-control border border-success rounded" >
-                  <span id="stock_error"></span>
+                  <span class="text-danger" id="stock_error"></span>
                 </div>
                 <div class=" mb-3 ">
                   <label for="images">Please Select Images</label>
                     <input  required  type="file" id="mainImage" name="images" multiple  placeholder="Select Main Image" accept="image/*" class="form-control border border-success rounded ">
-                    <span id="image_error"></span>
+                    <span class="text-danger" id="image_error"></span>
                   </div>
 
                 </div>

@@ -22,8 +22,8 @@ const userHome= async(req,res)=>{
             const products= await allProducts.find({ isDeleted:false})
             const user = await customer.findOne({username})
             const user_id = user._id
-            const wishlist_ = await WishlistCollection.findOne({User_Id:user._id})
-            const wishlist = wishlist_.Products
+            const wishlist_= await WishlistCollection.findOne({User_Id:user._id})
+            const wishlist = wishlist_?wishlist_.Products:[]
             console.log('---------///////',wishlist);
             
         res.render('user/index',{title:'Mobile Cart',products,username,wishlist})

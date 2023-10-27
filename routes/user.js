@@ -66,7 +66,7 @@ router.get('/gustuser',userAuth.userExist,gustuser_home_Controll.gustuser)
 // home route
 router.get('/',userAuth.verifyuser,gustuser_home_Controll.userHome)
 //user logout
-router.get('/logout',(req,res)=>{ req.session.destroy(); res.redirect('/') })
+router.get('/logout',(req,res)=>{  req.session.logedIn=false; res.redirect('/') })
 
 
 
