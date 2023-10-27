@@ -1,6 +1,10 @@
 
 function addWishlist(productId) {
+  
+  const add_wishlist = document.getElementById('add_wishlist')
+  const add_wishlist_icon= document.getElementById('add_wishlist_icon')
     // Make an AJAX request to add the product to the wishlist
+
     fetch('/add-wishlist', {
       method: 'POST',
       headers: {
@@ -8,17 +12,29 @@ function addWishlist(productId) {
       },
       body: JSON.stringify({ productId }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if(response.added){
+          add_wishlist_icon.classList.add('text-danger')
+        }else{
+          add_wishlist_icon.classList.remove('text-danger')
+        }
+        response.json()
+      })
       .then((data) => {
         if (data.message) {
-          alert('One Item Successfully Added To The Wishlist')
+          add_wishlist_icon.classList.add('selected');
+          // alert('One Item Successfully Added To The Wishlist')
         } else {
-          console.log('error on adding to wish list');
+          add_wishlist_icon.classList.remove('selected'); 
+          // console.log('error on adding to wish list');
         }
       })
       .catch((error) => {
         console.error('Error:', error);
       });
+
+      
+      
   }
 
   
@@ -48,48 +64,3 @@ function addWishlist(productId) {
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    
-    function toggleWishlist(button, productId) {
-      // Check if the button has the 'added' class
-      const isAdded = button.classList.contains('added');
-    
-      if (isAdded) {
-        // Remove item from the wishlist
-        // Perform an AJAX request to delete the item from the wishlist
-        fetch(`/delete-wishlist/${productId}`, {
-          method: 'DELETE',
-        })
-          .then((response) => {
-            if (response.ok) {
-              button.classList.remove('added'); // Remove the 'added' class
-            } else {
-              console.log('Error removing item from wishlist');
-            }
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
-      } else {
-        // Add item to the wishlist
-        // Perform an AJAX request to add the item to the wishlist
-        fetch('/add-wishlist', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ productId }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.message) {
-              button.classList.add('added'); // Add the 'added' class
-            } else {
-              console.log('Error adding item to wishlist');
-            }
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
-      }
-    }
-    

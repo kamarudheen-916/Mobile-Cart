@@ -52,7 +52,7 @@ const add_wishlist = async(req,res)=>{
         if (!productId) {
           return res.status(400).json({ error: 'Product ID is required' });
         }
-      
+        console.log('--------/////',productId);
         const username = req.session.user;
         const user = await userCollection.findOne({ username: username });
       
@@ -64,14 +64,14 @@ const add_wishlist = async(req,res)=>{
         console.log('--------------------',userWishlist);
         if (userWishlist) {
            // If the user's wishlist exists, add the product to it using updateOne
-          
+          req.session.wishlistAdded = productId
            await wishlist.updateOne(
             { User_Id: user._id },
             { $pull: { Products: { Product_id: productId } } }
           );
         } else {
          // If the user's wishlist doesn't exist, create a new one
-
+         req.session.wishlistAdded = true
          await wishlist.updateOne({User_Id:user._id},{$push:{Products:{Product_id:productId}}},{upsert:true})
         }
       
