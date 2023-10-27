@@ -41,12 +41,13 @@
                     </a>
                     <div id="home_Addtocart d-flex justify-content-between">
                       <a href="#" class="btn btn-success">Add to cart</a>
-                      <!-- <a href="/add_wishlist"><i class="fa-regular fa-heart" style="color: #000000;"></i></a> -->
                      
-                      <button id="add_wishlist" onclick="addWishlist('<%= products[i]._id %>')" class="btn btn-success" >
-                        
-                        <i class="fa fa-heart  " id="add_wishlist_icon" ></i>
+                     
+                      <button id="add_wishlist" type="button" onclick="toggleWishlist('<%= products[i]._id %>')" class="btn btn-success">
+                        <i class="fa fa-heart<% if (wishlist.map(item => item.Product_id.toString()).includes(products[i]._id.toString())) { %> text-danger<% } %>" id="add_wishlist_icon" data-product-id="<%= products[i]._id %>"></i>
                       </button>
+                      
+                    
                     </div>
                     
                     

@@ -65,14 +65,17 @@ const add_wishlist = async(req,res)=>{
         if (userWishlist) {
            // If the user's wishlist exists, add the product to it using updateOne
           req.session.wishlistAdded = productId
+          
            await wishlist.updateOne(
             { User_Id: user._id },
             { $pull: { Products: { Product_id: productId } } }
           );
         } else {
          // If the user's wishlist doesn't exist, create a new one
+        
          req.session.wishlistAdded = true
          await wishlist.updateOne({User_Id:user._id},{$push:{Products:{Product_id:productId}}},{upsert:true})
+        
         }
       
         return res.status(200).json({ message: 'Product added to wishlist successfully' });

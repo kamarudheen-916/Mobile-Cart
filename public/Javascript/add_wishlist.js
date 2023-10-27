@@ -1,41 +1,38 @@
+function toggleWishlist(productId) {
+  // Find the corresponding wishlist icon
+  const wishlistIcon = document.querySelector(`[data-product-id="${productId}"]`);
 
-function addWishlist(productId) {
-  
-  const add_wishlist = document.getElementById('add_wishlist')
-  const add_wishlist_icon= document.getElementById('add_wishlist_icon')
-    // Make an AJAX request to add the product to the wishlist
+  // Check if the icon element exists
+  if (wishlistIcon) {
+      // Toggle the text-danger class
+      if (wishlistIcon.classList.contains('text-danger')) {
+          wishlistIcon.classList.remove('text-danger');
+      } else {
+          wishlistIcon.classList.add('text-danger');
+      }
 
-    fetch('/add-wishlist', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ productId }),
-    })
-      .then((response) => {
-        if(response.added){
-          add_wishlist_icon.classList.add('text-danger')
-        }else{
-          add_wishlist_icon.classList.remove('text-danger')
-        }
-        response.json()
+      // Make an AJAX request to add the product to the wishlist
+      fetch('/add-wishlist', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ productId }),
       })
+      .then((response) => response.json())
       .then((data) => {
-        if (data.message) {
-          add_wishlist_icon.classList.add('selected');
-          // alert('One Item Successfully Added To The Wishlist')
-        } else {
-          add_wishlist_icon.classList.remove('selected'); 
-          // console.log('error on adding to wish list');
-        }
+          if (data.message) {
+            console.log('One Item Successfully Added To The Wishlist');
+          } else {
+              console.log('Error on adding to wishlist');
+          }
       })
       .catch((error) => {
-        console.error('Error:', error);
+          console.error('Error:', error);
       });
-
-      
-      
   }
+}
+
 
   
 
