@@ -13,12 +13,31 @@ const get_product = async(req,res)=>{
         if(req.session.adminLoggedin){
             if(  req.session.searched){
                  searched = req.session.searched
-                const products = req.session.searchData
-                res.render('admin/adminProducts',{title:'Admin Product Page',products,searched,categories})
-            }else{
+                const products2 = req.session.searchData
                 
-                const products = await allProducts.find()
-                res.render('admin/adminProducts',{title:'Admin Product Page',products,searched,categories})
+                let pageNumber = req.query.page?Number(req.query.page):0;
+                let skip = pageNumber *5
+                let limit = 5*(pageNumber+1)
+                let products = products2.slice(skip,limit)                          
+                console.log('-------------------products-count',products);
+                
+                let products_count = products2.length
+                products_count = (products_count/5)
+                res.render('admin/adminProducts',{title:'Admin Product Page',products,searched,categories,products_count})
+            }else{
+                let pageNumber = req.query.page?Number(req.query.page):0;               
+                let products_count = await allProducts.find().count()
+                console.log('---------------------',products_count);
+                products_count = products_count/5              
+                let skip = pageNumber *5
+                const products = await allProducts.find().skip(skip).limit(5)
+                res.render('admin/adminProducts',
+                {
+                    title:'Admin Product Page',
+                    products,
+                    searched,
+                    categories,
+                    products_count})
             }
          
         }else{
@@ -92,8 +111,10 @@ const post_add_new_products =async (req,res,next)=>{
 const post_product_search = async (req,res)=>{
     try {
         let i=0
+       
+        // const products = await allProducts.find().skip(skip).limit(5)
         const searchData = req.body.search
-    console.log('------------------',searchData);
+   
     const searchProductData = await allProducts.find({name:{$regex:"^"+searchData,$options:'i'}})
     console.log(`----------${searchProductData}`);
     req.session.searchData = searchProductData;
@@ -141,9 +162,7 @@ const post_edit_product = async(req,res)=>{
                 
                 }
             }
-           
-            // console.log('-----------------------------------allImages',allImages);
-            // console.log('---------------allImages_filename',allImages_filename);
+
         await allProducts.updateOne({_id:productId},
             {$set:
                 {
