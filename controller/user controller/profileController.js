@@ -11,7 +11,7 @@ const user_profile_get= async (req,res)=>{
     try {
         const username = req.session.user
         const userData = await userCollection.findOne({username})
-        console.log('userData_______',userData);
+        // console.log('userData_______',userData);
         res.render('user/profile',{title:'User Profile',username,userData})
     } catch (error) {
         res.render('error',{error})
@@ -23,6 +23,8 @@ const user_address_get = async (req,res)=>{
         const username = req.session.user
         const userData = await userCollection.findOne({username})
         const allAddress = userData.Address
+        // const  editAddress =  req.session.editAddress
+        // console.log('Original address--2:---------------------',editAddress);
         res.render('user/address',{title:'User Address',username,allAddress})
     } catch (error) {
         res.render('error',{error}) 
@@ -54,7 +56,10 @@ const user_deleteAddress = async(req,res)=>{
         
         const isAddressDeleted = await userCollection.updateOne({username},
             {$pull:{Address:{_id:addressId}}})
-            res.redirect('/get_userAddress')
+            // res.redirect('/get_userAddress')
+            res.json({success:true})
+
+        
 
     } catch (error) {
         console.log('address delete error');
@@ -74,23 +79,63 @@ const user_editAddress = async(req,res)=>{
         console.log("edit page ------------------",addressId);
         const UserAddress = await userCollection.findOne({Address:{$elemMatch:{_id:addressId}}})
         UserAddress_Address= UserAddress.Address
-        console.log('---------------------',UserAddress_Address);
-            // res.redirect('/get_userAddress')
+        // console.log('---------------------',UserAddress_Address);
             let address ;
          UserAddress_Address.forEach((value)=>{
-            console.log('value._id:',value._id);
-            console.log('addressId:',addressId);
-            if(value._id==addressId){
+            // console.log('value._id:',value._id);
+            // console.log('addressId:',addressId);
+            if(value._id.toString()==addressId.toString()){
              address = value;
             }
          })   
-         console.log('Original address:---------------------',address);
+        //  console.log('Original address:---------------------',address);
+         req.session.editAddress= address
+         res.redirect('/get_userAddress')
+        //  res.json({
+        //     success:true,
+        //     address
+        // })
+        //  console.log('Original address:---------------------', req.session.editAddress);
+         
+
     } catch (error) {
         console.log('address edit error',error);
         res.render('error',{error}) 
     }
 }
+ 
+const user_editAddress_post = async (req,res)=>{
+    try {
+        const addressId = req.params.id
+        const editAddress_data = req.body
+        console.log('editAddress_data-------------',editAddress_data);
+        console.log('editAddress_data-------------',addressId);
+        username = req.session.user;
+        console.log('username----------',username);
+        const objectIdAddressId = new ObjectId(addressId);
 
+        const editAddress = await userCollection.updateOne(
+            {
+                username,
+                'Address._id': objectIdAddressId
+            },
+            {
+                $set: {
+                    'Address.$.HouseName': editAddress_data.HouseName,
+                    'Address.$.city': editAddress_data.city,
+                    'Address.$.pincode': editAddress_data.pincode,
+                    'Address.$.state': editAddress_data.state,
+                    'Address.$.mobileNumber': editAddress_data.mobileNumber,
+                }
+            });
+
+            console.log('edited result -----------------',editAddress);
+            res.redirect('/get_userAddress')
+    } catch (error) {
+        console.log('user_editAddress_post error',error);
+        res.render('error',{error}) 
+    }
+}
 
 module.exports={
     user_profile_get, 
@@ -98,4 +143,5 @@ module.exports={
     user_address_post,
     user_deleteAddress,
     user_editAddress,
+    user_editAddress_post,
 }

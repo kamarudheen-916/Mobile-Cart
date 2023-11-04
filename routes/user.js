@@ -79,7 +79,8 @@ router.get('/removeFromCart/:productId',userAuth.verifyuser,cartControll.removeF
 router.get('/get_profile',userAuth.verifyuser,userProfileController.user_profile_get)
 router.get('/get_userAddress',userAuth.verifyuser,userProfileController.user_address_get)
 router.post('/post_userAddress',userAuth.verifyuser,userProfileController.user_address_post)
-router.get('/deletAddress/:addressId',userAuth.verifyuser,userProfileController.user_deleteAddress)
+router.post('/deletAddress/:addressId',userAuth.verifyuser,userProfileController.user_deleteAddress)
 router.get('/editAddress/:addressId',userAuth.verifyuser,userProfileController.user_editAddress)
+router.post('/post_editAddress/:id',userAuth.verifyuser,userProfileController.user_editAddress_post)
 
 module.exports= router;
