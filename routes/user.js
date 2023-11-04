@@ -14,24 +14,10 @@ const gustuser_home_Controll = require('../controller/user controller/gustuser&h
 const productDetails_Controll = require('../controller/user controller/productDetails')
 const productList_Controll = require('../controller/user controller/productList_Controll')
 const wishlist_controll =require('../controller/user controller/wishlist_controll')
-
+const cartControll =require('../controller/user controller/cartControll')
+const userProfileController = require('../controller/user controller/profileController')
 //--------------------------------------------------------------------------------
-//user product detailes
-router.get('/productDetails/:id',userAuth.verifyuser,productDetails_Controll.get_productDetails)
 
-//--------------------------------------------------------------------------
-//user product list 
-router.get('/userProductList/:category',userAuth.verifyuser,productList_Controll.get_product_List)
-//------------------------------------------------------------------------
-//user wishlist get 
-router.get('/wishlist',userAuth.verifyuser,wishlist_controll.get_wishlist)
-
-//add to wishlist 
-router.post('/add-wishlist',userAuth.verifyuser,wishlist_controll.add_wishlist)
-//Delete to wishlist 
-router.delete('/delete-wishlist/:productId',userAuth.verifyuser,wishlist_controll.delete_wishlist)
-
-//-----------------------------------------------------------------------------------------------
 // user login route get
 router.get('/login',userAuth.userExist,loginControls.userLogin)
 // user login post
@@ -68,7 +54,32 @@ router.get('/',userAuth.verifyuser,gustuser_home_Controll.userHome)
 //user logout
 router.get('/logout',(req,res)=>{  req.session.logedIn=false; res.redirect('/') })
 
+//--------------------------------------------------------------------------
+//user product list 
+router.get('/userProductList/:category',userAuth.verifyuser,productList_Controll.get_product_List)
+
+//user product detailes
+router.get('/productDetails/:id',userAuth.verifyuser,productDetails_Controll.get_productDetails)
 
 
+//------------------------------------------------------------------------
+//user wishlist get 
+router.get('/wishlist',userAuth.verifyuser,wishlist_controll.get_wishlist)
+
+//add to wishlist 
+router.post('/add-wishlist',userAuth.verifyuser,wishlist_controll.add_wishlist)
+//Delete to wishlist 
+router.delete('/delete-wishlist/:productId',userAuth.verifyuser,wishlist_controll.delete_wishlist)
+
+//-----------------------------------------------------------------------------------------------
+router.get('/get_cart',userAuth.verifyuser,cartControll.user_cart)
+router.post('/add-addToCart/:count',userAuth.verifyuser,cartControll.add_to_Cart)
+router.get('/removeFromCart/:productId',userAuth.verifyuser,cartControll.removeFromCart)
+//---------------------------------------------------------------------------------------------
+router.get('/get_profile',userAuth.verifyuser,userProfileController.user_profile_get)
+router.get('/get_userAddress',userAuth.verifyuser,userProfileController.user_address_get)
+router.post('/post_userAddress',userAuth.verifyuser,userProfileController.user_address_post)
+router.get('/deletAddress/:addressId',userAuth.verifyuser,userProfileController.user_deleteAddress)
+router.get('/editAddress/:addressId',userAuth.verifyuser,userProfileController.user_editAddress)
 
 module.exports= router;

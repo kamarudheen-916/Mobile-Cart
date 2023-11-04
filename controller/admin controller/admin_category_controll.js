@@ -15,6 +15,7 @@ const get_categories = async(req,res)=>{
              const categories =req.session.searchCategoryData
             res.render('admin/adminCategory',{title:'Admin Category',categories,searched})
         }else{
+            req.session.duplicate_category_name=false
             const categories = await categoryCollection.find()
             res.render('admin/adminCategory',{title:'Admin Category',categories,searched})
         }

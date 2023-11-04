@@ -26,10 +26,6 @@ const get_wishlist = async(req,res)=>{
             wishlistItems: [], // An empty array to indicate there are no items in the wishlist
           });
         }
-    
-        // Populate the product data for the wishlist items
-        // await userWishlist.populate('Products.Product_id').execPopulate();
-    
         return res.status(200).render('user/wishlist', {
           title: 'User Wishlist',
           username,
@@ -60,7 +56,8 @@ const add_wishlist = async(req,res)=>{
           return res.render('error')
         }
       
-        const userWishlist = await wishlist.findOne({$and:[{User_Id: user._id },{Products:{$elemMatch:{ Product_id:productId}}}]})
+        const userWishlist = await wishlist.findOne(
+          {$and:[{User_Id: user._id },{Products:{$elemMatch:{ Product_id:productId}}}]})
         console.log('--------------------',userWishlist);
         if (userWishlist) {
            // If the user's wishlist exists, add the product to it using updateOne

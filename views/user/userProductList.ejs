@@ -36,7 +36,8 @@
                   </div>
                   <div class="col-xl-6 col-md-5 col-sm-7">
                     <a href="/productDetails/<%=products[i]._id%>" class="text-decoration-none">
-                       <h5 class="text-success"><%=products[i].name%></h5></a>
+                       <h5 class="text-success"><%=products[i].name%></h5>
+                    </a>
                     <div class="d-flex flex-row">
                       <div class="text-warning mb-1 me-2">
                         <i class="fa fa-star"></i>
@@ -77,25 +78,9 @@
        <%}%>
 
         <!-- Pagination -->
-        <!-- <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
-          <ul class="pagination">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#">5</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav> -->
+        <%for(let i=0;i<products_count;i++){%>
+          <a name="pageInationNumber" class="btn btn-success" href="/userProductList/<%=products[0].category%>?page=<%=i%>"><%=i+1%></a>
+          <%}%>
         <!-- Pagination -->
       </div>
     </div>

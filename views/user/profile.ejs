@@ -1,0 +1,85 @@
+<%-include('../layout/head')-%>
+
+<!-- user header partial -->
+
+<%-include('../partials/user-header')-%>
+
+<div class="container-fluid " style="padding-top: 110px; padding-bottom: 120px;">
+    <div class="row d-flex justify-content-center ">  
+      <div class="col-md-3">
+        <div class="card shadow border mt-5 ">
+          <div class="card-body">
+            <div class="border-right">
+              <div
+                class="profile-pic d-flex flex-column align-items-center text-center  py-5"
+              >
+              <label class="-label" for="file">
+                <!-- <span class="glyphicon glyphicon-camera"></span>
+                <span>Change Image</span> -->
+              </label>
+              <input id="file" type="file" onchange="loadFile(event)"/>
+                <img
+                  class="rounded-circle mt-2 img-fluid"
+                  width="150px"
+                  src="<%=   'https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg' %>"
+                  id="output"
+                  alt="Default Image"
+                />
+
+                <span class="font-weight-bold"> profile.name </span>
+                <span class="text-black-50"> profile.email </span>
+              </div>
+              <div>
+              <div class=" d-flex justify-content-center">
+                <a href="" class="form-control">Reset Password</a>
+              </div>
+              <div class=" d-flex justify-content-center">
+                <a href="" class="form-control">Orders</a>
+              </div>
+              <div class=" d-flex justify-content-center">
+                <a href="/get_userAddress" class="form-control">Manage Address</a>
+              </div>
+            </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+
+     <div class="col-md-6">
+        <div class="card shadow border mt-5 me-5">
+          <div class="card-body">
+            <div class="d-flex justify-content-center"><h5 style="text-decoration: underline;">Address</h5></div>
+            <form id="profileForm" >
+              <div class="p-3 py-5 Address">
+               <div>
+                <div>Name &nbsp;&nbsp;&nbsp;&nbsp;: </div>
+                <div><%=userData.username%></div>
+               </div>
+               <div>
+                <div>Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</div><div> <%=userData.email%></div>
+               </div>
+               <div>
+                <div>Address &nbsp;:</div><div id="">MV House <br> ayikkarappadi <br> malappuram <br> 673003 <br> 9847678427</div>
+               </div>
+              </div>
+              
+            </form>
+          
+          </div>
+        </div>
+
+       
+      </div>
+
+    </div>
+</div>
+      
+<!-- user footer partials -->
+<%-include('../partials/user-footer')-%>
+<!-- user footer partials -->
+
+
+
+<%-include('../layout/footer')-%>

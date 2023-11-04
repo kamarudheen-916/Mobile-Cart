@@ -1,0 +1,10 @@
+.Address div{
+    font-size: 15px;
+    font-weight: bold;
+    display: flex;
+}
+#Address2{
+    margin-left: 100px;
+    font-size: 16px;
+    font-weight: 700;
+}

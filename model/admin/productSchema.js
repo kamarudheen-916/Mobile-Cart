@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
     image:{type:Array},
     // image:[imageSchema],
 
-    Product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'products' },
+    // Product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'products' },
     
     
     })

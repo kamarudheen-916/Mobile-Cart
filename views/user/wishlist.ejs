@@ -140,7 +140,7 @@
       
       
       <div class="card shadow-0 border rounded-3">
-        <div class="card-body shadow">
+        <div class="card-body shadow" style="height: 80vh; overflow: scroll;">
           <div class="row g-0">
 
             <% if (wishlistItems.length > 0) { %>
@@ -149,7 +149,7 @@
             <div class="col-xl-3 col-md-4 d-flex justify-content-center p-3 ">
               <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
                 <a href="" class="text-decoration-none" >
-                  <img  src='/static/uploads/<%=wishlistItems[i].Product_id.image[0]%>' style="width: 40%; " />
+                  <img  src='/static/uploads/<%=wishlistItems[i].Product_id.image[0]%>' style="width: 30%; " />
                 </a>
                 <a href="#!">
                   <div class="hover-overlay">
@@ -158,46 +158,29 @@
                 </a>
               </div>
             </div>
-            <div class="col-xl-6 col-md-5 col-sm-7">
+            <div class="col-xl-4 col-md-5 col-sm-7">
               <a href="" class="text-decoration-none">
                  <h5 class="text-success"><%=wishlistItems[i].Product_id.name%></h5></a>
-              <div class="d-flex flex-row">
-                <div class="text-warning mb-1 me-2">
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fas fa-star-half-alt"></i>
-                  <span class="ms-1">
-                    4.5
-                  </span>
-                </div>
-                <span class="text-muted">154 orders</span>
-              </div>
-
-              <p class="text mb-4 mb-md-0">
-                description
-              </p>
             </div>
-            <div class="col-xl-3 col-md-3 col-sm-5">
+            <div class="col-xl-2 col-md-2 col-sm-5">
               <div class="d-flex flex-row align-items-center mb-1">
                 <h4 class="mb-1 me-1"><span>₹</span><%=wishlistItems[i].Product_id.price%></h4>
                 <span class="text-danger"><s>$49.99</s></span>
               </div>
-              
-              <div class="mt-4">
-                <button class="btn btn-success shadow-0" type="button">Add To Cart</button>
-                <button onclick="deleteWishlist(`<%= wishlistItems[i].Product_id._id %>`)" class="btn btn-light border px-2 pt-2 icon-hover">
-                  <i class="fas fa-trash fa-lg px-1"></i>
-                </button>
-                
-                
-              </div>
             </div>
+                <div class="mt-4">
+                <button class="btn btn-success shadow-0" type="button">Add To Cart</button>
+                <button onclick="deleteWishlist(`<%= wishlistItems[i].Product_id._id %>`)" class="btn btn-danger border px-2 pt-2 icon-hover">
+                  Remove
+                </button>
+              </div>
           </div>
             <% } %>
             <% } else { %>
-              <p>Your wishlist is empty.</p>
+              
+              <div class="p-4 d-flex justify-content-center text-danger ">
+                <h4>Your wishlist is empty.</h4>
+            </div>
             <% } %>
 
           </div>
