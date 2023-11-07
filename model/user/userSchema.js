@@ -10,7 +10,7 @@ status:{type:String,default:'Activate'},
 isBlocked:{type:Boolean,default:false},
 timeStamp:{type:Date},
 password:{type:String},
-profile:{type:Object},
+profile:{type:String},
 Orders:[{}],
 Address: [{
     HouseName: {type: String},

@@ -6,6 +6,7 @@ const otpValidation = require('../auth/otpAuth')
 const passport = require("passport")
 require("../passport-google/passport.js")
 const userAuth = require('../middleware/user_session')
+const upload = require('../middleware/multer')
 
 const loginControls = require('../controller/user controller/user_login_contrller')
 const otpControls = require('../controller/user controller/get_and_post_otp')
@@ -16,6 +17,7 @@ const productList_Controll = require('../controller/user controller/productList_
 const wishlist_controll =require('../controller/user controller/wishlist_controll')
 const cartControll =require('../controller/user controller/cartControll')
 const userProfileController = require('../controller/user controller/profileController')
+const userOrderControll = require('../controller/user controller/OrderControll.js')
 //--------------------------------------------------------------------------------
 
 // user login route get
@@ -82,5 +84,11 @@ router.post('/post_userAddress',userAuth.verifyuser,userProfileController.user_a
 router.post('/deletAddress/:addressId',userAuth.verifyuser,userProfileController.user_deleteAddress)
 router.get('/editAddress/:addressId',userAuth.verifyuser,userProfileController.user_editAddress)
 router.post('/post_editAddress/:id',userAuth.verifyuser,userProfileController.user_editAddress_post)
+router.post('/post_userProfile_update',userAuth.verifyuser,upload.single('userProfile'),userProfileController.post_userProfile_update)
+router.post('/get_profile/resetPassword',userAuth.verifyuser,userProfileController.resetPassword)
+//---------------------------------------------------------------------------------------------
+
+router.get('/get_palceOrder',userAuth.verifyuser,userOrderControll.get_palceOrder)
+router.get('/confirmOrder',userAuth.verifyuser,userOrderControll.get_confirmOrder)
 
 module.exports= router;

@@ -17,6 +17,8 @@ const gustuser = async(req,res)=>{
 }
 // home rout
 // Modify the userHome function
+// Modify the userHome function
+// Modify the userHome function
 const userHome = async (req, res) => {
     try {
         const username = req.session.user;
@@ -29,9 +31,17 @@ const userHome = async (req, res) => {
 
             // Fetch the user's cart data
             const userCartData = await cartCollection.findOne({ userId: user._id });
+            console.log('------------------------userCartData', userCartData);
 
-            // Create a Set of productIds that are in the cart
-            const cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
+            // Declare cartProductIds outside the if block
+            let cartProductIds = new Set();
+
+            // Check if userCartData is not null and has 'Products'
+            if (userCartData && userCartData.Products) {
+                // Create a Set of productIds that are in the cart
+                cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
+                console.log('------------------------cartProductIds', cartProductIds);
+            }
 
             const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
             const wishlist = wishlist_ ? wishlist_.Products : [];
@@ -50,6 +60,7 @@ const userHome = async (req, res) => {
         console.log('home error:-----------', error);
     }
 };
+
 
 
 

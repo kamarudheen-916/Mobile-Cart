@@ -11,7 +11,7 @@ const user_profile_get= async (req,res)=>{
     try {
         const username = req.session.user
         const userData = await userCollection.findOne({username})
-        // console.log('userData_______',userData);
+        console.log('userData_______',userData);
         res.render('user/profile',{title:'User Profile',username,userData})
     } catch (error) {
         res.render('error',{error})
@@ -38,7 +38,8 @@ const user_address_post = async (req,res)=>{
         const newAddressUpdate = await userCollection.findOneAndUpdate({username},
            {$push:{Address:newAddress}} )
            console.log('-----------------newAddressUpdate',newAddressUpdate);
-        res.redirect('/get_userAddress')
+        // res.redirect('/get_userAddress')
+        res.json({success:true})
     } catch (error) {
         res.render('error',{error}) 
     }
@@ -137,6 +138,73 @@ const user_editAddress_post = async (req,res)=>{
     }
 }
 
+const post_userProfile_update = async (req,res)=>{
+    try {
+
+        const username = req.session.user
+        if(req.file){
+            console.log('profle route reached-------');
+            const image = req.file
+            console.log('profile image : --------: ',image);
+            const filename = '/static/uploads/'+image.filename
+            console.log('-----------filename:',filename);
+            const uploadProfile =  await userCollection.updateOne({username},
+                {$set:{profile:filename}})
+                console.log('-----------uploadProfile:',uploadProfile);
+               
+                res.json({
+                    success:true,
+                    filename,
+                })
+
+        }else{
+            res.json({ error: 'No file uploaded' });
+        }
+        
+    } catch (error) {
+        console.log('user_profile_post error',error);
+        res.render('error',{error}) 
+    }
+}
+
+const resetPassword = async(req,res)=>{
+    try {
+
+        const resetPasswordData = req.body
+        if(Object.keys(resetPasswordData)===0 ){
+            res.json({success:false,message:'No data has provided'})
+        } 
+        const username = req.session.user
+        const userdata = await userCollection.findOne({username})
+        if(!userdata){
+            res.json({success:false,message:'There is no user'})
+        }
+
+        if(resetPasswordData.newpassword!==resetPasswordData.confirmpassword){
+            res.json({success:false,message:'Confirm Password mismatch'})
+        }
+
+        bcrypt.compare(resetPasswordData.oldpassword,userdata.password,async (err,result)=>{
+        if(err){
+            res.json({success:false,message:'Current password is mismatch'})
+        }else if(result ===true){
+            const  newPassword=await bcrypt.hash(resetPasswordData.newpassword,10)
+            const resultPasswordReset = await userCollection.updateOne({username},
+                {$set:{password:newPassword}}) 
+            res.json({success:true,message:'Reset Password Successful'})
+        }else{
+            res.json({success:false,message:'Current password is mismatch'})
+        }
+        })
+    
+
+
+        console.log('resetPasswordData------------',resetPasswordData);
+    } catch (error) {
+        console.log('user_profile_rest Password post error',error);
+        res.render('error',{error}) 
+    }
+}   
 module.exports={
     user_profile_get, 
     user_address_get,
@@ -144,4 +212,6 @@ module.exports={
     user_deleteAddress,
     user_editAddress,
     user_editAddress_post,
+    post_userProfile_update,
+    resetPassword,
 }

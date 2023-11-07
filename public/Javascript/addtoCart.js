@@ -1,4 +1,4 @@
-const { response } = require("express");
+
 
 function changeQuantity(productId, count) {
 
@@ -37,8 +37,8 @@ function changeQuantity(productId, count) {
         })
         .then((data) => {
             if (data.message) {
-                alert('One Item Successfully Added To The Wishlist')
-                console.log('One Item Successfully Added To The Wishlist');
+               
+                console.log('Item Quatity Successfully Changed');
             } else {
                 console.log('Error on adding to wishlist');
             }
@@ -54,7 +54,7 @@ function changeQuantity(productId, count) {
 
 function addToCart(productId, count){
       // Rest of your code
-    
+   
       
       fetch(`/add-addToCart/${count}`, {
         method: 'POST',
@@ -68,7 +68,7 @@ function addToCart(productId, count){
             if (data.message) {
                 console.log('------------------log');
                 console.log(data.message);
-                // alert('One Item Successfully Added To The Cart:'+data.message)
+                alert('One Item Successfully Added To The Cart')
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'center',

@@ -1,0 +1,17 @@
+#placeOrderSection{
+    height: 100vh;
+     padding-top: 150px;
+}
+#SelectAddressHead{
+    font-weight: bold;
+}
+.displayAddressContainer{
+    overflow-y: scroll;
+    height: 380px;
+}
+#paymentMethods{
+    height: 200px;
+}
+.modal{
+    margin-top: 100px;
+}

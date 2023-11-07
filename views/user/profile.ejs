@@ -17,27 +17,31 @@
                 <!-- <span class="glyphicon glyphicon-camera"></span>
                 <span>Change Image</span> -->
               </label>
-              <input id="file" type="file" onchange="loadFile(event)"/>
+              <input id="file" type="file" name="userProfile" onchange="loadFile(event)"/>
                 <img
-                  class="rounded-circle mt-2 img-fluid"
+                  class="rounded-circle  mt-2 ImageContainer"
                   width="150px"
-                  src="<%=   'https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg' %>"
+                  src="<%= userData.profile||'https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg' %>"
                   id="output"
-                  alt="Default Image"
-                />
+                  alt='https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg'
+                 
+                  />
 
-                <span class="font-weight-bold"> profile.name </span>
-                <span class="text-black-50"> profile.email </span>
+                <span class="font-weight-bold"> <%=userData.username%> </span>
+                <span class="text-black-50"><%=userData.email%></span>
               </div>
               <div>
               <div class=" d-flex justify-content-center">
-                <a href="" class="form-control">Reset Password</a>
+                <!-- Button trigger modal -->
+                    <button type="button" id="Reset_Password" class="btn  form-control text-light bg-success border-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                      Reset Password
+                    </button>
               </div>
               <div class=" d-flex justify-content-center">
-                <a href="" class="form-control">Orders</a>
+                <a href="" class="btn  form-control text-light bg-success border-0 mt-2 mb-2">Orders</a>
               </div>
               <div class=" d-flex justify-content-center">
-                <a href="/get_userAddress" class="form-control">Manage Address</a>
+                <a href="/get_userAddress" class="btn  form-control text-light bg-success border-0">Manage Address</a>
               </div>
             </div>
             </div>
@@ -61,7 +65,14 @@
                 <div>Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</div><div> <%=userData.email%></div>
                </div>
                <div>
-                <div>Address &nbsp;:</div><div id="">MV House <br> ayikkarappadi <br> malappuram <br> 673003 <br> 9847678427</div>
+                <div>Address &nbsp;:</div>
+                <div id="">
+                  <%=userData.Address[0].HouseName%><br> 
+                  <%=userData.Address[0].city%> <br>
+                  <%=userData.Address[0].pincode%> <br> 
+                  <%=userData.Address[0].state%> <br>
+                  <%=userData.Address[0].mobileNumber%>
+                </div>
                </div>
               </div>
               
@@ -76,6 +87,43 @@
     </div>
 </div>
       
+
+
+
+<!-- Modal -->
+<div class="modal fade"  style="margin-top: 100px;" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Reset Your Password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="resetPasswordform">
+        
+        <div id="errorResetPasswordMessage" style="display: none;" class="alert alert-danger" role="alert "></div>
+        
+        <fieldset >
+        
+         
+          <div class="modal-body">
+            <label class="form-label" for="">Enter Old Password</label>
+            <input type="text" name="oldpassword" class="form-control">
+            <hr>
+            <label class="form-label" for="">Enter Old Password</label>
+            <input type="text" name="newpassword" class="form-control">
+            <label class="form-label" for="">Enter Old Password</label>
+            <input type="text" name="confirmpassword" class="form-control">
+    
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button id="resetPassword" type="submit" class="btn btn-success">Submit</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
 <!-- user footer partials -->
 <%-include('../partials/user-footer')-%>
 <!-- user footer partials -->

@@ -1,0 +1,13 @@
+.ImageContainer {
+    width: 150px; /* Set the desired width */
+    height: 150px; /* Set the desired height */
+    overflow: hidden; /* Optional: hide any overflowing content */
+  }
+
+  .ImageContainer img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+  }
+  

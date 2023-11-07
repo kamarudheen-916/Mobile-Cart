@@ -124,18 +124,27 @@ const   add_to_Cart =async (req,res)=>{
 const removeFromCart = async (req, res) => {
     try {
         const productId = req.params.productId;
-        const userCartData = await cartCollection.findOne({
-            Products: { $elemMatch: { ProductId: productId } }
-        });
+        console.log('---------------productId',productId);
+        const username = req.session.user
+        const userdata = await userCollection.findOne({username})
+        if(!userdata){
+            res.render('error',{error})
+        }
 
+        const userCartData = await cartCollection.findOne({userId:userdata._id});
+
+        console.log('---------------userCartData',userCartData);
         if (userCartData) {
             // Update the document to remove the specified item
+
+         
+           
             const updatedCart = await cartCollection.updateOne(
-                { /* Your query condition goes here */ },
+                {userId:userdata._id},
                 { $pull: { Products: { ProductId: productId } } }
             );
 
-            
+            console.log('---------------updatedCart',updatedCart);
 
             if (updatedCart.modifiedCount > 0) {
                 console.log('Item removed from cart successfully.');
