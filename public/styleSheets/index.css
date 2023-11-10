@@ -22,6 +22,7 @@
 #image_user{
     width: 100%;
     height: 60%;
+    position: relative;
     
 }
 .card-body{
@@ -40,4 +41,8 @@
     width: 70%; 
 }
 
-  
+  .isStock{
+    position: absolute;
+    padding: 3px;
+    border-radius: 10px;
+  }

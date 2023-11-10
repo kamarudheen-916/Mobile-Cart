@@ -1,0 +1,77 @@
+<%-include('../layout/head')-%>
+    <!-- user header partial -->
+ <%-include('../partials/user-header')-%>
+
+ <section class="h-100 gradient-custom shadow " style="padding-top: 80px;">
+    <div class="container py-5 h-100 ">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-lg-10 col-xl-8">
+          <div class="card shadow" style="border-radius: 10px;">
+            <div class="card-header px-4 py-5">
+              <h5 class="text-muted mb-0">Thanks for your Order, <span style="color: rgb(4, 132, 10);"><%=username%></span>!</h5>
+            </div>
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <p class="lead fw-normal mb-0" style="color: #13a7b2;">Receipt</p>
+                <!-- <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p> -->
+              </div>
+              <div class="card shadow-0 border mb-4">
+                <div class="card-body">
+                    <% if (orderData && orderData.Products && Array.isArray(orderData.Products)) { %>
+                        <% orderData.Products.forEach((x) => { %>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <img src="/static/uploads/<%=x.ProductId.image[0]%>"
+                        class="img-fluid w-50" alt="Phone">
+                    </div>
+                    <div class="col-md-6 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 h6"><%= x.ProductId.name %> </p>
+                    </div>
+                    
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 h6">Qty : <%= x.Quantity %></p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 h5"> ₹<%= x.ProductId.price %></p>
+                    </div>
+                   
+                  </div>
+                 
+                  <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                  <div class="row d-flex align-items-center">
+                  
+                  </div>
+                  <% }) %>
+                  <% }else{%>
+                      <h3>No data available</h3>
+                      <% } %>
+                </div>
+              </div>
+              
+  
+              
+  
+              <div class="d-flex justify-content-between">
+                <p class="text-muted mb-0">Order ID : <%=orderData._id%></p>
+                <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p> -->
+              </div> 
+  
+              <div class="d-flex justify-content-between mb-5">
+                <p class="text-muted mb-0"><b>Order Status : <%=orderData.Status%></b></p>
+                <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p> -->
+              </div> 
+            </div>
+            <div class="card-footer border-0 px-4 py-5"
+              style="background-color: #105b09; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+              <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
+            <span class="h2 mb-0 ms-2">  ₹ <%= orderData.TotalPrice %></span></h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ <%-include('../partials/user-footer')-%>
+ <!-- user footer partials -->
+<%-include('../layout/footer')-%>

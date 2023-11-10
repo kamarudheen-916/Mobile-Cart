@@ -47,9 +47,12 @@
                                  <%}%>   
 
                             </div>
+
+                            <%if(cartItems.length>0){%>
                             <div>
                                 <a href="/get_palceOrder" class="btn btn-success mt-3">Place Order</a>
                             </div>
+                            <%}%> 
                         </div>
                         <div class="priceDetails col-md-4 ">
 
@@ -60,12 +63,12 @@
                                <div>
                                 <div>
                                     <div class="d-flex priceDetails_div border-bottom">
-                                        <h6>Price (1 item)</h6>
+                                        <h6>Price (<%=cartItems.length%> items)</h6>
                                         <h6><span>₹</span><%=cartToatal%></h6>
                                     </div>
                                     <div class="d-flex priceDetails_div border-bottom">
                                         <h6>Delevery Charge</h6>
-                                        <h6>₹1,497</h6>
+                                        <h6>Free Delevery</h6>
                                     </div>
                                 </div>
 

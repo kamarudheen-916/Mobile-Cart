@@ -17,6 +17,8 @@ const dashbord_controll = require('../controller/admin controller/dashboard_cont
 const product_controll = require('../controller/admin controller/product_controll')
 const customer_controll = require('../controller/admin controller/admin_customers_controll')
 const category_controll = require('../controller/admin controller/admin_category_controll')
+const adminOrderControll = require('../controller/admin controller/adminOrderController')
+
 
 // admin login
 router.get('/admin',adminAuth.adminExist,loginControls.admin_login)
@@ -79,5 +81,12 @@ router.get('/admin/categories/refresh',adminAuth.verifyAdmin,category_controll.g
 //--------------------------------------------------------------------------
 //admin payment page get
 router.get('/admin/paymensts',adminAuth.verifyAdmin,adminPaymentControll.get_payment)
+
+//--------------------------------------------------------------------------
+//admin order view page
+router.get('/admin/orders',adminAuth.verifyAdmin,adminOrderControll.get_orderView)
+router.put('/updateOrderStatus/:productId',adminAuth.verifyAdmin,adminOrderControll.updateOrderStatus)
+
+
 
 module.exports = router;    

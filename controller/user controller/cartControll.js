@@ -36,6 +36,8 @@ const user_cart = async(req,res)=>{
           cartData.Products.forEach((item)=>{
           total+= (item.ProductId.price*item.Quantity)
           })
+          req.session.cartToatal=total
+          req.session.cartProducts =  cartData.Products
             console.log('-------------total',total);
         const cart_=  await cartCollection.findOneAndUpdate(
             {userId:user._id},{$set:{TotalAmount:total}})
@@ -53,7 +55,7 @@ const user_cart = async(req,res)=>{
         res.render('error',{error})
     }
 }
-
+//--------------------------------------------------------------------------------
 const   add_to_Cart =async (req,res)=>{
     try {
        console.log('========test');
@@ -94,9 +96,9 @@ const   add_to_Cart =async (req,res)=>{
                     console.log('there is data on cart collection --------------');
                 }
                
-            }else{
+            }else{  
                 await cartCollection.updateOne(
-                    {userId:user._id},{$push:{Products:{ProductId:productId,addeddToCart:true}}},{upsert:true})
+                    {userId:user._id},{$push:{Products:{ProductId:productId}}},{upsert:true})
                 console.log('no data----------- new data');
             }
 

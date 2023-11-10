@@ -89,6 +89,10 @@ router.post('/get_profile/resetPassword',userAuth.verifyuser,userProfileControll
 //---------------------------------------------------------------------------------------------
 
 router.get('/get_palceOrder',userAuth.verifyuser,userOrderControll.get_palceOrder)
-router.get('/confirmOrder',userAuth.verifyuser,userOrderControll.get_confirmOrder)
+router.post('/confirmOrder',userAuth.verifyuser,userOrderControll.post_confirmOrder)
+//---------------------------------------------------------------------------------------------
+router.get('/get_Orders',userAuth.verifyuser,userOrderControll.get_Orders)
+router.post('/removeOrder/:ProductId',userAuth.verifyuser,userOrderControll.post_remove_Orders)
+router.get('/get_OrderDetails/:id',userAuth.verifyuser,userOrderControll.get_OrderDetails)
 
 module.exports= router;

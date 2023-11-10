@@ -68,19 +68,26 @@ function addToCart(productId, count){
             if (data.message) {
                 console.log('------------------log');
                 console.log(data.message);
-                alert('One Item Successfully Added To The Cart')
+                // alert('One Item Successfully Added To The Cart')
                 const Toast = Swal.mixin({
                     toast: true,
-                    position: 'center',
+                    position: 'bottom',
                     showConfirmButton: false,
                     timer: 1000,
                     timerProgressBar: true,
                     didOpen: (toast) => {
                         toast.addEventListener('mouseenter', Swal.stopTimer)
                         toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
+                    },
+                    didClose: () => {
+                        // Reload the page after the toast is closed
+                        location.reload();
+                    },
                 });
-                location.reload()
+                Toast.fire({
+                    icon: 'success',
+                    title: 'One Item Successfully Added To The Cart',
+                });
 
             } else {
                 console.log('Error on adding to wishlist');
