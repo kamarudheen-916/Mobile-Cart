@@ -1,129 +1,250 @@
-<%-include('../layout/head')-%>
-    <!-- user header partial -->
- <%-include('../partials/user-header')-%>
+    <%-include('../layout/head')-%>
+        <!-- user header partial -->
+    <%-include('../partials/user-header')-%>
 
- <section>
-    <section class="vh-100" style="background-color: #eee; ">
-        <div class="container py-5 h-100">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col">
-              <div class="card card-stepper shadow" style="border-radius: 10px; height: 500px;margin-top: 100px; overflow-y: scroll; ">
-                <%userOrderData.forEach((order)=>{%>
-                
-                    <section class="vh-100" style="background-color: #eee;">
-                        <div class="container py-5 h-100">
-                          <div class="row d-flex justify-content-center align-items-center h-100">
-                            <div class="col">
-                              <div class="card card-stepper" style="border-radius: 10px;">
-                                <div class="card-body p-4">
+    <section>
+        <section class="vh-100" style="background-color: #eee; ">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col">
+                  <div class="card card-stepper shadow" style="border-radius: 10px; height: 500px;margin-top: 100px; overflow-y: scroll; ">
+                  <%if(userOrderData.length>0){%>
+                    
+                    <%userOrderData.reverse().forEach((order)=>{%>
                       
-                                  <div class="d-flex justify-content-between align-items-center mb-5">
-                                    <div class="d-flex flex-column">
-                                        <span class="lead fw-normal">
-                                          <u>
-                                            Your order has been delivered 
-                                          </u>
-                                            <span class="text-muted p-4" style="font-size: small;"> &nbsp;&nbsp;&nbsp;(<%=order.OrderDate%>)</span>
+                        
+                                                  
+
+                        <section class="vh-100" style="background-color: #eee;">
+                            <div class="container py-5 h-100">
+                              <div class="row d-flex justify-content-center align-items-center h-100">
+                                <div class="col">
+                                  <div class="card card-stepper" style="border-radius: 10px;">
+                                    <div class="card-body p-4">
+                          
+                                      <div class="d-flex justify-content-between align-items-center mb-5">
+                                        <div class="d-flex flex-column">
+                                            <span class="lead fw-normal">
+                                              <u>
+                                                Your order has been delivered 
+                                              </u>
+                                                <span class="text-muted p-4" style="font-size: small;"> &nbsp;&nbsp;&nbsp;(<%=order.OrderDate%>)</span>
+                                              
+                                            </span>
+
+                                            <%order.Products.forEach((product)=>{%>
+                                                <div class="">
+                                            <span class="small"><h6><span style="font-size:x-large ;">• </span><%=product.ProductId.name%></h6></span>
                                           
-                                        </span>
-                                        <%order.Products.forEach((product)=>{%>
-                                            <div class="">
-                                        <span class="small"><h6><span style="font-size:x-large ;">• </span><%=product.ProductId.name%></h6></span>
-                                       
-                                        <span class="" style="font-size:small;font-weight: 700;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quatity : <%=product.Quantity%> </span>
-                                              </div>
-                                        <%})%>
+                                            <span class="" style="font-size:small;font-weight: 700;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quatity : <%=product.Quantity%> </span>
+                                                  </div>
+                                            <%})%>
+                                          </div>
+                                          
+                                        <div>
+                                          <a href="/get_OrderDetails/<%=order._id%>" class="btn btn-outline-primary" type="button">Track order details</a>
+                                        </div>
                                       </div>
-                                      
-                                    <div>
-                                      <a href="/get_OrderDetails/<%=order._id%>" class="btn btn-outline-primary" type="button">Track order details</a>
-                                    </div>
-                                  </div>
-                                  <%if(order.Status!='Cancelled'){%>
-                      
-                                  <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
-                                
-                                    <span class="dot"></span>
-                                    <%if(order.Status==='Order Placed'){%>
-                                      <hr class="flex-fill track-line"><span
-                                      class="d-flex justify-content-center align-items-center big-dot dot">
-                                      <i class="fa fa-check text-white"></i></span>
-                                    <%}else{%>
-                                      <hr class="flex-fill track-line"><span class="dot"></span>
-                                      <%}%>
-
-                                      <%if(order.Status==='Shipped'){%>
-                                        <hr class="flex-fill track-line"><span
-                                        class="d-flex justify-content-center align-items-center big-dot dot">
-                                        <i class="fa fa-check text-white"></i></span>
+                                      <%if(order.Status!='Cancelled'){%>
+                          
+                                      <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                    
+                                        <span class="dot"></span>
+                                        <%if(order.Status==='Order Placed'){%>
+                                          <hr class="flex-fill track-line"><span
+                                          class="d-flex justify-content-center align-items-center big-dot dot">
+                                          <i class="fa fa-check text-white"></i></span>
                                         <%}else{%>
                                           <hr class="flex-fill track-line"><span class="dot"></span>
                                           <%}%>
-                                    
 
-                                          <%if(order.Status==='Delivered'){%>
+                                          <%if(order.Status==='Shipped'){%>
                                             <hr class="flex-fill track-line"><span
                                             class="d-flex justify-content-center align-items-center big-dot dot">
                                             <i class="fa fa-check text-white"></i></span>
                                             <%}else{%>
                                               <hr class="flex-fill track-line"><span class="dot"></span>
                                               <%}%>
-                                   
-                                  </div>
-                      
-                                  <div class="d-flex flex-row justify-content-between align-items-center ">
-                                    
-                                      <div  class="d-flex flex-column justify-content-center">
-                                        <span class="btn btn-secondary">Pending</span>
-                                    </div>
-                                    <div class="d-flex flex-column justify-content-center align-items-center">
-                                        <span class="btn btn-warning">Order Placed</span>
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <span class="btn btn-warning">Shipped</span>
-                                    </div>
-                                    <div class="d-flex flex-column align-items-end">
-                                        <span class="btn btn-success">Delivered</span>
-                                    </div>
-                                   
-                                  </div>
+                                        
 
-                                  <div class="d-flex justify-content-between mt-5 " >
-                                    
-                                    <div id="cancelOrderButton"> 
-                                       <button onclick="cancelOrder('<%=order._id%>')" class="btn btn-outline-danger">Cancel Order</button>
-                                    </div>
-                                  
-                                    <div>
-                                       <button class="btn btn-outline-primary">Get Invoice</button>
-                                    </div>
-                                 </div>
-                                 <%}else{%>
-                                  <div class="alert alert-danger text-center h2">
-                                    Order Cancelled
-                                  </div>
-                                  <%}%>
+                                              <%if(order.Status==='Delivered'){%>
+                                                <hr class="flex-fill track-line"><span
+                                                class="d-flex justify-content-center align-items-center big-dot dot">
+                                                <i class="fa fa-check text-white"></i></span>
+                                                <%}else{%>
+                                                  <hr class="flex-fill track-line"><span class="dot"></span>
+                                                  <%}%>
+                                      
+                                      </div>
+                          
+                                      <div class="d-flex flex-row justify-content-between align-items-center ">
+                                        
+                                          <div  class="d-flex flex-column justify-content-center">
+                                            <span class="btn btn-secondary">Pending</span>
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                            <span class="btn btn-secondary">Order Placed</span>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="btn btn-secondary">Shipped</span>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-end">
+                                            <span class="btn btn-success">Delivered</span>
+                                        </div>
+                                      
+                                      </div>
 
-                      
+                                      <%if(order.return && order.return.returnStatus=='Request for Return' || order.return.returnStatus=='Returned'){%>
+                                        <div class="alert alert-warning d-flex justify-content-center mt-5" role="alert">
+                                          <h1><%=order.return.returnStatus%></h1>
+                                        </div>
+                                      <%}%>
+
+                                      <div class="d-flex justify-content-between mt-5 " >
+                                        <%if(order.Status=='Delivered'){%>
+                                          <div id=""> 
+                                            <%if(order.return && order.return.returnStatus!=='Request for Return' && order.return.returnStatus !=='Returned'){%>
+                                            <!-- Button trigger modal -->
+                                            <% if (new Date(order.returnExpiryDate) <= new Date(nowDate)) { %>
+                                              <button type="button" id="returnOrderButton" class="btn btn-secondary" disabled >
+                                                Sorry Ruturn date expired
+                                              </button>
+                                              <%}else{%>
+                                                
+                                            <button type="button" id="returnOrderButton" class="btn btn-primary" onclick="returnOrder('<%=order._id%>')" >
+                                              Ruturn
+                                            </button>
+                                            <%}%>
+                                            <%}%>
+                                          </div>
+                                          
+                                        
+                                          <%}else{%>
+                                    
+                                            <div id=""> 
+                                              <button id="cancelOrderButton" onclick="cancelOrder('<%=order._id%>')" class="btn btn-outline-danger">Cancel Order</button>
+                                            </div>
+                                          
+                                            <%}%>
+                                        
+                                      
+                                        <div>
+                                          <button onclick="getInvoice('<%=order._id%>')" class="btn btn-outline-primary">Get Invoice</button>
+                                        </div>
+                                    </div>
+                                    <%}else{%>
+                                      <div class="alert alert-danger text-center h2">
+                                        Order Cancelled
+                                      </div>
+                                      <%}%>
+
+                          
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      </section>
-                <%})%>
+                          </section>
+                    <%})%>
+                    <%}else{%>
+
+                      
+                      <div style="    display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      height: 100%; font-size: larger;
+                      font-weight: 700; 
+                      color: rgb(160, 33, 33);"> You Have No Orders Right Now !</div>
+                      
+                      <%}%>
 
 
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
- </section>
+          </section>
+    </section>
 
- <%-include('../partials/user-footer')-%>
- <!-- user footer partials -->
-<%-include('../layout/footer')-%>
 
+    <div>
+      <!-- return Order Modal start  -->
+  
+                <!-- Modal -->
+                <div class="modal fade" id="returnOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 9999;">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form id="returnOrderForm">
+                          <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Reason:</label>
+                            <input type="text" name="Reason" class="form-control" id="recipient-name">
+                          </div>
+                          <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea  name="Message" class="form-control" id="message-text"></textarea>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" id="returnOrderSubmit" data-bs-dismiss="modal" class="btn btn-primary">Submit</button>
+                          </div>
+                        </form>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </div>
+  <!-- return Order Modal end -->
+    </div>
+    
+    <script>
+
+      let OrderId 
+      function returnOrder (orderId){
+          OrderId = orderId
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+    const openModalBtn = document.getElementById('returnOrderButton');
+    const myModal = new bootstrap.Modal(document.getElementById('returnOrderModal'));
+
+    openModalBtn.addEventListener('click', function () {
+      myModal.show();
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded',()=>{
+        const returnOrderSubmit = document.querySelector('#returnOrderSubmit')
+        const returnOrderForm = document.querySelector('#returnOrderForm')
+        if(returnOrderForm){
+          returnOrderForm.addEventListener('submit',(e)=>{
+            e.preventDefault()
+            fetch(`/returnOrder/${OrderId}`,{
+              method:'POST',
+              headers: {
+              'Content-Type': 'application/x-www-form-urlencoded', // Set the content type
+            },
+            body:new URLSearchParams(new FormData(returnOrderForm))
+            })
+            .then((res)=>res.json())
+            .then((data)=>{
+              if(data.success){
+                alert('check return order')
+                location.reload()
+              }else{
+                alert('This roduct cannot return!')
+              }
+            })
+          })
+        }
+  })
+    </script>
+    
+    <%-include('../partials/user-footer')-%>
+    <!-- user footer partials -->
+    <%-include('../layout/footer')-%>
 
 

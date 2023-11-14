@@ -14,8 +14,8 @@
             <form id="add_new_products" class="border border-success rounded m-4 p-4" action="/admin/add-new-products" method="post" enctype="multipart/form-data"    > 
               <div class="">
                 <label for="name">Enter Product Name:</label>
-                  <input type="text" id="productname"  name="name"  placeholder="product Name" class="form-control border border-success rounded">
-                  <span class="text-danger" id="name_error"></span>
+                  <input onchange="clearMessage()" type="text" required id="productname"  name="name"  placeholder="product Name" class="form-control border border-success rounded">
+                  <!-- <span class="text-danger" id="name_error"></span> -->
                 </div>
               <div class="">
                 <label for="category">Choose The Category:</label>
@@ -79,7 +79,7 @@
     
        
         const  productName = document.getElementById('productname').value
-        const name_error = document.getElementById('name_error')
+        // const name_error = document.getElementById('name_error')
         const priceValue = document.getElementById('price').value
         const price_error = document.getElementById('price_error')
         const stockValue = document.getElementById('stock').value
@@ -92,10 +92,10 @@
          stock_error.innerHTML=''
        
 
-      if(productName === ''){
-        name_error.innerHTML='This field is required'
-        return false
-      }
+      // if(productName === ''){
+      //   name_error.innerHTML='This field is required'
+      //   return false
+      // }
       if(priceValue <=0){
         price_error.innerHTML='Must more than zero'
         return false
@@ -108,6 +108,12 @@
         return true
       } 
       
+
+      function clearMessage(){
+  
+  document.querySelector('#name_error').textContent = ''
+
+}
       </script>
       
 

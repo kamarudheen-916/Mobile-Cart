@@ -72,9 +72,14 @@ function addToCart(productId, count){
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'bottom',
+                    iconColor: 'black',
+                    titleColor:'black',
                     showConfirmButton: false,
                     timer: 1000,
                     timerProgressBar: true,
+                    customClass: {
+                        popup: 'colored-toast',
+                      },
                     didOpen: (toast) => {
                         toast.addEventListener('mouseenter', Swal.stopTimer)
                         toast.addEventListener('mouseleave', Swal.resumeTimer)

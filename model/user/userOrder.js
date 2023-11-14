@@ -11,9 +11,19 @@ const ShippedAddressSchema = new Schema({
   mobileNumber: { type: Number, required: true },
 });
 
+const ReturnSchema = new Schema({
+  returnStatus:{ type: String, default:"not returned"},
+  Reason:{type:String},
+  Message:{type:String},
+  returnDate:{type:String},
+  
+})
+
+
 const OrdersSchema = new Schema({
   UserId: { type: Schema.Types.ObjectId },
   Status: { type: String, default:"Order Placed"},
+  return:{type:ReturnSchema},
   email:{type:String,required:true},
   Products: [{
     ProductId: { type: Schema.Types.ObjectId , ref: "products" },
@@ -22,6 +32,7 @@ const OrdersSchema = new Schema({
   PaymentMethod: {type: String},
   OrderDate: { type: String },
   ExpectedDeliveryDate:{type: String},
+  returnExpiryDate:{type:String},
   TotalPrice: { type: Number },
   PaymentStatus: {type: String, default: "Pending"},
   CouponId: { type: Schema.Types.ObjectId },

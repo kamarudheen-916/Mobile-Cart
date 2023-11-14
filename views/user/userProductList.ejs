@@ -63,9 +63,14 @@
                     </div>
                     <h6 class="text-success">Free shipping</h6>
                     <div class="mt-4">
-                      <button class="btn btn-success shadow-0" type="button">Add To Cart</button>
-                      <button id="add_wishlist" onclick="addWishlist('<%= products[i]._id %>')" class="btn btn-success" >
-                        <i class="fa-regular fa-heart" style="color: #000000;"></i>
+                      <% if (cartProductIds.has(products[i]._id.toString())) { %>
+                        <a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a>
+                      <% } else { %>
+                        <a id="addToCartButton_<%= products[i]._id %>" class="btn btn-success" onclick="addToCart('<%= products[i]._id %>', 1)">Add To Cart</a>
+
+                      <% } %>
+                      <button id="add_wishlist" type="button" onclick="toggleWishlist('<%= products[i]._id %>')" class="btn btn-success">
+                        <i class="fa fa-heart<% if (wishlist.map(item => item.Product_id.toString()).includes(products[i]._id.toString())) { %> text-danger<% } %>" id="add_wishlist_icon" data-product-id="<%= products[i]._id %>"></i>
                       </button>
                     </div>
                   </div>
@@ -78,13 +83,21 @@
        <%}%>
 
         <!-- Pagination -->
+        
         <%for(let i=0;i<products_count;i++){%>
-          <a name="pageInationNumber" class="btn btn-success" href="/userProductList/<%=products[0].category%>?page=<%=i%>"><%=i+1%></a>
+          <%if(i===pageNumber){%>
+          <a name="pageInationNumber" onclick="pageInationButton()" id="pageInationButton<%=i%>" class="btn btn-secondary m-2" href="/userProductList/<%=products[0].category%>?page=<%=i%>"><%=i+1%></a>
+         <%}else{%>
+          <a name="pageInationNumber" onclick="pageInationButton()" id="pageInationButton<%=i%>" class="btn btn-success m-2" href="/userProductList/<%=products[0].category%>?page=<%=i%>"><%=i+1%></a>
+
+          <%}%>
           <%}%>
         <!-- Pagination -->
       </div>
     </div>
   </div>
 </section>
+<!--  -->
+
 <%-include('../partials/user-footer')-%>
 <%-include('../layout/footer')-%> 

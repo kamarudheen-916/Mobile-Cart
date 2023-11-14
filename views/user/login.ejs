@@ -8,7 +8,7 @@
               <h2 class="text-success mb-3">Login...</h2>
             </div>
             <div class="mb-3">
-                     <input type="text"  name="username" class="form-control border border-success" id="username" placeholder="username" aria-describedby="emailHelp">
+                     <input type="text" onchange="clearMessage()"  name="username" class="form-control border border-success" id="username" placeholder="username" aria-describedby="emailHelp">
                       <span class="text-danger" id="username_error"></span>
                       <span id="username_err" class="isBlocked"><%=noUser_message?'Incorrect Username or Password':""%></span>
             </div>

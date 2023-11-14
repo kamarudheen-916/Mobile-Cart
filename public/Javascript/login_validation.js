@@ -59,3 +59,10 @@ document.addEventListener('DOMContentLoaded', function() {
     return true;
   }
 });
+
+
+function clearMessage(){
+  
+  document.querySelector('span').textContent = ''
+
+}

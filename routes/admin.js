@@ -86,6 +86,7 @@ router.get('/admin/paymensts',adminAuth.verifyAdmin,adminPaymentControll.get_pay
 //admin order view page
 router.get('/admin/orders',adminAuth.verifyAdmin,adminOrderControll.get_orderView)
 router.put('/updateOrderStatus/:productId',adminAuth.verifyAdmin,adminOrderControll.updateOrderStatus)
+router.get('/confirmOrderReturn/:OrderId',adminAuth.verifyAdmin,adminOrderControll.confirmOrderReturn)
 
 
 

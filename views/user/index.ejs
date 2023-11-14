@@ -31,7 +31,7 @@
                               <span class="isStock bg-success text-white">inStock</span>
                               <%}else if(products[i].stock>0 && products[i].stock<5){%>
                                 <span class="isStock bg-warning text-black"><%=products[i].stock%> pcs avilable</span>
-                               <%}else if(products[i].stock ===0){%>
+                               <%}else if(products[i].stock<=0){%>
                                 <span class="isStock bg-danger text-white">Out of Stock</span>
                                 <%}%> 
                                  <img id="image_" src="/static/uploads/<%=products[i].image[0]%>" class="card-img-top p-3" alt="image is not avilable"> 

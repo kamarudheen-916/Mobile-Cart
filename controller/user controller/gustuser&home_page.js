@@ -61,10 +61,25 @@ const userHome = async (req, res) => {
     }
 };
 
+const search = async (req,res)=>{
+    try {
+
+        const query = req.query.q;
+        const results = await allProducts.find({ $text: { $search: new RegExp(query, 'i') } });
+       
+        console.log('searched data ===========',results);
+        
+        res.json({ success: true, results });
+    } catch (error) {
+        console.error('Search error:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+}
 
 
 
 module.exports={
     userHome,
     gustuser,
+    search,
 }

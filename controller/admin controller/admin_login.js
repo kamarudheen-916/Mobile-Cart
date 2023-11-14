@@ -52,7 +52,7 @@ const admin_login_post = async(req,res)=>{
 //admin logout
 const admin_logout =(req,res)=>{
     try {
-        res.session.destroy();
+        req.session.adminLoggedin=false;
         res.redirect('/admin')
     } catch (error) {
         console.log('-----------admin logout error',error);

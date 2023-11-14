@@ -17,16 +17,16 @@
                     <div id="img-container" style=" z-index: 5; width: 400px;">
                       <img  id="display_image" src="/static/uploads/<%=products.image[0]%>"  style="width: 50%;" alt="">
                     </div>
-                        <div class="d-flex flex-column ">
+                        <div class="d-flex flex-column m-5">
                           <div>
-                            <a href="" class="btn btn-outline-success border border-success border-3 m-3 fw-bold">Add to cart</a>
-
+                            <% if (cartProductIds.has(products._id.toString())) { %>
+                              <a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a>
+                            <% } else { %>
+                              <a id="addToCartButton_<%= products[i]._id %>" class="btn btn-success" onclick="addToCart('<%= products[i]._id %>', 1)">Add To Cart</a>
+      
+                            <% } %>
                           </div>
-                          <!-- <div class=" w-25 ms-4">
-                            <button class="border border-success  text-light bg-success fw-bold fs-4 ">-</button>
-                          <input type="number" class="border border-success fs-4 w-25 " value="1">
-                          <button class="border border-success bg-success text-light fw-bold fs-4">+</button  >
-                          </div> -->
+                         
                         </div>
                       </div>
                   </div>

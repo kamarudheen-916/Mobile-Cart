@@ -24,7 +24,7 @@
                     </thead>
                     <tbody>
                         <% if (orderData.length > 0) { %>
-                          <% orderData.forEach((x, index) => { %>
+                          <% orderData.reverse().forEach((x, index) => { %>
                             <tr class="border-bottom">
                               <th scope=""><%= index + 1 %></th>
                               <td><%= x._id %></td>
@@ -34,7 +34,14 @@
                               <td><%= x.TotalPrice %></td>
                               <td>
                                  
-                                    <% if (x.Status !== 'Cancelled') { %>
+                                <%if(x.return && x.return.returnStatus=='Request for Return'){%>
+                                      <div>
+                                        <button id="verifyReturnOrder" onclick="verifyReturnOrder('<%=x._id%>')" class="btn btn-warning">Request for return</button>
+                                      </div>
+                                  <%}else if(x.return && x.return.returnStatus=='Returned'){%>
+                                    <span class="text-danger"><%=x.return.returnStatus%></span>
+                                    <%}else{%>
+                                    <% if (x.Status !== 'Cancelled' && x.Status !=='Delivered') { %>
                                         <% const currentStatus = x.Status || 'Order Placed'; %>
                                         <select class="form-select" id="statusSelect<%= x %>" onchange="updateOrderStatus('<%= x._id %>', this.value)">
                                         <option value="Order Placed" <%= currentStatus === 'Order Placed' ? 'selected' : '' %>>Order Placed</option>
@@ -42,13 +49,15 @@
                                         <option value="Delivered" <%= currentStatus === 'Delivered' ? 'selected' : '' %>>Delivered</option>
                                         <option value="Rejected" <%= currentStatus === 'Rejected' ? 'selected' : '' %>>Rejected</option>
                                         </select>
-                                    <% } else { %>
-                                        Cancelled
-                                    <% } %>
-                                  
+                                    <% } else if(x.Status=='Cancelled') { %>
+                                        <span class="text-danger"><%=x.Status%></span>
+                                    <% } else{ %>
+                                      <span class="text-success"><%=x.Status%></span>
+                                      <%}%>
+                                      <%}%>
                     
                               </td>
-                              <td><a href="/admin/orderView/<%=x._id%>"><button type="button" class="btn btn-light">View</button></a></td>
+                              <td><a  href="/get_OrderDetails/<%=x._id%>""><button type="button" class="btn btn-light">View</button></a></td>
                             </tr>
                           <% }) %>
                         <% } else { %>
