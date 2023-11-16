@@ -2,6 +2,7 @@ const userCollection = require('../../model/user/userSchema')
 const allProducts=require('../../model/admin/productSchema')
 const WishlistCollection = require('../../model/user/wishlistSchema')
 const cartCollection =require('../../model/user/userCartSchema')
+const categoryCollection = require('../../model/admin/admin_categorySchema')
 const sendMail =require('../../controller/email&otp-Controller/emailController')
 const bcrypt = require('bcrypt')
 const ObjectId = require('mongodb').ObjectId;
@@ -42,8 +43,11 @@ const get_product_List = async(req,res)=>{
         const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
         const wishlist = wishlist_ ? wishlist_.Products : [];
         
+        const allcategorys = await categoryCollection.find({},{name:1,_id:0})
+        console.log('categoryCollection--------------',allcategorys);
+
         res.render('user/userProductList',
-        {title:'Product List Page',username,products,products_count,category,pageNumber,wishlist,cartProductIds})
+        {title:'Product List Page',username,products,products_count,category,pageNumber,wishlist,cartProductIds,allcategorys})
         // res.json({
         //     success:true,
         //     products,
@@ -53,7 +57,45 @@ const get_product_List = async(req,res)=>{
         }
 }
 
+const filterByCategory = async(req,res)=>{
+    try {
+        const category =  req.query.category
+        const Products = await allProducts.find({category})
+        const username= req.session.user
+        // Fetch the user's cart data
+        const user = await userCollection.findOne({ username });
+        
+         // Fetch the user's cart data
+         const userCartData = await cartCollection.findOne({ userId: user._id });
+        
+ 
+         // Declare cartProductIds outside the if block
+         let cartProductIds = new Set();
+ 
+         // Check if userCartData is not null and has 'Products'
+         if (userCartData && userCartData.Products) {
+             // Create a Set of productIds that are in the cart
+             cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
+             console.log('------------------------cartProductIds', cartProductIds);
+         }
+         
+         console.log('------------------------cartProductIds', cartProductIds);
+         const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
+         const wishlist = wishlist_ ? wishlist_.Products : [];
+
+         
+        if(Products){
+            res.json({success:true,Products,cartProductIds,wishlist})
+        }
+       
+    } catch (error) {
+        console.error('Error in filterByCategory:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+    
+}
 
 module.exports={
     get_product_List, 
+    filterByCategory,
 }

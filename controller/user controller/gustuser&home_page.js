@@ -63,13 +63,39 @@ const userHome = async (req, res) => {
 
 const search = async (req,res)=>{
     try {
+        const username =req.session.user
 
-        const query = req.query.q;
+        const query = req.query.searchInput;
+        console.log('query =============',query);
         const results = await allProducts.find({ $text: { $search: new RegExp(query, 'i') } });
-       
+        let products_count= results.length
+        let pageNumber = req.query.page?Number(req.query.page):0; 
+        products_count = products_count/5
+        let skip =pageNumber*5
+        const products = results
         console.log('searched data ===========',results);
-        
-        res.json({ success: true, results });
+
+        const user = await customer.findOne({ username });
+        console.log('------------------------userCartData', user);
+
+        // Fetch the user's cart data
+        const userCartData = await cartCollection.findOne({ userId: user._id });
+        console.log('------------------------userCartData', userCartData);
+
+        // Declare cartProductIds outside the if block
+        let cartProductIds = new Set();
+
+        // Check if userCartData is not null and has 'Products'
+        if (userCartData && userCartData.Products) {
+            // Create a Set of productIds that are in the cart
+            cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
+            console.log('------------------------cartProductIds', cartProductIds);
+        }
+
+        const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
+        const wishlist = wishlist_ ? wishlist_.Products : [];
+        res.render('user/userSearch',{username,title:'Search Data',products,cartProductIds,wishlist,products_count,pageNumber})
+        // res.json({ success: true, results });
     } catch (error) {
         console.error('Search error:', error);
         res.status(500).json({ success: false, error: 'Internal Server Error' });

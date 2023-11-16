@@ -85,4 +85,6 @@ router.get('/get_OrderDetails/:id',userAuth.verifyuser,userOrderControll.get_Ord
 router.get('/getInvoice/:OrderId',userAuth.verifyuser,userOrderControll.getInvoice)
 router.post('/returnOrder/:OrderId',userAuth.verifyuser,userOrderControll.post_returnOrder)
 
+router.get('/filterByCategory',userAuth.verifyuser,productList_Controll.filterByCategory)
+
 module.exports= router;

@@ -47,7 +47,7 @@ const post_confirmOrder =  async (req,res)=>{
             PaymentMethod: confirmOrderData.paymentMethods,
             OrderDate: new Date(Date.now()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
             ExpectedDeliveryDate:new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
-            returnExpiryDate:new Date(Date.now() +  7*24*60*60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+            returnExpiryDate:new Date(Date.now() + 120 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
             TotalPrice: cartToatal,
             Address: shippingAddress,
         })
