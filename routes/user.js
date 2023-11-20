@@ -77,7 +77,9 @@ router.post('/post_userProfile_update',userAuth.verifyuser,upload.single('userPr
 router.post('/get_profile/resetPassword',userAuth.verifyuser,userProfileController.resetPassword)
 //--------------------------------------------------------------------------------------------------
 router.get('/get_palceOrder',userAuth.verifyuser,userOrderControll.get_palceOrder)
-router.post('/confirmOrder',userAuth.verifyuser,userOrderControll.post_confirmOrder)
+router.get('/confirmOrderAndGetOrderSucess',userAuth.verifyuser,userOrderControll.get_confirmOrder)
+router.post('/confirmOrder',userAuth.verifyuser,userOrderControll.confirmOrder)
+router.post('/verify-payment',userAuth.verifyuser,userOrderControll.verify_payment)
 //--------------------------------------------------------------------------------------------------
 router.get('/get_Orders',userAuth.verifyuser,userOrderControll.get_Orders)
 router.post('/removeOrder/:ProductId',userAuth.verifyuser,userOrderControll.post_remove_Orders)

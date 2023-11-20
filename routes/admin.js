@@ -18,6 +18,7 @@ const product_controll = require('../controller/admin controller/product_control
 const customer_controll = require('../controller/admin controller/admin_customers_controll')
 const category_controll = require('../controller/admin controller/admin_category_controll')
 const adminOrderControll = require('../controller/admin controller/adminOrderController')
+const couponController=require('../controller/admin controller/admin_coupen_controller')
 
 
 // admin login
@@ -87,6 +88,13 @@ router.get('/admin/paymensts',adminAuth.verifyAdmin,adminPaymentControll.get_pay
 router.get('/admin/orders',adminAuth.verifyAdmin,adminOrderControll.get_orderView)
 router.put('/updateOrderStatus/:productId',adminAuth.verifyAdmin,adminOrderControll.updateOrderStatus)
 router.get('/confirmOrderReturn/:OrderId',adminAuth.verifyAdmin,adminOrderControll.confirmOrderReturn)
+
+//admin coupen management page
+router.get('/admin/coupens',adminAuth.verifyAdmin, couponController.CouponManagement)
+router.post('/admin/addCoupon',adminAuth.verifyAdmin, couponController.addCoupon)
+router.delete('/admin/deleteCoupon/:couponId',adminAuth.verifyAdmin, couponController.deleteCoupon)
+router.get('/admin/editCoupon/:couponId',adminAuth.verifyAdmin, couponController.editcouponget)
+router.post('/admin/edit-coupon/:couponId',adminAuth.verifyAdmin, couponController.editCoupon)
 
 
 

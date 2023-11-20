@@ -7,6 +7,10 @@ const cartCollection = require('../../model/user/userCartSchema')
 const bcrypt = require('bcrypt')
 const ObjectId = require('mongodb').ObjectId;
 var mongoose = require('mongoose');
+const Razorpay = require('razorpay');
+const razorpay =  require('../../utility/razorpay')
+const crypto = require("crypto");
+
 
 const get_palceOrder = async (req,res)=>{
 try {
@@ -23,13 +27,76 @@ try {
 }
 }
 
-const post_confirmOrder =  async (req,res)=>{
+const confirmOrder =async (req,res)=>{
     try {
+            req.session.confirmOrderBody =  req.body
+            const cartToatal =  req.session.cartToatal
+            // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
+           if(req.session.confirmOrderBody.paymentMethods ==='CashOnDelivery'){
+            req.session.paymentStatus = 'CashOnDelivery'
+            res.json({success:'cahsOnDelevery'})}
+            else if(req.session.confirmOrderBody.paymentMethods ==='OnliePayment'){
+                // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
+                var order = {
+                    amount: cartToatal*100,  // amount in the smallest currency unit
+                    currency: "INR",
+                    receipt: req.session.cartId,
+                  };
+                  await razorpay 
+                  .createRazorpayOrder(order)
+                  .then((createdOrder)=>{
+                    req.session.paymentStatus = 'OnliePayment'
+                  res.json({success:'OnliePayment',createdOrder,order});
+                  })
+                  .catch((error) => {
+                    console.error('Razorpay error:', error);
+                    res.status(500).json({ error: 'Internal Server Error' });
+                })
+                
+                  
+            }
+    } catch (error) {
+        console.log('confirmOrder:',error)
+    }
+}
+
+const verify_payment = async (req, res) => {
+    try {
+      let hmac = crypto.createHmac("sha256", process.env.KEY_SECRET);
+    
+      hmac.update(
+        req.body.payment.razorpay_order_id +
+          "|" +
+          req.body.payment.razorpay_payment_id
+      );
+    
+      hmac = hmac.digest("hex");
+      
+      if (hmac === req.body.payment.razorpay_signature) {
+
+        const orderId = new mongoose.Types.ObjectId(
+          req.body.order.createdOrder.receipt
+        );
+        
+        res.json({ success: true });
+      } else {
+        // console.log("hmac failed");
+        res.json({ failure: true });
+      }
+    } catch (error) {
+      console.error("failed to verify the payment", error);
+    }
+  };
+
+const get_confirmOrder =  async (req,res)=>{
+    try {
+        console.log('check enter ------------------');
         const username = req.session.user
         const cartToatal =  req.session.cartToatal
         // const cartProducts = req.session.cartProducts
         
-        const confirmOrderData =  req.body
+        const confirmOrderData =  req.session.confirmOrderBody
+        // console.log('confirmOrderData:-----------',confirmOrderData);
         const userData =await userCollection.findOne({username})
 
         let shippingAddress = {}
@@ -40,6 +107,14 @@ const post_confirmOrder =  async (req,res)=>{
         })
         const cartProducts =  await cartCollection.findOne({userId:userData._id}).populate("Products.ProductId")
 
+        console.log(req.session.paymentStatus );
+        let paymentStatus;
+        if(req.session.paymentStatus === 'CashOnDelivery'){
+             paymentStatus = 'Pending'
+        }else if(req.session.paymentStatus ==='OnliePayment'){
+            paymentStatus= 'Online Payment'
+        }
+
         const insertOrderData = await OrdersCollection.insertMany({
             UserId: new ObjectId(userData._id),
             email:userData.email,
@@ -47,13 +122,14 @@ const post_confirmOrder =  async (req,res)=>{
             PaymentMethod: confirmOrderData.paymentMethods,
             OrderDate: new Date(Date.now()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
             ExpectedDeliveryDate:new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
-            returnExpiryDate:new Date(Date.now() + 120 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+            returnExpiryDate:new Date(Date.now() + 60*60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+            PaymentStatus: paymentStatus,
             TotalPrice: cartToatal,
             Address: shippingAddress,
         })
        
             const orderData = cartProducts
-            console.log('orderData------------------',orderData);   
+            // console.log('orderData------------------',orderData);   
         if (orderData && orderData.Products) {
             for(const items of orderData.Products){
                 const ProductId =items.ProductId;
@@ -79,7 +155,7 @@ const post_confirmOrder =  async (req,res)=>{
         
         res.render('user/orderSuccess', { title: 'Order Success', username });
 
-        console.log('check---------------************///////////');
+        // console.log('check---------------************///////////');
     
     } catch (error) {
         res.status(400).render('error',{error})
@@ -87,6 +163,8 @@ const post_confirmOrder =  async (req,res)=>{
         
     }
 }
+
+
 
 const get_Orders = async (req,res)=>{
     try {
@@ -262,11 +340,14 @@ const post_returnOrder = async(req,res)=>{
     }
 }
 module.exports={
+confirmOrder,
 get_palceOrder,
-post_confirmOrder,
+get_confirmOrder,
 get_Orders,
 post_remove_Orders,
 get_OrderDetails,
 getInvoice,
 post_returnOrder,
+verify_payment,
+
 }

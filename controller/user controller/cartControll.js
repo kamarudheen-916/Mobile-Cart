@@ -37,6 +37,7 @@ const user_cart = async(req,res)=>{
           total+= (item.ProductId.price*item.Quantity)
           })
           req.session.cartToatal=total
+          req.session.cartId =  cartData._id
           req.session.cartProducts =  cartData.Products
             console.log('-------------total',total);
         const cart_=  await cartCollection.findOneAndUpdate(

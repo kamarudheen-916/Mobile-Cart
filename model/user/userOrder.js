@@ -34,7 +34,7 @@ const OrdersSchema = new Schema({
   ExpectedDeliveryDate:{type: String},
   returnExpiryDate:{type:String},
   TotalPrice: { type: Number },
-  PaymentStatus: {type: String, default: "Pending"},
+  PaymentStatus: {type: String},
   CouponId: { type: Schema.Types.ObjectId },
   Address: { type: ShippedAddressSchema },
 });
