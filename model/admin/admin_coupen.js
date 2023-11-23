@@ -16,21 +16,13 @@ const couponSchema = new mongoose.Schema({
           status: {type: String, default: 'Attempted'}
         }
       ],
-      discountType: {
-        type: String,
-        enum: ['percentage', 'fixed'],
-        required: true
-    },
-    amount: Number,
-  minAmount: Number,
-  minAmountFixed: Number,
-  maxAmount: Number,
-  limit: Number,
+  discountAmount: Number,
+  MinimumPurchaseAmount: Number,
   couponType: String,
-  startDate: Date,
-  endDate: Date,
+  isUsed:{type:Boolean,default:false},
+  startDate: String,
+  endDate: String,
   category: Array,
-  applyType: String,
   status: { type: Boolean, default: true },
 });
 

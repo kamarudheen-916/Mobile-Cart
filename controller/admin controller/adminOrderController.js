@@ -38,8 +38,16 @@ const updateOrderStatus =async (req,res)=>{
 const confirmOrderReturn = async(req,res)=>{
     try {
         const OrderId = req.params.OrderId
-
+        
         const orderData = await OrdersCollection.findOne({_id:OrderId})
+        const UserData =  await customer.findOne({_id:orderData.UserId})
+        if(!UserData){
+            console.log('there is no userdata ');
+        }
+        console.log('userData when confirm Order Return :',UserData);
+        UserData.wallet = orderData.TotalPrice
+        UserData.save()
+
         if(!orderData){
             res.status(400).json({status:false})
         }
@@ -59,8 +67,24 @@ const confirmOrderReturn = async(req,res)=>{
         console.log('confirmOrderReturn error',error);
     }
 }
+
+const get_OrderDetails = async (req,res)=>{
+    try {
+        const orderId = req.params.id
+
+        const orderData = await OrdersCollection.findOne({_id:orderId}).populate('Products.ProductId')
+         
+        // console.log('orderData with id ------------',orderData.Products[0].ProductId);
+        const username = req.session.user
+
+        res.render('admin/adminOrderDetails',{title:"Admin Order Details",username,orderData})
+    } catch (error) {
+        console.log('get_OrderDetails error ',error);
+    }
+}
 module.exports = {
     get_orderView,
     updateOrderStatus,
     confirmOrderReturn,
+    get_OrderDetails,
 }

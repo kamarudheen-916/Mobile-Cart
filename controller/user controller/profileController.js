@@ -1,9 +1,11 @@
 const userCollection = require('../../model/user/userSchema')
 const allProducts=require('../../model/admin/productSchema')
+const Coupon = require('../../model/admin/admin_coupen')
 const sendMail =require('../../controller/email&otp-Controller/emailController')
 const bcrypt = require('bcrypt')
 const ObjectId = require('mongodb').ObjectId;
 var mongoose = require('mongoose');
+
 
 
 //user profile
@@ -11,7 +13,7 @@ const user_profile_get= async (req,res)=>{
     try {
         const username = req.session.user
         const userData = await userCollection.findOne({username})
-        console.log('userData_______',userData);
+        // console.log('userData_______',userData);
         res.render('user/profile',{title:'User Profile',username,userData})
     } catch (error) {
         res.render('error',{error})
@@ -34,10 +36,10 @@ const user_address_post = async (req,res)=>{
     try {
         const username = req.session.user
         const newAddress =  req.body
-        console.log('-----------------NEWADDRESS',newAddress);
+        // console.log('-----------------NEWADDRESS',newAddress);
         const newAddressUpdate = await userCollection.findOneAndUpdate({username},
            {$push:{Address:newAddress}} )
-           console.log('-----------------newAddressUpdate',newAddressUpdate);
+        //    console.log('-----------------newAddressUpdate',newAddressUpdate);
         // res.redirect('/get_userAddress')
         res.json({success:true})
     } catch (error) {
@@ -77,7 +79,7 @@ const user_editAddress = async(req,res)=>{
             console.log('there is no address id ');
             res.render('error',{error})
         }
-        console.log("edit page ------------------",addressId);
+        // console.log("edit page ------------------",addressId);
         const UserAddress = await userCollection.findOne({Address:{$elemMatch:{_id:addressId}}})
         UserAddress_Address= UserAddress.Address
         // console.log('---------------------',UserAddress_Address);
@@ -109,10 +111,10 @@ const user_editAddress_post = async (req,res)=>{
     try {
         const addressId = req.params.id
         const editAddress_data = req.body
-        console.log('editAddress_data-------------',editAddress_data);
-        console.log('editAddress_data-------------',addressId);
+        // console.log('editAddress_data-------------',editAddress_data);
+        // console.log('editAddress_data-------------',addressId);
         username = req.session.user;
-        console.log('username----------',username);
+        // console.log('username----------',username);
         const objectIdAddressId = new ObjectId(addressId);
 
         const editAddress = await userCollection.updateOne(
@@ -130,7 +132,7 @@ const user_editAddress_post = async (req,res)=>{
                 }
             });
 
-            console.log('edited result -----------------',editAddress);
+            // console.log('edited result -----------------',editAddress);
             res.redirect('/get_userAddress')
     } catch (error) {
         console.log('user_editAddress_post error',error);
@@ -143,14 +145,14 @@ const post_userProfile_update = async (req,res)=>{
 
         const username = req.session.user
         if(req.file){
-            console.log('profle route reached-------');
+            // console.log('profle route reached-------');
             const image = req.file
-            console.log('profile image : --------: ',image);
+            // console.log('profile image : --------: ',image);
             const filename = '/static/uploads/'+image.filename
-            console.log('-----------filename:',filename);
+            // console.log('-----------filename:',filename);
             const uploadProfile =  await userCollection.updateOne({username},
                 {$set:{profile:filename}})
-                console.log('-----------uploadProfile:',uploadProfile);
+                // console.log('-----------uploadProfile:',uploadProfile);
                
                 res.json({
                     success:true,
@@ -199,12 +201,30 @@ const resetPassword = async(req,res)=>{
     
 
 
-        console.log('resetPasswordData------------',resetPasswordData);
+        // console.log('resetPasswordData------------',resetPasswordData);
     } catch (error) {
         console.log('user_profile_rest Password post error',error);
         res.render('error',{error}) 
     }
 }   
+
+//view coupons
+const viewCoupon=async(req,res)=>{
+    try {
+      const username= req.session.user;
+      const Coupons=await Coupon.find()
+      if(!Coupons){
+        res.render('error')
+      }
+      console.log(Coupons);
+      const date = new Date()
+     
+      res.render('user/coupon',{title:'User Coupon',coupon:Coupons,username,date})
+    } catch (error) {
+      console.error('error while rendering coupon page')
+    }
+  }
+  
 module.exports={
     user_profile_get, 
     user_address_get,
@@ -214,4 +234,5 @@ module.exports={
     user_editAddress_post,
     post_userProfile_update,
     resetPassword,
+    viewCoupon,
 }

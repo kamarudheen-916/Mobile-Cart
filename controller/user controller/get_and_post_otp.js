@@ -31,7 +31,7 @@ const userOtp_post =async (req,res)=>{
         }
             req.session.logedIn=true
             
-            console.log('---------------'+req.session.logedIn);
+            // console.log('---------------'+req.session.logedIn);
             res.redirect('/')
         }else{
             req.session.OTPerrorMessage = true;

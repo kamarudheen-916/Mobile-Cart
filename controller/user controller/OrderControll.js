@@ -10,18 +10,20 @@ var mongoose = require('mongoose');
 const Razorpay = require('razorpay');
 const razorpay =  require('../../utility/razorpay')
 const crypto = require("crypto");
+const Coupon = require('../../model/admin/admin_coupen');
 
 
 const get_palceOrder = async (req,res)=>{
 try {
         const username = req.session.user
-
+        const cartToatal =  req.session.totalWithCoupon? req.session.totalWithCoupon: req.session.cartToatal
+        
         const userData = await userCollection.findOne({username})
 
-        console.log('userData_______',userData);
+        // console.log('userData_______',userData);
         const allAddress = userData.Address
 
-    res.render('user/placeOrder',{username,title:'Place Order',allAddress,userData})
+    res.render('user/placeOrder',{username,title:'Place Order',allAddress,userData,cartToatal})
 } catch (error) {
     res.status(400).render('error',{error})
 }
@@ -30,7 +32,7 @@ try {
 const confirmOrder =async (req,res)=>{
     try {
             req.session.confirmOrderBody =  req.body
-            const cartToatal =  req.session.cartToatal
+            const newToatal =  req.session.totalWithCoupon? req.session.totalWithCoupon: req.session.cartToatal
             // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
            if(req.session.confirmOrderBody.paymentMethods ==='CashOnDelivery'){
             req.session.paymentStatus = 'CashOnDelivery'
@@ -38,7 +40,7 @@ const confirmOrder =async (req,res)=>{
             else if(req.session.confirmOrderBody.paymentMethods ==='OnliePayment'){
                 // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
                 var order = {
-                    amount: cartToatal*100,  // amount in the smallest currency unit
+                    amount: newToatal*100,  // amount in the smallest currency unit
                     currency: "INR",
                     receipt: req.session.cartId,
                   };
@@ -57,6 +59,34 @@ const confirmOrder =async (req,res)=>{
             }
     } catch (error) {
         console.log('confirmOrder:',error)
+    }
+}
+
+const applyCoupon = async(req,res)=>{
+    try {
+        const couponCode =  req.query.couponCode
+        req.session.couponCode =  couponCode
+        const CouponData =  await Coupon.findOne({couponCode})
+        console.log(CouponData);
+        if(!CouponData){
+            res.json({success:false,message:'Wrong Coupon Code!!!'})
+        }else{
+            if(CouponData.isUsed){
+                res.json({success:false,message:'This Coupon Is Already Used!!!'})
+            }else if(req.session.cartToatal<CouponData.MinimumPurchaseAmount){
+               
+                res.json({success:false,message:`Coupon only can be used above ₹ ${CouponData.MinimumPurchaseAmount} !!!`})
+            }else {
+                console.log('************//////////////////');
+            const discountAmount  =  req.session.cartToatal - CouponData.discountAmount
+            req.session.totalWithCoupon =  discountAmount
+            req.session.couponAmount =  CouponData.discountAmount
+            res.json({success:true,discountAmount})
+            }
+        }
+       
+    } catch (error) {
+        console.log('apply coupon error',error);
     }
 }
 
@@ -90,9 +120,11 @@ const verify_payment = async (req, res) => {
 
 const get_confirmOrder =  async (req,res)=>{
     try {
-        console.log('check enter ------------------');
+        // console.log('check enter ------------------');
         const username = req.session.user
-        const cartToatal =  req.session.cartToatal
+        const newToatal =  req.session.totalWithCoupon? req.session.totalWithCoupon: req.session.cartToatal
+      
+        
         // const cartProducts = req.session.cartProducts
         
         const confirmOrderData =  req.session.confirmOrderBody
@@ -107,7 +139,7 @@ const get_confirmOrder =  async (req,res)=>{
         })
         const cartProducts =  await cartCollection.findOne({userId:userData._id}).populate("Products.ProductId")
 
-        console.log(req.session.paymentStatus );
+        // console.log(req.session.paymentStatus );
         let paymentStatus;
         if(req.session.paymentStatus === 'CashOnDelivery'){
              paymentStatus = 'Pending'
@@ -124,7 +156,9 @@ const get_confirmOrder =  async (req,res)=>{
             ExpectedDeliveryDate:new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
             returnExpiryDate:new Date(Date.now() + 60*60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
             PaymentStatus: paymentStatus,
-            TotalPrice: cartToatal,
+            couponAmount:req.session.couponAmount,
+            walletAmount:0,
+            TotalPrice: newToatal,
             Address: shippingAddress,
         })
        
@@ -152,7 +186,10 @@ const get_confirmOrder =  async (req,res)=>{
        
             //clear cart products when confirm order
         const clearCart = await cartCollection.findOneAndDelete({userId:userData._id})
-        
+        const couponCode =  req.session.couponCode
+        const CouponData =  await Coupon.findOneAndUpdate(
+            {couponCode},
+            {$set:{isUsed:true}})
         res.render('user/orderSuccess', { title: 'Order Success', username });
 
         // console.log('check---------------************///////////');
@@ -172,9 +209,9 @@ const get_Orders = async (req,res)=>{
         const userData = await userCollection.findOne({username})
 
         
-        console.log('userOrderData---------------',userData);   
+        // console.log('userOrderData---------------',userData);   
         const userOrderData = await OrdersCollection.find({UserId:userData._id}).populate('Products.ProductId')
-        console.log('userOrderData---------------',userOrderData);
+        // console.log('userOrderData---------------',userOrderData);
         if (userOrderData.length > 0) {
             // Assuming you want to iterate over each order
             userOrderData.forEach(order => {
@@ -205,8 +242,8 @@ const post_remove_Orders = async (req,res)=>{
         const username = req.session.user
         const productId = req.params.ProductId
         const orderData = await OrdersCollection.findOne({_id:productId})       
-        console.log('productId-----------',productId);
-        console.log('productId-----------',orderData);
+        // console.log('productId-----------',productId);
+        // console.log('productId-----------',orderData);
 
         if(orderData){
             orderData.Status = 'Cancelled'
@@ -226,7 +263,7 @@ const get_OrderDetails = async (req,res)=>{
 
         const orderData = await OrdersCollection.findOne({_id:orderId}).populate('Products.ProductId')
          
-        console.log('orderData with id ------------',orderData.Products[0].ProductId);
+        // console.log('orderData with id ------------',orderData.Products[0].ProductId);
         const username = req.session.user
 
         res.render('user/OrderDetails',{title:"User Order Details",username,orderData})
@@ -239,10 +276,10 @@ const getInvoice = async (req,res)=>{
     try {
         const username = req.session.user
         const orderId = req.params.OrderId;
-        console.log('--------------------------orderId',orderId);
+        // console.log('--------------------------orderId',orderId);
         
         const orderData = await OrdersCollection.findOne({ _id: orderId }).populate('Products.ProductId');
-        console.log('--------------------------get invoice',orderData);
+        // console.log('--------------------------get invoice',orderData);
 
         if (!orderData) {
           return res.status(404).json({ success: false, message: 'Order not found' });
@@ -307,8 +344,8 @@ const post_returnOrder = async(req,res)=>{
         const orderId =  req.params.OrderId
         const Reason = req.body.Reason
         const Message =  req.body.Message
-        console.log('reason-----------',Reason);
-        console.log('message----------',Message);
+        // console.log('reason-----------',Reason);
+        // console.log('message----------',Message);
         console.log(orderId);
         const orderData  = await OrdersCollection.findOne({_id:orderId})
         console.log('orderData=============',orderData);
@@ -326,10 +363,10 @@ const post_returnOrder = async(req,res)=>{
             orderData.return.Reason =Reason;
             orderData.return.Message = Message;
             orderData.return.returnDate=new Date(Date.now()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
-            console.log('reason-----------',orderData.return.Reason);
-            console.log('message----------',orderData.return.Message);
+            // console.log('reason-----------',orderData.return.Reason);
+            // console.log('message----------',orderData.return.Message);
             orderData.save()
-            console.log(orderData,'orderData=============');
+            // console.log(orderData,'orderData=============');
             res.json({success:true})
         }else{
             console.log('there is no user data');
@@ -343,6 +380,7 @@ module.exports={
 confirmOrder,
 get_palceOrder,
 get_confirmOrder,
+applyCoupon,
 get_Orders,
 post_remove_Orders,
 get_OrderDetails,

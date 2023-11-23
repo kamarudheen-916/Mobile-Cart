@@ -12,8 +12,9 @@ const ObjectId = require('mongodb').ObjectId;
 //user cart get
 const user_cart = async(req,res)=>{
     try {
+        req.session.totalWithCoupon=0
         const username = req.session.user
-        console.log('-----------------------username',username);
+        // console.log('-----------------------username',username);
         const user = await userCollection.findOne({username})
 
         if (!user) {
@@ -39,10 +40,10 @@ const user_cart = async(req,res)=>{
           req.session.cartToatal=total
           req.session.cartId =  cartData._id
           req.session.cartProducts =  cartData.Products
-            console.log('-------------total',total);
+            // console.log('-------------total',total);
         const cart_=  await cartCollection.findOneAndUpdate(
             {userId:user._id},{$set:{TotalAmount:total}})
-            console.log('----------------cart_',cart_);
+            // console.log('----------------cart_',cart_);
            cartData.save()
            res.status(200).render('user/cart', {
             title: 'User Wishlist',
@@ -59,7 +60,7 @@ const user_cart = async(req,res)=>{
 //--------------------------------------------------------------------------------
 const   add_to_Cart =async (req,res)=>{
     try {
-       console.log('========test');
+    //    console.log('========test');
         const count = req.params.count
         const { productId } = req.body;
         
@@ -79,7 +80,7 @@ const   add_to_Cart =async (req,res)=>{
 
                  
                 let quantity = req.query.quantity;
-                console.log('quantity------',quantity);
+                // console.log('quantity------',quantity);
                 quantity =Number(quantity)+Number(count)
 
 
@@ -109,13 +110,13 @@ const   add_to_Cart =async (req,res)=>{
           total+= (item.ProductId.price*item.Quantity)
           })
 
-          console.log('********---------////',total);
+        //   console.log('********---------////',total);
           await cartCollection.updateOne(
             {userId:user._id},{$set:{TotalAmount:total}})
         
             res.json({
                 success:true,
-                message:'it is success  *******---------'
+                message:'it is success  '
             })
         // console.log('---------------product id:',productId); 
 
@@ -127,7 +128,7 @@ const   add_to_Cart =async (req,res)=>{
 const removeFromCart = async (req, res) => {
     try {
         const productId = req.params.productId;
-        console.log('---------------productId',productId);
+        // console.log('---------------productId',productId);
         const username = req.session.user
         const userdata = await userCollection.findOne({username})
         if(!userdata){
@@ -136,7 +137,7 @@ const removeFromCart = async (req, res) => {
 
         const userCartData = await cartCollection.findOne({userId:userdata._id});
 
-        console.log('---------------userCartData',userCartData);
+        // console.log('---------------userCartData',userCartData);
         if (userCartData) {
             // Update the document to remove the specified item
 
@@ -147,7 +148,7 @@ const removeFromCart = async (req, res) => {
                 { $pull: { Products: { ProductId: productId } } }
             );
 
-            console.log('---------------updatedCart',updatedCart);
+            // console.log('---------------updatedCart',updatedCart);
 
             if (updatedCart.modifiedCount > 0) {
                 console.log('Item removed from cart successfully.');

@@ -17,19 +17,19 @@ const userSignup_post_generate_otp = async (req,res)=>{
     try {
       const signUp_username = req.body.username
       const signup_email = req.body.email
-      console.log('--------------username:',signUp_username);
+      // console.log('--------------username:',signUp_username);
   
       const userdata = await userCollection.findOne({username:signUp_username})
       const username = userdata?userdata.username:""
       const userEmail = userdata?userdata.email:""
-      console.log('--------------mongodb Username:',username);
+      // console.log('--------------mongodb Username:',username);
       if(signUp_username!==username && signup_email!==userEmail ){
           req.session.duplicateUserNameMessage = ''
           const userEmail = req.body.email
           req.session.newOtp = Number(sendMail(req,res,userEmail))
           req.session.user=req.body.username
           req.session.OTPerrorMessage = false;
-          console.log(req.session.user);
+          // console.log(req.session.user);
       
          req.session.signUp_userData={
               username:req.body.username,
@@ -38,7 +38,7 @@ const userSignup_post_generate_otp = async (req,res)=>{
               password:await bcrypt.hash(req.body.password,10)
           }
           
-          console.log(req.session.signUp_userData);
+          // console.log(req.session.signUp_userData);
           req.session.userSignup=true
           res.redirect('/otp')
       }else{

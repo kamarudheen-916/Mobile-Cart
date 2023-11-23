@@ -53,9 +53,11 @@ router.get('/logout',(req,res)=>{  req.session.logedIn=false; res.redirect('/') 
 //--------------------------------------------------------------------------
 //user product list 
 router.get('/userProductList/:category',userAuth.verifyuser,productList_Controll.get_product_List)
+router.get('/filterByCategory',userAuth.verifyuser,productList_Controll.filterByCategory)
+
 //user product detailes
 router.get('/productDetails/:id',userAuth.verifyuser,productDetails_Controll.get_productDetails)
-//------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 //user wishlist get 
 router.get('/wishlist',userAuth.verifyuser,wishlist_controll.get_wishlist)
 //add to wishlist 
@@ -75,11 +77,15 @@ router.get('/editAddress/:addressId',userAuth.verifyuser,userProfileController.u
 router.post('/post_editAddress/:id',userAuth.verifyuser,userProfileController.user_editAddress_post)
 router.post('/post_userProfile_update',userAuth.verifyuser,upload.single('userProfile'),userProfileController.post_userProfile_update)
 router.post('/get_profile/resetPassword',userAuth.verifyuser,userProfileController.resetPassword)
+router.get('/coupons',userAuth.verifyuser,userProfileController.viewCoupon)
+
+
 //--------------------------------------------------------------------------------------------------
 router.get('/get_palceOrder',userAuth.verifyuser,userOrderControll.get_palceOrder)
 router.get('/confirmOrderAndGetOrderSucess',userAuth.verifyuser,userOrderControll.get_confirmOrder)
 router.post('/confirmOrder',userAuth.verifyuser,userOrderControll.confirmOrder)
 router.post('/verify-payment',userAuth.verifyuser,userOrderControll.verify_payment)
+router.post('/applyCoupon',userAuth.verifyuser,userOrderControll.applyCoupon)
 //--------------------------------------------------------------------------------------------------
 router.get('/get_Orders',userAuth.verifyuser,userOrderControll.get_Orders)
 router.post('/removeOrder/:ProductId',userAuth.verifyuser,userOrderControll.post_remove_Orders)
@@ -87,6 +93,7 @@ router.get('/get_OrderDetails/:id',userAuth.verifyuser,userOrderControll.get_Ord
 router.get('/getInvoice/:OrderId',userAuth.verifyuser,userOrderControll.getInvoice)
 router.post('/returnOrder/:OrderId',userAuth.verifyuser,userOrderControll.post_returnOrder)
 
-router.get('/filterByCategory',userAuth.verifyuser,productList_Controll.filterByCategory)
+
+
 
 module.exports= router;

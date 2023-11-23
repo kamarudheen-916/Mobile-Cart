@@ -37,7 +37,7 @@ function updateOrderStatus(productId,newStatus){
 
 
 function verifyReturnOrder (orderId){
-
+  
     fetch(`/confirmOrderReturn/${orderId}`,{
 
     }).then((res)=>res.json())

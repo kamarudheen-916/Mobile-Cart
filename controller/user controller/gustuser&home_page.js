@@ -17,12 +17,11 @@ const gustuser = async(req,res)=>{
 }
 // home rout
 // Modify the userHome function
-// Modify the userHome function
-// Modify the userHome function
+
 const userHome = async (req, res) => {
     try {
         const username = req.session.user;
-        console.log('-----login user name:', username);
+        // console.log('-----login user name:', username);
 
         if (req.session.logedIn) {
             const products = await allProducts.find({ isDeleted: false });
@@ -31,7 +30,7 @@ const userHome = async (req, res) => {
 
             // Fetch the user's cart data
             const userCartData = await cartCollection.findOne({ userId: user._id });
-            console.log('------------------------userCartData', userCartData);
+            // console.log('------------------------userCartData', userCartData);
 
             // Declare cartProductIds outside the if block
             let cartProductIds = new Set();
@@ -40,7 +39,7 @@ const userHome = async (req, res) => {
             if (userCartData && userCartData.Products) {
                 // Create a Set of productIds that are in the cart
                 cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
-                console.log('------------------------cartProductIds', cartProductIds);
+                // console.log('------------------------cartProductIds', cartProductIds);
             }
 
             const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
@@ -66,21 +65,21 @@ const search = async (req,res)=>{
         const username =req.session.user
 
         const query = req.query.searchInput;
-        console.log('query =============',query);
+        // console.log('query =============',query);
         const results = await allProducts.find({ $text: { $search: new RegExp(query, 'i') } });
         let products_count= results.length
         let pageNumber = req.query.page?Number(req.query.page):0; 
         products_count = products_count/5
         let skip =pageNumber*5
         const products = results
-        console.log('searched data ===========',results);
+        // console.log('searched data ===========',results);
 
         const user = await customer.findOne({ username });
-        console.log('------------------------userCartData', user);
+        // console.log('------------------------userCartData', user);
 
         // Fetch the user's cart data
         const userCartData = await cartCollection.findOne({ userId: user._id });
-        console.log('------------------------userCartData', userCartData);
+        // console.log('------------------------userCartData', userCartData);
 
         // Declare cartProductIds outside the if block
         let cartProductIds = new Set();
@@ -89,9 +88,9 @@ const search = async (req,res)=>{
         if (userCartData && userCartData.Products) {
             // Create a Set of productIds that are in the cart
             cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
-            console.log('------------------------cartProductIds', cartProductIds);
+            // console.log('------------------------cartProductIds', cartProductIds);
         }
-
+        
         const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
         const wishlist = wishlist_ ? wishlist_.Products : [];
         res.render('user/userSearch',{username,title:'Search Data',products,cartProductIds,wishlist,products_count,pageNumber})

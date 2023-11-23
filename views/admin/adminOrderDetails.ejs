@@ -1,6 +1,8 @@
 <%-include('../layout/head')-%>
-    <!-- user header partial -->
- <%-include('../partials/user-header')-%>
+
+<div>
+    <%-include('../partials/admin-header')-%>
+</div>
 
  <section class="h-100 gradient-custom shadow " style="padding-top: 80px;">
     <div class="container py-5 h-100 ">
@@ -73,12 +75,12 @@
                     <div class="collapse" id="collapseExample">
                       <div class="card card-body">
                             <div class="d-flex">
-                              <h6 for="">Reason : &nbsp;</h6>
-                            <h6> <%= orderData.return.Reason %></h6>
+                              <h6 for="">Reason : </h6>
+                            <h6><%= orderData.return.Reason %></h6>
                             </div>
                             <div class="d-flex">
                               <h6 for="">Message : </h6>
-                              <h6> <%= orderData.return.Message%></h6>
+                              <h6><%= orderData.return.Message%></h6>
                             </div>
                             
                       </div>
@@ -98,6 +100,6 @@
     </div>
   </section>
 
- <%-include('../partials/user-footer')-%>
+ 
  <!-- user footer partials -->
 <%-include('../layout/footer')-%>

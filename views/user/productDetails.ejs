@@ -22,7 +22,7 @@
                             <% if (cartProductIds.has(products._id.toString())) { %>
                               <a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a>
                             <% } else { %>
-                              <a id="addToCartButton_<%= products[i]._id %>" class="btn btn-success" onclick="addToCart('<%= products[i]._id %>', 1)">Add To Cart</a>
+                              <a id="addToCartButton_<%=products._id%>" class="btn btn-success" onclick="addToCart('<%= products._id %>', 1)">Add To Cart</a>
       
                             <% } %>
                           </div>

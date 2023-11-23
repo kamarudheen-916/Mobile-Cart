@@ -21,7 +21,7 @@ const userLogin =async (req,res)=>{
         }else if(req.session.noUser){ 
             const username= req.session.user
             noUser_message=true;
-            console.log('incorrect password--------------------');
+            // console.log('incorrect password--------------------');
             res.render('user/login',{title:'User Login',username,isBlocked_message ,noUser_message,googleExistingUser})
         }else{
             const username= req.session.user

@@ -1,6 +1,6 @@
 const userCollection = require('../../model/user/userSchema')
 const allProducts=require('../../model/admin/productSchema')
-
+const cartCollection =require('../../model/user/userCartSchema')
 const sendMail =require('../../controller/email&otp-Controller/emailController')
 const bcrypt = require('bcrypt')
 const wishlist = require('../../model/user/wishlistSchema')
@@ -18,7 +18,7 @@ const get_wishlist = async(req,res)=>{
         }
     
         const userWishlist = await wishlist.findOne({ User_Id: user._id }).populate('Products.Product_id')
-        
+        // console.log('**********************',userWishlist.Products);
         if (!userWishlist) {
           return res.status(200).render('user/wishlist', {
             title: 'User Wishlist',
@@ -26,10 +26,29 @@ const get_wishlist = async(req,res)=>{
             wishlistItems: [], // An empty array to indicate there are no items in the wishlist
           });
         }
+
+        
+        const user_id = user._id;
+
+        // Fetch the user's cart data
+        const userCartData = await cartCollection.findOne({ userId: user._id });
+        // console.log('------------------------userCartData', userCartData);
+
+        // Declare cartProductIds outside the if block
+        let cartProductIds = new Set();
+
+        // Check if userCartData is not null and has 'Products'
+        if (userCartData && userCartData.Products) {
+            // Create a Set of productIds that are in the cart
+            cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
+            // console.log('------------------------cartProductIds', cartProductIds);
+        }
+
         return res.status(200).render('user/wishlist', {
           title: 'User Wishlist',
           username,
           wishlistItems: userWishlist.Products, // Now, each wishlist item has the product data
+          cartProductIds,
         });
       } catch (error) {
         console.log('Wishlist retrieval error:', error);
@@ -48,7 +67,7 @@ const add_wishlist = async(req,res)=>{
         if (!productId) {
           return res.status(400).json({ error: 'Product ID is required' });
         }
-        console.log('--------/////',productId);
+        // console.log('--------/////',productId);
         const username = req.session.user;
         const user = await userCollection.findOne({ username: username });
       
@@ -58,7 +77,7 @@ const add_wishlist = async(req,res)=>{
       
         const userWishlist = await wishlist.findOne(
           {$and:[{User_Id: user._id },{Products:{$elemMatch:{ Product_id:productId}}}]})
-        console.log('--------------------',userWishlist);
+        // console.log('--------------------',userWishlist);
         if (userWishlist) {
            // If the user's wishlist exists, add the product to it using updateOne
           req.session.wishlistAdded = productId
@@ -84,19 +103,19 @@ const add_wishlist = async(req,res)=>{
 
 const delete_wishlist = async(req,res)=>{
     try {
-        console.log('---------------skldblsakvjd');
+        // console.log('---------------skldblsakvjd');
         const username =req.session.user
-        console.log(username+"username");
+        // console.log(username+"username");
         const user = await userCollection.findOne({username:username})
-        console.log(user+"user!!!!!!!!!!!");
+        // console.log(user+"user!!!!!!!!!!!");
         if(!user){
             return res.render('error')
         }
         const productId =  req.params.productId
-        console.log(productId);
+        // console.log(productId);
         const User_Id =  user._id;
-        console.log(User_Id+"!!!!!@@@@@@@@@2");
-        console.log('productId---------',productId);
+        // console.log(User_Id+"!!!!!@@@@@@@@@2");
+        // console.log('productId---------',productId);
 
     
         await wishlist.updateOne(

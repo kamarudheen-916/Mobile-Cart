@@ -18,12 +18,19 @@ const ReturnSchema = new Schema({
   returnDate:{type:String},
   
 })
+const CancelSchema =  new Schema({
+  CancelStatus:{ type: String, default:"not returned"},
+  Reason:{type:String},
+  Message:{type:String},
+  returnDate:{type:String},
+})
 
 
 const OrdersSchema = new Schema({
   UserId: { type: Schema.Types.ObjectId },
   Status: { type: String, default:"Order Placed"},
   return:{type:ReturnSchema},
+  cancel:{type:CancelSchema},
   email:{type:String,required:true},
   Products: [{
     ProductId: { type: Schema.Types.ObjectId , ref: "products" },
@@ -33,6 +40,8 @@ const OrdersSchema = new Schema({
   OrderDate: { type: String },
   ExpectedDeliveryDate:{type: String},
   returnExpiryDate:{type:String},
+  couponAmount:{type:Number,default:0},
+  walletAmount:{type:Number,default:0},
   TotalPrice: { type: Number },
   PaymentStatus: {type: String},
   CouponId: { type: Schema.Types.ObjectId },

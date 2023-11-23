@@ -86,12 +86,13 @@ router.get('/admin/paymensts',adminAuth.verifyAdmin,adminPaymentControll.get_pay
 //--------------------------------------------------------------------------
 //admin order view page
 router.get('/admin/orders',adminAuth.verifyAdmin,adminOrderControll.get_orderView)
+router.get('/admin/get_OrderDetails/:id',adminAuth.verifyAdmin,adminOrderControll.get_OrderDetails)
 router.put('/updateOrderStatus/:productId',adminAuth.verifyAdmin,adminOrderControll.updateOrderStatus)
 router.get('/confirmOrderReturn/:OrderId',adminAuth.verifyAdmin,adminOrderControll.confirmOrderReturn)
 
 //admin coupen management page
 router.get('/admin/coupens',adminAuth.verifyAdmin, couponController.CouponManagement)
-router.post('/admin/addCoupon',adminAuth.verifyAdmin, couponController.addCoupon)
+router.post('/admin/addNewCoupon',adminAuth.verifyAdmin, couponController.addCoupon)
 router.delete('/admin/deleteCoupon/:couponId',adminAuth.verifyAdmin, couponController.deleteCoupon)
 router.get('/admin/editCoupon/:couponId',adminAuth.verifyAdmin, couponController.editcouponget)
 router.post('/admin/edit-coupon/:couponId',adminAuth.verifyAdmin, couponController.editCoupon)

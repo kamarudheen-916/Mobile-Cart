@@ -4,312 +4,202 @@
 <div>
     <%-include('../partials/admin-header')-%>
 </div>
+<style>
+.CoupenSubHeading{
+    font-weight: bold;
+    
+}
+</style>
+<section>
+  <div style="padding: 100px 20px 0px 20px;" class="col-md-12">
+        <div class="shadow col-md-12 " style="height: 75vh; overflow-y: scroll;">
+             <div class="row ">
+              <%if(coupons.length>0){%>
+                <%coupons.forEach(coupon=>{%>
+                      <div class="card col-md-3  p-5 m-3">
+                        <div class="d-flex justify-content-center mb-5 h4">
+                          <div  class="CoupenSubHeading">Coupon</div>
+                          
+                        </div>
+                            <div class="d-flex justify-content-between">
+                              <div  class="CoupenSubHeading">Name :</div>
+                              <label><%=coupon.couponName%></label>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                              <div class="CoupenSubHeading">Code :</div>
+                              <label><%=coupon.couponCode%></label>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                              <div class="CoupenSubHeading">Discount Amount :</div>
+                              <label><%=coupon.discountAmount%></label>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                              <div class="CoupenSubHeading">Minimum Purchase :</div>
+                              <label><%=coupon.MinimumPurchaseAmount%></label>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                              <div class="CoupenSubHeading">couponType :</div>
+                              <label><%=coupon.couponType%></label>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                              <div class="CoupenSubHeading">startDate :</div>
+                              <label><%=coupon.startDate%></label>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                              <div class="CoupenSubHeading">endDate :</div>
+                              <label><%=coupon.endDate%></label>
+                            </div>
+                            <div class="d-flex justify-content-between mt-4" >
+                                <button  type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#editModal<%=coupon._id%>"> Edit </button>
+                                <a  onclick="deleteCoupon('<%=coupon._id%>')" type="button" class="btn btn-danger">Delete </a>
+                            </div>
+                      </div>
+                    
+                      <!-- EDIT MODAL -->
 
-<div class="details">
-    <div class="recentOrders">
-        <div class="cardHeader " style="padding-top: 100px;">
-            <h1>Coupon Management</h1>
-            <button class="btn me-2" data-bs-toggle="modal" data-bs-target="#addCouponModal">
-                <i class="fas fa-plus-circle"></i> Add Coupon
+                      <div class="modal fade p-5" id="editModal<%=coupon._id%>" tabindex="-1" aria-divledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" >
+                            <div class="modal-content" id="editModalBody" >
+                                
+                                <div class="modal-content">
+                                    <div class="modal-header bg-black text-light " data-bs-theme="dark">
+                                      <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Coupen</h1>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-div="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form id="editCouponForm<%=coupon._id%>"  onsubmit="return editCouponSubmit('<%=coupon._id%>')">
+                                        <div class="mb-3">
+                                          <div for="exampleInputEmail1" class="form-div">Coupon Name </div>
+                                          <input type="text" required value='<%=coupon.couponName%>' class="form-control" name="couponName" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        </div>
+                                        <div class="mb-3">
+                                          <div for="exampleInputPassword1" class="form-div">Coupon Code </div>
+                                          
+                                          <input type="text" required value='<%=coupon.couponCode%>' class="form-control" onchange="editCouponValidation('<%=coupon._id%>')" name="couponCode" id="editCouponCode<%=coupon._id%>">
+                                          <span id="editCouponCodeError" class="text-danger"></span>
+                                          <p class="text-secondary fw-lighter "> Must Include :A-Z,a-z,0-9</p>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                          <div for="exampleInputPassword1" class="form-div">Minimum Purchase Amount </div>
+                                          <input type="number" required value='<%=coupon.MinimumPurchaseAmount%>' class="form-control" name="MinimumPurchaseAmount" id="EditMinimumPurchaseAmount<%=coupon._id%>">
+                                        </div>
+
+                                        <div class="mb-3">
+                                          <div for="exampleInputPassword1" class="form-div">Discount Amount </div>
+                                          <input type="number" required value='<%=coupon.discountAmount%>' onchange="editCouponValidation('<%=coupon._id%>')" class="form-control" name="discountAmount" id="EditDiscountAmount<%=coupon._id%>">
+                                          <span id="editDiscountError<%=coupon._id%>" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="CoupenSubHeading">Public Or Fixed..?</div>
+                                            <select required class="form-control" name="couponType" id="">
+                                                <option value="public" <%=coupon.couponType%> === 'public' ? 'selected' : ''>Public</option>
+                                                <option value="fixed" <%=coupon.couponType%> === 'fixed' ? 'selected' : ''>Fixed</option>
+                                            </select>
+                                        </div>
+                        
+                                          <div class="mb-3">
+                                            <div for="exampleInputPassword1" class="form-div">Select Start Date</div>
+                                            <input type="date" value='<%=coupon.startDate%>' name="startDate" class="form-control" id="editStartDate<%=coupon._id%>">
+                                          </div>
+                                          <div class="mb-3">
+                                            <div for="exampleInputPassword1" class="form-div">Select End Date  </div>
+                                            <input type="date" value='<%=coupon.endDate%>' name="endDate" class="form-control" id="editEndDate<%=coupon._id%>">
+                                            <span id="editendDateError<%=coupon._id%>" class="text-danger"></span>
+                                          </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success w-100">Submit</button>
+                                      </form>
+                                    </div>
+                                  </div>
+                            </div>
+                    </div>
+                      
+                            
+                  <%})%>
+            <%}else{%>
+              <div class=" d-flex justify-content-center p-5 h3 text-danger">
+                There is no Coupon available now..!
+              </div>
+              <%}%>
+            
+             </div>
+        </div>
+        <div>
+          <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+             Add New Coupon
             </button>
         </div>
+  </div>
+</section>
 
-        <div class="col-12 mt-5">
-            <div class="container">
-              <div class="row">
-                <% coupons.forEach(function(coupon){%>
-                <div class="col-md-6 mb-3">
-                  <div class="card coupon-card glow-on-hover" style="height: 500px;" >
-                    <div class="card-body">
-                        <h5 class="card-title">COUPON NAME : <%=coupon.couponName%></h5>
-                        <p class="card-text">COUPON CODE : <%=coupon.couponCode%></p>
-                        <p class="card-text">DISCOUNT TYPE : <%=coupon.discountType%></p>
-                        <p class="card-text">AMOUNT : <%=coupon.amount%></p>
-                        <p class="card-text">COUPON TYPE : <%=coupon.couponType%></p>
-                        <% let dt=new Date(coupon.startDate)%>
-                      
-                       
-                        <p class="card-text">START DATE :  <%=dt.getDate()%>/<%=dt.getMonth()+1%>/<%=dt.getFullYear()%>  %></p>
-                        <% if ( date < coupon.endDate){%>
-                          <% let dte=new Date(coupon.endDate) %>
-                          
-                          <p class="card-text">EXPIRES ON :   <%=dte.getDate()%>/<%=dte.getMonth()+1%>/<%=dte.getFullYear()%>  %></p>
-                        <%}else{%>
-                          <% let de=new Date(coupon.endDate) %>
-                          <p class="card-text text-danger">EXPIRED ON :<%=de.getDate()%>/<%=de.getMonth()+1%>/<%=de.getFullYear()%>  %></p>
-                        <%}%>
-                        <button class="btn btn-dark" onclick="editCoupon('<%= coupon._id %>')">Edit Coupon</button>
-                          <button class="btn " onclick="deleteCoupon('<%= coupon._id %>')">
-                            <i class="fa-solid fa-trash <%= date > coupon.endDate ? 'fa-bounce' : '' %> fa-2x" style="color: #000000;"></i>
-                          </button>                        
-                      </div>
-                    </div>
-                  </div>
-                  <% }) %>
-                </div>
-              </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-divledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-black text-light " data-bs-theme="dark">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Coupen</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-div="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addNewCoupenForm"  onsubmit="return addNewCoupon()">
+          <div class="mb-3">
+            <div for="exampleInputEmail1" class="form-div">Coupon Name </div>
+            <input type="text" required class="form-control" name="couponName" id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+          <div class="mb-3">
+            <div for="exampleInputPassword1" class="form-div">Coupon Code </div>
+            <input type="text" required class="form-control" onchange="addNewCouponValidation()" name="couponCode" id="CouponCode">
+            <span id="CouponCodeError" class="text-danger"></span>
+            <p class="text-secondary fw-lighter "> Must Include :A-Z,a-z,0-9</p>
+            
+          </div>
+          
+          <div class="mb-3">
+            <div for="exampleInputPassword1" class="form-div">Minimum Purchase Amount </div>
+            <input type="number" required class="form-control " id="MinimumPurchaseAmount_add" name="MinimumPurchaseAmount" >
+          </div>
+
+          <div class="mb-3">
+            <div for="exampleInputPassword1" class="form-div">Discount Amount </div>
+            <input type="number" required class="form-control" id="discountAmount_add" onchange="return addNewCouponValidation()" name="discountAmount" >
+            <span id="DiscountError" class="text-danger"></span>
+          </div>
+          <div class="mb-3">
+            <div class="CoupenSubHeading">Public Or Privet..?</div>
+              <select class="form-control" required name="couponType" id="">
+                <option value="public">Public</option>
+                <option value="fixed">Privet</option>
+              </select>
+          </div>
+          <div>
+            <div class="mb-3">
+              <div for="exampleInputPassword1"  class="form-div">Select Start Date</div>
+              <input type="date" required name="startDate" class="form-control" id="startDate">
             </div>
-
-
+            <div class="mb-3">
+              <div for="exampleInputPassword1" class="form-div">Select End Date  </div>
+              <input type="date"  required name="endDate" class="form-control" id="endDate">
+              <span id="endDateError" class="text-danger"></span>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Submit</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
     </div>
+  </div>
 </div>
 
 
-<div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h3 class="modal-title" id="addCouponModalLabel">Add Coupon</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <form id="couponForm" >
-                    <div
-                      id="flashMessage"
-                      class="alert alert-danger"
-                      style="display: none"
-                    ></div>
-                    <div class="form-group">
-                      <label for="couponName">Name of Coupon</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="couponName"
-                        name="couponName"
-                        placeholder="Enter the name of coupon"
-                        required
-                      />
-                    </div>
-                    <br />
-                    <div class="form-group">
-                      <label for="couponCode">Coupon Code</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="couponCode"
-                        name="couponCode"
-                        placeholder="Enter coupon code"
-                        required
-                      />
-                    </div>
-                    <br />
-                    <div class="form-group">
-                      <label>Discount Type:</label>
-                      <div class="form-check form-check-inline">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          name="discountType"
-                          value="percentage"
-                          id="percentageRadio"
-                        />
-                        <label class="form-check-label" for="percentageRadio"
-                          >Percentage</label
-                        >
-                      </div>
-                      <div class="form-check form-check-inline">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          name="discountType"
-                          value="fixed"
-                          id="fixedRadio"
-                        />
-                        <label class="form-check-label" for="fixedRadio">Fixed</label>
-                      </div>
-                    </div>
-                    <div class="form-group" id="percentageFields" style="display: none">
-                      <br />
-                      <label for="percentage">Discount Percentage</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="percentage"
-                        name="amount"
-                        min="0"
-                        max="100"
-                        placeholder="Enter the Discount Percentage"
-                      />
-                      <br />
-                      <label for="minAmount">Minimum Amount</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="minAmount"
-                        name="minAmount"
-                        placeholder="Enter the Minimum Amount to Apply Coupon"
-                      />
-                      <br />
-                      <label for="maxAmount">Maximum Amount</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="maxAmount"
-                        name="maxAmount"
-                        placeholder="Enter the Maximum Amount that can be deducted"
-                      />
-                    </div>
-                    <div class="form-group" id="fixedFields" style="display: none">
-                      <br />
-                      <label for="amount">Amount</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="amount"
-                        name="amount"
-                        placeholder="Enter the amount that will be deducted"
-                      />
-                      <br />
-                      <label for="minAmountFixed">Minimum Amount</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="minAmount"
-                        name="minAmountFixed"
-                        placeholder="Enter the Minimum Amount to Apply Coupon"
-                      />
-                    </div>
-                    <br />
-                    <div class="form-group">
-                      <label for="amount">Usage Limit</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="limit"
-                        name="limit"
-                        placeholder="Enter the Limit for the number of uses for each customer"
-                      />
-                    </div>
-                    <br />
-                    <div class="form-group">
-                      <label for="couponType">Coupon Type</label>
-                      <select class="form-control" id="couponType" name="couponType">
-                        <option value="public">Public</option>
-                        <option value="private">Private</option>
-                      </select>
-                    </div>
-                    <br />
-                    <div class="form-group">
-                      <label for="startDate">Start Date</label>
-                      <input
-                        type="date"
-                        class="form-control"
-                        id="startDate"
-                        name="startDate"
-                        placeholder="Select the date to validate the Coupon"
-                      />
-                    </div>
-                    <br />
-                    <div class="form-group">
-                      <label for="endDate">End Date</label>
-                      <input
-                        type="date"
-                        class="form-control"
-                        id="endDate"
-                        name="endDate"
-                        placeholder="Select the date for Expiration of coupon"
-                      />
-                    </div>
-                    <br />
-                    <div class="form-group">
-                      <button type="submit" class="btn btn-dark">Create Coupon</button>
-                    </div>
-                  </form>
-            </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                  Close
-                </button>
-              </div>
-
-        </div>
-    </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-
-
-
-<script>
-
-
-function editCoupon(couponId) {
-  window.location.href = `/admin/editCoupon/${couponId}`;
-}
-
-
-
-$(document).ready(function() {
-    $('input[name="discountType"]').change(function() {
-        if ($('#percentageRadio').is(':checked')) {
-            $('#percentageFields').show();
-            $('#fixedFields').hide();
-        } else if ($('#fixedRadio').is(':checked')) {
-            $('#percentageFields').hide();
-            $('#fixedFields').show();
-        }
-    });
-});
-
-
-
-
-    $("#couponForm").submit((e) => {
-      
-      e.preventDefault();
-      $.ajax({
-        url: "/admin/addCoupon",
-        method: "POST",
-        data: $("#couponForm").serialize(),
-        
-        success: (response) => {
-          if (response.success) {
-            console.log(response);
-            console.log("coupon added successfully");
-            window.location.reload();
-            $("#addCouponModal").modal("hide");
-            alert("coupon Added successfully");
-          } else {
-            console.log(response.error);
-            $("#flashMessage").text(response.error).show();
-          }
-        },
-        error: (xhr, status, error) => {
-          console.log("Error:", error);
-          $("#flashMessage")
-            .text("An error occurred. Please try again.")
-            .show();
-        },
-      });
-    });
-
-
-
-    function deleteCoupon(couponId) {
-    $.ajax({
-        url: "/admin/deleteCoupon/" + couponId, 
-        method: "DELETE",
-        success: function (response) {
-            if (response.success) {
-                console.log("Coupon deleted successfully");
-               location.reload();
-            } else {
-                console.log("Error deleting coupon: " + response.error);
-            }
-        },
-        error: function (xhr, status, error) {
-            console.log("Error:", error);
-        }
-    });
-}
-
-
-
-
-  </script>
 
 
 <%-include('../layout/footer')-%>
