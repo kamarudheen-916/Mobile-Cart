@@ -11,7 +11,7 @@
         <div class="row d-flex justify-content-center align-items-center  " style="height: 100vh;">
           
           <div class="leftPart col-md-6" style="margin-top: 3rem;" >
-            <form id="add_new_products" class="border border-success rounded m-4 p-4" action="/admin/add-new-products" method="post" enctype="multipart/form-data"    > 
+            <form id="add_new_products"   class="border border-success rounded m-4 p-4" action="/admin/add-new-products" method="post" enctype="multipart/form-data"    > 
               <div class="">
                 <label for="name">Enter Product Name:</label>
                   <input onchange="clearMessage()" type="text" required id="productname"  name="name"  placeholder="product Name" class="form-control border border-success rounded">
@@ -66,7 +66,7 @@
                 </div>
               
                   <div class="d-flex justify-content-between">
-                    <button type="submit"  onclick="return validateForm()" class="btn btn-success">Submit</button>
+                    <button type="submit" onclick="return validateAddPeoductForm(event)"  class="btn btn-success">Submit</button>
                   </div>
               </form>
               
@@ -75,45 +75,37 @@
     </div>
 
     <script>
-      function validateForm(){
-    
-       
-        const  productName = document.getElementById('productname').value
-        // const name_error = document.getElementById('name_error')
-        const priceValue = document.getElementById('price').value
-        const price_error = document.getElementById('price_error')
-        const stockValue = document.getElementById('stock').value
-        const stock_error= document.getElementById('stock_error')
-       
-        
-       
-         name_error.innerHTML=''
-         price_error.innerHTML=''
-         stock_error.innerHTML=''
-       
+    function validateAddPeoductForm(event) {
+    alert('validateForm function is called');
 
-      // if(productName === ''){
-      //   name_error.innerHTML='This field is required'
-      //   return false
-      // }
-      if(priceValue <=0){
-        price_error.innerHTML='Must more than zero'
+    const productName = document.getElementById('productname').value
+    const name_error = document.getElementById('name_error')
+    const priceValue = document.getElementById('price').value
+    const price_error = document.getElementById('price_error')
+    const stockValue = document.getElementById('stock').value
+    const stock_error= document.getElementById('stock_error')
+
+    name_error.innerHTML=''
+    price_error.innerHTML=''
+    stock_error.innerHTML=''
+
+    if (productName === '') {
+        name_error.innerHTML = 'This field is required'
         return false
-      }
-      if(stockValue <=0){
-        stock_error.innerHTML='Must more than zero'
+    }
+    if (priceValue <= 0) {
+        price_error.innerHTML = 'Must be more than zero'
         return false
-      }
-    
-        return true
-      } 
-      
+    }
+    if (stockValue <= 0) {
+        stock_error.innerHTML = 'Must be more than zero'
+        return false
+    }
 
-      function clearMessage(){
-  
-  document.querySelector('#name_error').textContent = ''
-
+    return true
 }
+
+
       </script>
       
 

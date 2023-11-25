@@ -30,6 +30,7 @@ router.get('/admin/logout',loginControls.admin_logout )
 //---------------------------------------------------------------------------------------
 //admin dashbord get 
 router.get('/admin/dashbord',adminAuth.verifyAdmin,dashbord_controll.get_dashbord)
+router.get('/admin/orderData',adminAuth.verifyAdmin,dashbord_controll.get_order_data)
 //--------------------------------------------------------------------------------------
 //admin get products
 router.get('/admin/products',adminAuth.verifyAdmin,product_controll.get_product) 
