@@ -109,7 +109,7 @@ async function  chart(){
             console.log(uniquedate);
             console.log(eachToatal);
             new Chart("acquisitions", {
-            type: "bar",
+            type: "line",
             data: {
                 labels: xValues,
                 datasets: [{ 

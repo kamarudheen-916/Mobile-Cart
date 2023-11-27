@@ -39,8 +39,8 @@
               <div class="mt-3">
                 <label for="category">Choose The Category:</label>
 
-                <select name="category" required id="category" class="form-control border border-success rounded ">
-                  <option value=""><%=products.category%></option>
+                <select name="category" value="<%=products.category%>" required id="category" class="form-control border border-success rounded ">
+                 
                   <%categories.forEach((category)=>{%>
                   <option value="<%=category.name%>"><%=category.name%></option>
                  <%})%>
@@ -84,7 +84,7 @@
                 </div>
               
                   <div class="d-flex justify-content-between mt-3">
-                    <button type="submit" onclick="return validateForm()" class="btn btn-success">Update</button>
+                    <button type="submit" onclick="return validateEditProductForm()" class="btn btn-success">Update</button>
                     <!-- <a  href="" class="btn btn-success">Preview</a> -->
                   </div>
                   
@@ -94,7 +94,7 @@
     </div>
 
     <script>
-      function validateForm(){
+      function validateEditProductForm(){
         
         const priceValue = document.getElementById('price').value
         const price_error =document.getElementById('price_error')
@@ -107,18 +107,33 @@
          stock_error.innerHTML=''
          name_error.innerHTML=''
 
-      if(productName === ''){
+      if(productName.trim() === ''){
         name_error.innerHTML='This field is required'
+        name_error.style.color='red'
         return false
       }
 
          
+      if(priceValue ===""){
+          price_error.innerHTML='This field is required'
+          price_error.style.color='red'
+          return false;
+        }
         if(priceValue<=0){
           price_error.innerHTML='Must more than Zero '
+          price_error.style.color='red'
+          return false;
+        }
+
+
+        if(stockValue===""){
+          stock_error.innerHTML='This field is required'
+          stock_error.style.color='red'
           return false;
         }
         if(stockValue<=0){
           stock_error.innerHTML='Must more than Zero '
+          stock_error.style.color='red'
           return false;
         }
         return true

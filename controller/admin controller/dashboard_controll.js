@@ -10,6 +10,7 @@ const get_dashbord=async(req,res)=>{
     try {
         const admin = req.session.adminLoggedin
     if(admin){
+       
         res.render('admin/adminDashbord',{title:'Admin Dashbord'})
     }else{
         res.redirect('/admin') 
@@ -30,8 +31,12 @@ const get_order_data = async (req, res) => {
         }
   };
   
+  
+    
+    
 
 module.exports = {
     get_dashbord,
     get_order_data,
+    
 }

@@ -1,53 +1,81 @@
 
 
 function changeQuantity(productId, count) {
-
+    
     const cartQuantityInput = document.getElementById('cartQuantity' + productId);
     const cartQuantity = parseInt(cartQuantityInput.value);
+   
 
     if (Number(count) === 1) {
-        // Increase the quantity
-        cartQuantityInput.value = cartQuantity + 1;
+        fetch(`increaseCartQuantity?productId=${productId}`,{})
+        .then((res)=>res.json())
+        .then((data)=>{
+            if(cartQuantity < data.stock){
+                cartQuantityInput.value = cartQuantity + 1;
+                QuantityChange()
+            }else{
+                
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'center',
+                    iconColor: 'red',
+                    titleColor:'black',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: false,
+                    customClass: {
+                        popup: 'colored-toast',
+                      },
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    },
+                    didClose: () => {
+                        // Reload the page after the toast is closed
+                        location.reload();
+                    },
+                });
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Avilable Stock Is Reached..!',
+                });
+            }
+        })
+        
     } else if (Number(count) === -1) {
         // Decrease the quantity if it's greater than 0
         if (cartQuantity > 1) {
             cartQuantityInput.value = cartQuantity - 1;
+            QuantityChange()
         }
        
     }
 
-    
-    if(parseInt(cartQuantity) >0){
+    function QuantityChange(){
+        if(parseInt(cartQuantity) >0){
         
-         // Rest of your code
-    fetch(`/add-addToCart/${count}?quantity=${cartQuantity}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId }),
-    })
-        .then((response) => {
-            if (response.ok) {
-                console.log('-----------/////****', response.ok);
-                location.reload();
-            } else {
-                console.log('add to cart  Error on JavaScript');
-            }
-        })
-        .then((data) => {
-            if (data.message) {
-               
-                console.log('Item Quatity Successfully Changed');
-            } else {
-                console.log('Error on adding to wishlist');
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+            // Rest of your code
+       fetch(`/add-addToCart/${count}?quantity=${cartQuantity}`, {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json',
+           },
+           body: JSON.stringify({ productId }),
+       })
+           .then((response) => response.json())
+           .then((data) => {
+               if (data.success) {
+                  location.reload()
+                   console.log('Item Quatity Successfully Changed');
+               } else {
+                   console.log('Error on adding to wishlist');
+               }
+           })
+           .catch((error) => {
+               console.error('Error:', error);
+           });
+       }
     }
-
    
 }
 

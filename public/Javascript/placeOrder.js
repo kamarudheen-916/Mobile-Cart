@@ -53,11 +53,17 @@ placeOrderForm.addEventListener('submit', (e) => {
                         razOrPay(data)
                     }else if(data.success === 'WalletPayment'){
                       location.href = '/confirmOrderAndGetOrderSucess'
+                    }else if(data.success ==='Quantity Exeeded'){
+                      
+                      QuantityErrorSwal(data.QuantityError)
+
                     }
 
                 })
                 .catch(error => console.error('Error:', error));
     }
+
+
 
     function razOrPay(order){ 
       
@@ -106,6 +112,34 @@ rzp1.open();
  }});
 });
 
+
+//QuantityErrorSwal
+function QuantityErrorSwal(QuantityError){
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'center',
+    iconColor: 'red',
+    titleColor:'black',
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: false,
+    customClass: {
+        popup: 'colored-toast',
+      },
+    didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    },
+    didClose: () => {
+        // Reload the page after the toast is closed
+        location.href='/get_cart';
+    },
+});
+Toast.fire({
+    icon: 'error',
+    title: QuantityError,
+});
+}
 
 // apply Cuopon 
 function applyCoupon(){

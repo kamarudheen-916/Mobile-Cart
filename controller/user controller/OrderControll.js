@@ -14,55 +14,93 @@ const Coupon = require('../../model/admin/admin_coupen');
 
 
 const get_palceOrder = async (req,res)=>{
-try {
+try {   
+
+        
         const username = req.session.user
         const cartToatal =  req.session.totalWithCoupon? req.session.totalWithCoupon: req.session.cartToatal
         
         const userData = await userCollection.findOne({username})
 
+        const cartProducts = await cartCollection.findOne({userId:userData._id})
+        
+        await Promise.all(cartProducts.Products.map(async (cartProduct) => {
+            const product = await allProducts.findOne({ _id: cartProduct.ProductId });
+
+            if (cartProduct.Quantity > product.stock) {
+              
+                req.session.stockVariation ='The available stock of '+ product.name+' is ' + product.stock +' only ';
+                
+                res.redirect('/get_cart');
+            }
+        }));
+
         // console.log('userData_______',userData);
         const allAddress = userData.Address
 
-    res.render('user/placeOrder',{username,title:'Place Order',allAddress,userData,cartToatal})
+         res.render('user/placeOrder',{username,title:'Place Order',allAddress,userData,cartToatal})
 } catch (error) {
+    console.log(error);
     res.status(400).render('error',{error})
+    
 }
 }
 
 const confirmOrder =async (req,res)=>{
     try {
-            req.session.confirmOrderBody =  req.body
-            const newToatal =  req.session.totalWithCoupon? req.session.totalWithCoupon: req.session.cartToatal
-            // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
-         if(req.session.confirmOrderBody.paymentMethods ==='CashOnDelivery'){
-            req.session.paymentStatus = 'CashOnDelivery'
-            res.json({success:'cahsOnDelevery'})
-        }else if(req.session.confirmOrderBody.paymentMethods ==='WalletPayment'){
-            req.session.paymentStatus = 'WalletPayment'
-            res.json({success:'WalletPayment'}) 
-        }else if(req.session.confirmOrderBody.paymentMethods ==='OnliePayment'){
-                // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
-                var order = {
-                    amount: newToatal*100,  // amount in the smallest currency unit
-                    currency: "INR",
-                    receipt: req.session.cartId,
-                  };
-                  await razorpay 
-                  .createRazorpayOrder(order)
-                  .then((createdOrder)=>{
-                    req.session.paymentStatus = 'OnliePayment'
-                  res.json({success:'OnliePayment',createdOrder,order});
-                  })
-                  .catch((error) => {
-                    console.error('Razorpay error:', error);
-                    res.status(500).json({ error: 'Internal Server Error' });
-                })
-                
+
+            //check the stock of cart products
+            const username = req.session.user
+            const userData = await userCollection.findOne({username})
+
+            const cartProducts = await cartCollection.findOne({userId:userData._id})
+            
+            await Promise.all(cartProducts.Products.map(async (cartProduct) => {
+                const product = await allProducts.findOne({ _id: cartProduct.ProductId });
+    
+                if (cartProduct.Quantity > product.stock) {
                   
-            }
+                    req.session.stockVariation ='The available stock of '+ product.name+' is ' + product.stock +' only ';
+                    res.json({success:'Quantity Exeeded',QuantityError:req.session.stockVariation});
+                    // res.redirect('/get_cart');
+                }else{
+                    req.session.confirmOrderBody =  req.body
+                    const newToatal =  req.session.totalWithCoupon? req.session.totalWithCoupon: req.session.cartToatal
+                    // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
+                 if(req.session.confirmOrderBody.paymentMethods ==='CashOnDelivery'){
+                    req.session.paymentStatus = 'CashOnDelivery'
+                    res.json({success:'cahsOnDelevery'})
+                }else if(req.session.confirmOrderBody.paymentMethods ==='WalletPayment'){
+                    req.session.paymentStatus = 'WalletPayment'
+                    res.json({success:'WalletPayment'}) 
+                }else if(req.session.confirmOrderBody.paymentMethods ==='OnliePayment'){
+                        // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
+                        var order = {
+                            amount: newToatal*100,  // amount in the smallest currency unit
+                            currency: "INR",
+                            receipt: req.session.cartId,
+                          };
+                          await razorpay 
+                          .createRazorpayOrder(order)
+                          .then((createdOrder)=>{
+                            req.session.paymentStatus = 'OnliePayment'
+                          res.json({success:'OnliePayment',createdOrder,order});
+                          })
+                          .catch((error) => {
+                            console.error('Razorpay error:', error);
+                            res.status(500).json({ error: 'Internal Server Error' });
+                        })
+                        
+                          
+                    }
+                }
+            }));
+
+
+           
     } catch (error) {
         console.log('confirmOrder:',error)
-        res.json({success:false})
+        // res.json({success:false})
     }
 }
 

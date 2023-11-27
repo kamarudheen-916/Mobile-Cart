@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const wishlist = require('../../model/user/wishlistSchema')
 const products = require('../../model/admin/productSchema')
 const cartCollection = require('../../model/user/userCartSchema')
+const cart = require('../../model/user/userCartSchema')
 const ObjectId = require('mongodb').ObjectId;
 
 
@@ -22,7 +23,7 @@ const user_cart = async(req,res)=>{
           }
 
         const cartData = await cartCollection.findOne({userId:user._id}).populate('Products.ProductId')
-
+        req.session.cartData = cartData.Products
         console.log(cartData);
         if (!cartData) {
             return res.status(200).render('user/cart', {
@@ -37,19 +38,25 @@ const user_cart = async(req,res)=>{
           cartData.Products.forEach((item)=>{
           total+= (item.ProductId.price*item.Quantity)
           })
+
           req.session.cartToatal=total
           req.session.cartId =  cartData._id
-          req.session.cartProducts =  cartData.Products
+          req.session.cartProducts =  cartData
+          console.log('req.session.cartProducts==========',req.session.cartProducts);
             // console.log('-------------total',total);
-        const cart_=  await cartCollection.findOneAndUpdate(
+             const cart_=  await cartCollection.findOneAndUpdate(
             {userId:user._id},{$set:{TotalAmount:total}})
             // console.log('----------------cart_',cart_);
            cartData.save()
+                console.log('req.session.stockVariatoin ///***', req.session.stockVariation );
+            const stockVariation = req.session.stockVariation == '0' ? '0':req.session.stockVariation 
+            req.session.stockVariation ='0'
            res.status(200).render('user/cart', {
             title: 'User Wishlist',
             username,
             cartItems: cartData.Products, // Now, each cart item has the product data
             cartToatal:total,
+            stockVariation,
           });
           
        
@@ -58,6 +65,20 @@ const user_cart = async(req,res)=>{
     }
 }
 //--------------------------------------------------------------------------------
+
+const  increaseCartQuantity = async (req,res)=>{
+    try {
+        const productId = req.query.productId
+        const productDetails =  await allProducts.findById(productId)
+        console.log('productId =============',productDetails);
+        res.json({success:true,stock:productDetails.stock})
+    } catch (error) {
+        console.log('error');
+        res.json({success:false})
+
+    }
+}
+
 const   add_to_Cart =async (req,res)=>{
     try {
     //    console.log('========test');
@@ -83,11 +104,12 @@ const   add_to_Cart =async (req,res)=>{
                 // console.log('quantity------',quantity);
                 quantity =Number(quantity)+Number(count)
 
-
-                // console.log('-----------------count--------------',count);
-                if(Number(count)===1){
-                // console.log('userdata------',userCartData);
                 
+                const productDetails =  await allProducts.findById(productId)
+                // console.log('-----------------count--------------',count);
+                if(Number(count)===1 &&  productDetails.stock  >= quantity){
+                // console.log('userdata------',userCartData);
+               
                 await cartCollection.updateOne(
                     {userId:user._id,'Products.ProductId':productId},{$set:{'Products.$.Quantity':quantity}})
                 console.log('there is data on cart collection --------------');
@@ -169,6 +191,8 @@ const removeFromCart = async (req, res) => {
 
 module.exports ={
     user_cart,
+    increaseCartQuantity,
     add_to_Cart,
     removeFromCart,
+   
 }
