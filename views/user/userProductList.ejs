@@ -38,7 +38,11 @@
                 <div class="accordion-body">
                   <ul class="list-unstyled">
                     <% allcategorys.forEach(category => { %>
-                      <li><a onclick="filterByCategory('<%= category.name %>')" class="text-dark"  style="text-decoration: none; cursor: pointer;"><%= category.name %></a></li>
+                      <li>
+                        <a onclick="filterByCategory('<%= category.name %>')" id="<%=category.name%>" class="text-dark category-link"  style="text-decoration: none; cursor: pointer;">
+                          <%= category.name %>
+                        </a>
+                      </li>
                     <% }); %>
                     
                     
@@ -191,6 +195,13 @@
 <%-include('../partials/user-footer')-%>
 <script>
   function filterByCategory(category) {
+   
+    document.querySelectorAll('.category-link').forEach((element) => {
+        element.style.backgroundColor = ''; // Set to an empty string to remove inline style
+    });
+    // Change the color of the clicked category link
+    document.getElementById(category).style.backgroundColor = 'gray'
+   
     // Hide the product list while fetching and updating
     document.getElementById('productList').style.display = 'none';
 
@@ -287,14 +298,14 @@ const rangeInput = document.getElementById('customRange1');
     const rangeValue = rangeInput.value;
 
     // Update the label values
-    minPriceInput.value = rangeValue;
-    maxPriceInput.value = parseInt(rangeValue) + 10000; // Adjust this based on your price range
+    minPriceInput.value = rangeValue*100;
+    maxPriceInput.value = parseInt(rangeValue) + 1000000; // Adjust this based on your price range
     console.log('Min Price:', rangeInput.value);
     console.log('Max Price:', maxPriceInput.value);
 
     // Update the label text
-    document.querySelector('label[for="minPrice"]').textContent = `₹ ${rangeValue}`;
-    document.querySelector('label[for="maxPrice"]').textContent = `₹ ${parseInt(rangeValue) + 10000}`;
+    document.querySelector('label[for="minPrice"]').textContent = `₹ ${rangeValue*100}`;
+    document.querySelector('label[for="maxPrice"]').textContent = `₹ ${parseInt(rangeValue) + 1000000}`;
   }
 </script>
 <%-include('../layout/footer')-%> 

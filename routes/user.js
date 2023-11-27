@@ -66,6 +66,7 @@ router.post('/add-wishlist',userAuth.verifyuser,wishlist_controll.add_wishlist)
 router.delete('/delete-wishlist/:productId',userAuth.verifyuser,wishlist_controll.delete_wishlist)
 //-----------------------------------------------------------------------------------------------
 router.get('/get_cart',userAuth.verifyuser,cartControll.user_cart)
+// router.get('/increaseCartQuantity',userAuth.verifyuser,cartControll.increaseCartQuantity)
 router.post('/add-addToCart/:count',userAuth.verifyuser,cartControll.add_to_Cart)
 router.get('/removeFromCart/:productId',userAuth.verifyuser,cartControll.removeFromCart)
 //------------------------------------------------------------------------------------------------
@@ -82,7 +83,7 @@ router.get('/coupons',userAuth.verifyuser,userProfileController.viewCoupon)
 
 //--------------------------------------------------------------------------------------------------
 router.get('/get_palceOrder',userAuth.verifyuser,userOrderControll.get_palceOrder)
-router.get('/confirmOrderAndGetOrderSucess',userAuth.verifyuser,userOrderControll.get_confirmOrder)
+router.get('/confirmOrderAndGetOrderSucess',userAuth.verifyuser,userOrderControll.confirmOrderAndGetOrderSucess)
 router.post('/confirmOrder',userAuth.verifyuser,userOrderControll.confirmOrder)
 router.post('/verify-payment',userAuth.verifyuser,userOrderControll.verify_payment)
 router.post('/applyCoupon',userAuth.verifyuser,userOrderControll.applyCoupon)

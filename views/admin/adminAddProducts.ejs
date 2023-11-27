@@ -11,11 +11,11 @@
         <div class="row d-flex justify-content-center align-items-center  " style="height: 100vh;">
           
           <div class="leftPart col-md-6" style="margin-top: 3rem;" >
-            <form id="add_new_products"   class="border border-success rounded m-4 p-4" action="/admin/add-new-products" method="post" enctype="multipart/form-data"    > 
+            <form id="add_new_products" onsubmit="return AddNewProductSubmit()"  class="border border-success rounded m-4 p-4" action="/admin/add-new-products" method="post" enctype="multipart/form-data"    > 
               <div class="">
                 <label for="name">Enter Product Name:</label>
-                  <input onchange="clearMessage()" type="text" required id="productname"  name="name"  placeholder="product Name" class="form-control border border-success rounded">
-                  <!-- <span class="text-danger" id="name_error"></span> -->
+                  <input type="text" onchange="return AddNewProductClear('productname')" id="productname"  name="name"  placeholder="product Name" class="form-control border border-success rounded">
+                  <span class="text-danger" id="name_error"></span>
                 </div>
               <div class="">
                 <label for="category">Choose The Category:</label>
@@ -49,24 +49,24 @@
               <div class=" d-flex">
                 <div>
                   <label for="price">Enter The Price</label>
-                  <input id="price"  type="number" name="price" placeholder="Price" class="form-control border border-success rounded" >
+                  <input required id="AddNewPrice"  onchange="return AddNewProductClear('AddNewPrice')"  type="number" name="price" placeholder="Price" class="form-control border border-success rounded" >
                   <span class="text-danger" id="price_error"></span>
                 </div>
                 <div>
                   <label for="stock">Enter The Stock</label>
-                  <input id="stock"  type="number" name="stock" placeholder="Stock" class="form-control border border-success rounded" >
+                  <input required id="AddNewStock"  onchange="return AddNewProductClear('AddNewStock')" type="number" name="stock" placeholder="Stock" class="form-control border border-success rounded" >
                   <span class="text-danger" id="stock_error"></span>
                 </div>
                 <div class=" mb-3 ">
                   <label for="images">Please Select Images</label>
-                    <input  required  type="file" id="mainImage" name="images" multiple  placeholder="Select Main Image" accept="image/*" class="form-control border border-success rounded ">
+                    <input  required  type="file"  id="mainImage" name="images" multiple  placeholder="Select Main Image" accept="image/*" class="form-control border border-success rounded ">
                     <span class="text-danger" id="image_error"></span>
                   </div>
 
                 </div>
               
                   <div class="d-flex justify-content-between">
-                    <button type="submit" onclick="return validateAddPeoductForm(event)"  class="btn btn-success">Submit</button>
+                    <button type="submit"   class="btn btn-success">Submit</button>
                   </div>
               </form>
               
@@ -75,37 +75,7 @@
     </div>
 
     <script>
-    function validateAddPeoductForm(event) {
-    alert('validateForm function is called');
-
-    const productName = document.getElementById('productname').value
-    const name_error = document.getElementById('name_error')
-    const priceValue = document.getElementById('price').value
-    const price_error = document.getElementById('price_error')
-    const stockValue = document.getElementById('stock').value
-    const stock_error= document.getElementById('stock_error')
-
-    name_error.innerHTML=''
-    price_error.innerHTML=''
-    stock_error.innerHTML=''
-
-    if (productName === '') {
-        name_error.innerHTML = 'This field is required'
-        return false
-    }
-    if (priceValue <= 0) {
-        price_error.innerHTML = 'Must be more than zero'
-        return false
-    }
-    if (stockValue <= 0) {
-        stock_error.innerHTML = 'Must be more than zero'
-        return false
-    }
-
-    return true
-}
-
-
+    
       </script>
       
 

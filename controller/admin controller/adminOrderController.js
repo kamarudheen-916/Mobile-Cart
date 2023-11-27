@@ -45,7 +45,7 @@ const confirmOrderReturn = async(req,res)=>{
             console.log('there is no userdata ');
         }
         console.log('userData when confirm Order Return :',UserData);
-        UserData.wallet = orderData.TotalPrice
+        UserData.wallet += orderData.TotalPrice
         UserData.save()
 
         if(!orderData){

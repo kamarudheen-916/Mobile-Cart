@@ -19,7 +19,7 @@ Address: [{
     state: { type: String },
     mobileNumber: { type: Number },
  }],
-wallet:{type:Number},
+wallet:{type:Number,default:0},
 User_Id: { type: mongoose.Schema.Types.ObjectId, ref: 'users' }, 
  
 

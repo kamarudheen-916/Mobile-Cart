@@ -50,8 +50,9 @@ placeOrderForm.addEventListener('submit', (e) => {
                     if(data.success==='cahsOnDelevery'){
                       location.href='/confirmOrderAndGetOrderSucess'
                     }else if(data.success==='OnliePayment'){
-                      
-                      razOrPay(data)
+                        razOrPay(data)
+                    }else if(data.success === 'WalletPayment'){
+                      location.href = '/confirmOrderAndGetOrderSucess'
                     }
 
                 })

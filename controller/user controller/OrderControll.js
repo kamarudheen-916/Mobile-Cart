@@ -34,10 +34,13 @@ const confirmOrder =async (req,res)=>{
             req.session.confirmOrderBody =  req.body
             const newToatal =  req.session.totalWithCoupon? req.session.totalWithCoupon: req.session.cartToatal
             // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
-           if(req.session.confirmOrderBody.paymentMethods ==='CashOnDelivery'){
+         if(req.session.confirmOrderBody.paymentMethods ==='CashOnDelivery'){
             req.session.paymentStatus = 'CashOnDelivery'
-            res.json({success:'cahsOnDelevery'})}
-            else if(req.session.confirmOrderBody.paymentMethods ==='OnliePayment'){
+            res.json({success:'cahsOnDelevery'})
+        }else if(req.session.confirmOrderBody.paymentMethods ==='WalletPayment'){
+            req.session.paymentStatus = 'WalletPayment'
+            res.json({success:'WalletPayment'}) 
+        }else if(req.session.confirmOrderBody.paymentMethods ==='OnliePayment'){
                 // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
                 var order = {
                     amount: newToatal*100,  // amount in the smallest currency unit
@@ -59,6 +62,7 @@ const confirmOrder =async (req,res)=>{
             }
     } catch (error) {
         console.log('confirmOrder:',error)
+        res.json({success:false})
     }
 }
 
@@ -118,7 +122,7 @@ const verify_payment = async (req, res) => {
     }
   };
 
-const get_confirmOrder =  async (req,res)=>{
+const confirmOrderAndGetOrderSucess =  async (req,res)=>{
     try {
         // console.log('check enter ------------------');
         const username = req.session.user
@@ -138,13 +142,19 @@ const get_confirmOrder =  async (req,res)=>{
             }
         })
         const cartProducts =  await cartCollection.findOne({userId:userData._id}).populate("Products.ProductId")
-
+        if(!cartProducts){  
+            res.redirect('/')
+        }
         // console.log(req.session.paymentStatus );
         let paymentStatus;
         if(req.session.paymentStatus === 'CashOnDelivery'){
              paymentStatus = 'Pending'
         }else if(req.session.paymentStatus ==='OnliePayment'){
-            paymentStatus= 'Online Payment'
+            paymentStatus= 'Pament successfull(Online Payment)'
+        }else if(req.session.paymentStatus ==='WalletPayment'){
+            userData.wallet -= newToatal
+            userData.save();
+            paymentStatus= 'Pament successfull(Wallet)'
         }
 
         const insertOrderData = await OrdersCollection.insertMany({
@@ -379,7 +389,7 @@ const post_returnOrder = async(req,res)=>{
 module.exports={
 confirmOrder,
 get_palceOrder,
-get_confirmOrder,
+confirmOrderAndGetOrderSucess,
 applyCoupon,
 get_Orders,
 post_remove_Orders,
