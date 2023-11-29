@@ -89,7 +89,7 @@
             </div>
         </section>
 
-        <% if (stockVariation !== '0') { %>
+        <% if ( stockVariation !== '') { %>
             <div id="customAlert" class="custom-alert">
                 <div class="alert-content">
                     <h4>Alert</h4>
@@ -127,9 +127,10 @@
             </style>
         
             <script>
+               
                 function closeCustomAlert() {
                     document.getElementById('customAlert').style.display = 'none';
-                    location.reload(); // Optionally reload the page after closing the alert
+                    // location.reload(); // Optionally reload the page after closing the alert
                 }
         
                 document.getElementById('customAlert').style.display = 'block';

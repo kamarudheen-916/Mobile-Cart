@@ -15,25 +15,34 @@ const user_cart = async(req,res)=>{
     try {
         req.session.totalWithCoupon=0
         const username = req.session.user
-        // console.log('-----------------------username',username);
+        
         const user = await userCollection.findOne({username})
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
           }
-
+          
         const cartData = await cartCollection.findOne({userId:user._id}).populate('Products.ProductId')
-        req.session.cartData = cartData.Products
+        
         console.log(cartData);
+
+        // console.log('req.session.stockVariatoin ///***', req.session.stockVariation );
+        
+        const stockVariation = req.session.stockVariation;
+        req.session.stockVariation='';
+        // req.session.stockVariation =''
+
         if (!cartData) {
             return res.status(200).render('user/cart', {
               title: 'User Cart',
               username,
               cartItems: [], // An empty array to indicate there are no items in the cart
-              cartToatal:0
+              cartToatal:0,
+              stockVariation,
             });
           }
-
+          req.session.cartData = cartData.Products
+          console.log('-----------------------username',username);
           let total=0
           cartData.Products.forEach((item)=>{
           total+= (item.ProductId.price*item.Quantity)
@@ -48,9 +57,7 @@ const user_cart = async(req,res)=>{
             {userId:user._id},{$set:{TotalAmount:total}})
             // console.log('----------------cart_',cart_);
            cartData.save()
-                console.log('req.session.stockVariatoin ///***', req.session.stockVariation );
-            const stockVariation = req.session.stockVariation == '0' ? '0':req.session.stockVariation 
-            req.session.stockVariation ='0'
+           
            res.status(200).render('user/cart', {
             title: 'User Wishlist',
             username,

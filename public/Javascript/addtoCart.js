@@ -21,7 +21,7 @@ function changeQuantity(productId, count) {
                     iconColor: 'red',
                     titleColor:'black',
                     showConfirmButton: false,
-                    timer: 1500,
+                    timer: 2000,
                     timerProgressBar: false,
                     customClass: {
                         popup: 'colored-toast',

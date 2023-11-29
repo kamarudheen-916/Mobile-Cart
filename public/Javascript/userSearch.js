@@ -76,6 +76,6 @@ function displaySearchResults(results) {
        `;
 
        // Append the productHTML to the productListDiv
-       productListContainer.innerHTML += productHTML;
+       searchResultContainer.innerHTML += productHTML;
      });
 }

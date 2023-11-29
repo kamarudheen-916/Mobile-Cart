@@ -71,10 +71,6 @@ const post_add_new_products =async (req,res,next)=>{
         for(let i =0;i<allImages.length;i++){
             allImages_filename[i]=allImages[i].filename
         }
-   
-        console.log('check  ++++');   
-        console.log('Uploaded files ------------');
-        
         const productData =
         {
             name:req.body.name,
@@ -141,12 +137,33 @@ const get_edit_product = async(req,res)=>{
     try {
         let productId = req.params.id
     const products = await allProducts.findOne({_id:productId})
+    console.log(products);
     const categories = await categoryCollection.find()
     res.render('admin/adminProductEdit',{title:'Edit Product',products,categories},)
     } catch (error) {
         console.log('edit product get method error:----',error);
     }
 } 
+//admin  deleteImageFromEditProduct
+
+const deleteImageFromEditProduct = async(req,res)=>{
+    try {
+        const imageName = req.query.imageName
+        const product_id = req.query.productId
+        console.log('imageName:',imageName);
+        console.log('product_id:',product_id);
+        const productData = await allProducts.findByIdAndUpdate(product_id,
+            {
+                $pull:{image:imageName}
+            })
+        res.json({success:true})
+        console.log('productData:',productData);
+    } catch (error) {
+        console.log('deleteImageFromEditProduct',error);
+        res.json({success:false,message:error})
+    }
+}
+
 //admin edit product(update)
 const post_edit_product = async(req,res)=>{
          try {
@@ -224,6 +241,7 @@ module.exports={
     get_add_new_products,
     post_add_new_products,
     get_edit_product,
+    deleteImageFromEditProduct,
     post_edit_product,
     get_delete_product,
     post_product_search,

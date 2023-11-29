@@ -31,6 +31,7 @@ router.get('/admin/logout',loginControls.admin_logout )
 //admin dashbord get 
 router.get('/admin/dashbord',adminAuth.verifyAdmin,dashbord_controll.get_dashbord)
 router.get('/admin/orderData',adminAuth.verifyAdmin,dashbord_controll.get_order_data)
+router.post('/admin/download-sales-report',adminAuth.verifyAdmin, dashbord_controll.genereatesalesReport)
 //--------------------------------------------------------------------------------------
 //admin get products
 router.get('/admin/products',adminAuth.verifyAdmin,product_controll.get_product) 
@@ -42,14 +43,12 @@ router.post('/admin/products/search',adminAuth.verifyAdmin,product_controll.post
 router.get('/admin/products/refresh',adminAuth.verifyAdmin,product_controll.get_productRefresh)
 //admin add new products
 router.get('/admin/add-new-products',adminAuth.verifyAdmin,product_controll.get_add_new_products)
-
-
 //admin add product post 
 router.post('/admin/add-new-products',adminAuth.verifyAdmin,upload.array('images',12),product_controll.post_add_new_products)
-
 //admin edit product get 
 router.get('/admin/editProduct/:id',adminAuth.verifyAdmin,product_controll.get_edit_product)
 //admin edit product(update)
+router.get('/admin/deleteImageFromEditProduct',adminAuth.verifyAdmin,product_controll.deleteImageFromEditProduct)
 router.post('/admin/update/:id',adminAuth.verifyAdmin,upload.array('images',12),product_controll.post_edit_product)
 //admin delete product
 router.get('/admin/deleteProduct/:id',adminAuth.verifyAdmin,product_controll.get_delete_product)

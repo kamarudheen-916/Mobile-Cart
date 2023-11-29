@@ -122,7 +122,9 @@
                                           <%}else{%>
                                     
                                             <div id=""> 
-                                              <button id="cancelOrderButton" onclick="cancelOrder('<%=order._id%>')" class="btn btn-outline-danger">Cancel Order</button>
+                                              <button id="cancelOrderButton" onclick="cancelOrder('<%=order._id%>')" class="btn btn-outline-danger">
+                                                Cancel Order
+                                              </button>
                                             </div>
                                           
                                             <%}%>
@@ -182,8 +184,8 @@
                       <div class="modal-body">
                         <form id="returnOrderForm">
                           <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Reason:</label>
-                            <input type="text" name="Reason" class="form-control" id="recipient-name">
+                            <label for="" class="col-form-label">Reason:</label>
+                            <input type="text" name="Reason" class="form-control" id="">
                           </div>
                           <div class="mb-3">
                             <label for="message-text" class="col-form-label">Message:</label>
@@ -206,22 +208,27 @@
       <!-- cancel Order Modal start  -->
   
                 <!-- Modal -->
-                <div class="modal fade" id="cancelOrderModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 9999;">
+                <div class="modal fade" id="cancelOrderModal"  tabindex="-1" aria-labelledby="canceModalLabel" aria-hidden="true" style="z-index: 9999;">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                        <h1 class="modal-title fs-5" id="canceModalLabel">Select Products to Cancel</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
                         <form id="cancelOrderForm" >
-                          <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Reason:</label>
-                            <input type="text" name="Reason" class="form-control" id="recipient-name">
+                          <div>
+                            <div>
+                              <input type="checkbox" name="AllProducts" id="AllProducts">
+                              <label for="">All Products</label>
+                            </div>
+                          <div id="cancelProductsContent">
+                           
+                          </div>  
                           </div>
                           <div class="mb-3">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea  name="Message" class="form-control" id="message-text"></textarea>
+                            <label for="" class="col-form-label">Reason:</label>
+                            <input type="text" name="Reason" class="form-control" id="">
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -237,20 +244,69 @@
     </div>
 
 <script>
+//----------------------------------------------------------------------------------------------
 
-let OrderId 
+let OrderId //it is a global variable, so dont delete it...!
+//----------------------------------------------------------------------------------------------
+
 function returnOrder (orderId){
     OrderId = orderId
+    const myModal = new bootstrap.Modal(document.getElementById('returnOrderModal'));
+    myModal.show();
+
+}
+//----------------------------------------------------------------------------------------------
+function cancelOrder(orderid) {
+    const myModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+    OrderId = orderid;
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Cancel The Order ?'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            myModal.show();
+
+            const cancelProductsContent = document.getElementById('cancelProductsContent');
+
+            fetch(`/fetchCancelOrderProducts?orderid=${OrderId}`, {})
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        cancelProductsContent.innerHTML = '';
+
+                        const userOrderData = data.userOrderData.Products;
+
+                        userOrderData.forEach((Product) => {
+                            const productHTML = `
+                                <div class="d-flex justify-content-between border rounded p-2">
+                                    <input type="checkbox" name="" id="">
+                                    <img style="width:50px;" src="/static/uploads/${Product.ProductId.image[0]}" alt="images.....">
+                                    <div>${Product.ProductId.name}</div>
+                                    <div>₹:<span>${Product.ProductId.price}</span></div>
+                                </div>
+                            `;
+                            cancelProductsContent.innerHTML += productHTML;
+                        });
+                    }
+                });
+        }
+    });
 }
 
-
+//---------------------------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded',()=>{
     const openModalBtn = document.getElementById('returnOrderButton');
 const myModal = new bootstrap.Modal(document.getElementById('returnOrderModal'));
 
-openModalBtn.addEventListener('click', function () {
-myModal.show();
-});
+// openModalBtn.addEventListener('click', function () {
+// myModal.show();
+// });
   const returnOrderSubmit = document.querySelector('#returnOrderSubmit')
   const returnOrderForm = document.querySelector('#returnOrderForm')
   const cancelOrderForm = document.querySelector('#cancelOrderModal')
@@ -258,7 +314,8 @@ myModal.show();
   if(cancelOrderForm){
     cancelOrderForm.addEventListener('submit',(e)=>{
         e.preventDefault();
-        fetch(`/removeOrder/${OrderId}`,{
+        // alert('check cancel ')
+        fetch(`/cancelOrder/${OrderId}`,{
                         method:'POST',
                     
                     })
@@ -288,7 +345,7 @@ myModal.show();
       .then((res)=>res.json())
       .then((data)=>{
         if(data.success){
-          alert('check return order')
+          // alert('check return order')
           location.reload()
         }else{
           alert('This roduct cannot return!')
@@ -298,28 +355,7 @@ myModal.show();
   }
 })
 
-function cancelOrder(ProductId){
-    const myModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
 
-
-    
-    OrderId =  ProductId
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Cancel The Order ?'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          myModal.show();
-        }
-      })
-    
-
-}
 
 
 

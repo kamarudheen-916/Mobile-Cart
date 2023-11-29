@@ -30,7 +30,7 @@ try {
             if (cartProduct.Quantity > product.stock) {
               
                 req.session.stockVariation ='The available stock of '+ product.name+' is ' + product.stock +' only ';
-                
+                // console.log(' req.session.stockVariation:', req.session.stockVariation);
                 res.redirect('/get_cart');
             }
         }));
@@ -284,7 +284,7 @@ const get_Orders = async (req,res)=>{
     }
 }
 
-const post_remove_Orders = async (req,res)=>{
+const cancelOrder = async (req,res)=>{
     try {
 
         const username = req.session.user
@@ -305,6 +305,19 @@ const post_remove_Orders = async (req,res)=>{
     }
 }
 
+const fetchCancelOrderProducts = async (req,res)=>{
+    try {
+        const orderId = req.query.orderid
+            // const orderData = await OrdersCollection.findOne({_id:productId})
+            const userOrderData = await OrdersCollection.findOne({_id:orderId}).populate('Products.ProductId')
+            
+        console.log('userOrderData---------------****lllll',userOrderData);
+        res.json({success:true,userOrderData})
+    } catch (error) {
+        console.log('fetchCancelOrderProducts error:',error);
+        res.json({success:false});
+    }
+}
 const get_OrderDetails = async (req,res)=>{
     try {
         const orderId = req.params.id
@@ -366,7 +379,7 @@ const getInvoice = async (req,res)=>{
                 quantity: product.Quantity,
                 description: product.ProductId.name,
                 price: parseFloat(product.ProductId.price) || 0, // Convert to number, ensure default value if conversion fails
-                tax: 1,
+                'tax-rate': 0,
             })),
             
             bottomNotice: 'Thank you for your purchase!', // Closing note on the invoice
@@ -430,7 +443,8 @@ get_palceOrder,
 confirmOrderAndGetOrderSucess,
 applyCoupon,
 get_Orders,
-post_remove_Orders,
+cancelOrder,
+fetchCancelOrderProducts,
 get_OrderDetails,
 getInvoice,
 post_returnOrder,

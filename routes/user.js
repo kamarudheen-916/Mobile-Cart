@@ -89,7 +89,8 @@ router.post('/verify-payment',userAuth.verifyuser,userOrderControll.verify_payme
 router.post('/applyCoupon',userAuth.verifyuser,userOrderControll.applyCoupon)
 //--------------------------------------------------------------------------------------------------
 router.get('/get_Orders',userAuth.verifyuser,userOrderControll.get_Orders)
-router.post('/removeOrder/:ProductId',userAuth.verifyuser,userOrderControll.post_remove_Orders)
+router.post('/cancelOrder/:ProductId',userAuth.verifyuser,userOrderControll.cancelOrder)
+router.get('/fetchCancelOrderProducts',userAuth.verifyuser,userOrderControll.fetchCancelOrderProducts)
 router.get('/get_OrderDetails/:id',userAuth.verifyuser,userOrderControll.get_OrderDetails)
 router.get('/getInvoice/:OrderId',userAuth.verifyuser,userOrderControll.getInvoice)
 router.post('/returnOrder/:OrderId',userAuth.verifyuser,userOrderControll.post_returnOrder)

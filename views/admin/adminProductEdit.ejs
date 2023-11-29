@@ -10,22 +10,19 @@
 <div class="container" >
         <div class="row d-flex justify-content-center align-items-center  " style="height: 100vh;">
           <div class="rightPart col-md-5 ">
-                <div class="gap-4 image_container"> 
-                  <div  class="image_subdiv">
-                    <div class="preview_images">
-                      <img style="width:50%;" src="/static/uploads/<%=products.image[0]%>" alt="">
-                    </div>
-                    <div class="preview_images">
-                      <img style="width:50%;" src="/static/uploads/<%=products.image[1]%>" alt="">
-                    </div>
+                <div class="gap-4 "> 
+                  <div  class="">
+                    <div class="d-flex justify-content-center">
+                    <%for(let i=0;i<products.image.length;i++){%>
+                      
+                      <div >
+                        <button onclick="deleteImageFromEditProduct('<%=products.image[i]%>','<%=products._id%>')" class="btn btn-danger m-3">Delete</button>
+                       <div class="border p-3">
+                        <img style="width:100px;"  src="/static/uploads/<%=products.image[i]%>" alt="">
+                       </div>
+                      </div>
+                   <%}%>
                   </div>
-                  <div class="image_subdiv" >
-                    <div class="preview_images">
-                      <img style="width:50%;" src="/static/uploads/<%=products.image[2]%>" alt="">
-                    </div>
-                    <div class="preview_images">
-                      <img style="width:50%;" src="/static/uploads/<%=products.image[3]%>" alt="">
-                    </div>
                   </div>
                 </div>
           </div>
@@ -138,6 +135,48 @@
         }
         return true
       }
+
+      function deleteImageFromEditProduct(image, product_id) {
+    
+
+    // Properly encode image name and product ID
+    const encodedImage = encodeURIComponent(image);
+    const encodedProductId = encodeURIComponent(product_id);
+
+    fetch(`/admin/deleteImageFromEditProduct?imageName=${encodedImage}&productId=${encodedProductId}`, {})
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.success) {
+              const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'center',
+                    iconColor: 'red',
+                    titleColor:'red',
+                   
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: false,
+                    customClass: {
+                        popup: 'colored-toast',
+                      },
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    },
+                    didClose: () => {
+                        // Reload the page after the toast is closed
+                        location.reload();
+                    },
+                });
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Image is deleted..!',
+                });
+            } else {
+                alert(data.message);
+            }
+        });
+}
 
     
     </script>
