@@ -288,17 +288,31 @@ const cancelOrder = async (req,res)=>{
     try {
 
         const username = req.session.user
-        const productId = req.params.ProductId
-        const orderData = await OrdersCollection.findOne({_id:productId})       
-        // console.log('productId-----------',productId);
-        // console.log('productId-----------',orderData);
-
+        const OrderId = req.params.OrderId
+        console.log('OrderId:',OrderId); 
+        const orderData = await OrdersCollection.findOne({_id:OrderId}) 
+        const cancelOrderData =  req.body
+        console.log(cancelOrderData);
+        const IndividualcancelOrderData = cancelOrderData.products
+        console.log(IndividualcancelOrderData);
+        if('AllProducts' in cancelOrderData)
+        {  
         if(orderData){
             orderData.Status = 'Cancelled'
             await orderData.save()
         }
-        res.json({success:true})
-
+        res.json({success:'AllProducts'})
+        }else{
+           
+            orderData.Products.forEach((product)=>{
+                
+                if(IndividualcancelOrderData.includes(product.ProductId.toString())){
+                    product.Status = 'Cancelled'
+                }
+            })
+            await orderData.save()
+        res.json({success:'Individualcancel'})
+        }
     } catch (error) {
         console.log('remove order error',error);
         res.json({ success: false, message: 'User Order data not found' });

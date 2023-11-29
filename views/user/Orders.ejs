@@ -216,10 +216,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form id="cancelOrderForm" >
+                        <form id="cancelOrderForm" onsubmit="cancelOrderSubmit()" >
                           <div>
                             <div>
-                              <input type="checkbox" name="AllProducts" id="AllProducts">
+                              <input type="checkbox" name="AllProducts"  id="AllProductsId">
                               <label for="">All Products</label>
                             </div>
                           <div id="cancelProductsContent">
@@ -232,7 +232,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" id="returnOrderSubmit" data-bs-dismiss="modal" class="btn btn-primary">Submit</button>
+                            <button type="submit"  id="cancelOrderSubmit" data-bs-dismiss="modal" class="btn btn-primary">Submit</button>
                           </div>
                         </form>
                       </div>
@@ -278,14 +278,15 @@ function cancelOrder(orderid) {
                 .then((res) => res.json())
                 .then((data) => {
                     if (data.success) {
+                     
                         cancelProductsContent.innerHTML = '';
-
+                        document.getElementById('AllProductsId').value = data.userOrderData._id
                         const userOrderData = data.userOrderData.Products;
 
                         userOrderData.forEach((Product) => {
                             const productHTML = `
                                 <div class="d-flex justify-content-between border rounded p-2">
-                                    <input type="checkbox" name="" id="">
+                                    <input type="checkbox"  class='productCheckboxes' name='products' value='${Product.ProductId._id}' name="" id="">
                                     <img style="width:50px;" src="/static/uploads/${Product.ProductId.image[0]}" alt="images.....">
                                     <div>${Product.ProductId.name}</div>
                                     <div>₹:<span>${Product.ProductId.price}</span></div>
@@ -293,11 +294,52 @@ function cancelOrder(orderid) {
                             `;
                             cancelProductsContent.innerHTML += productHTML;
                         });
+
+                        const allProductsCheckbox = document.getElementById('AllProductsId')
+                        allProductsCheckbox.addEventListener('change',()=>{
+                          const productCheckboxes  = document.querySelectorAll('.productCheckboxes')
+                          productCheckboxes.forEach((checkBox)=>{
+                            checkBox.checked = allProductsCheckbox.checked
+                          })
+                        })
                     }
                 });
         }
     });
 }
+//=====================================================================================================
+function cancelOrderSubmit() {
+   const cancelOrderForm = document.querySelector('#cancelOrderForm');
+   
+   if (cancelOrderForm) {
+      const formData = new URLSearchParams(new FormData(cancelOrderForm))
+      
+      fetch(`/cancelOrder/${OrderId}`, {
+         method: 'POST',
+         headers: {
+        'Content-Type': 'application/x-www-form-urlencoded', // Set the content type
+      },
+         body: formData,
+      })
+         .then((response) => response.json())
+         .then((data) => {
+          alert(data.success)
+            if (data.success==='AllProducts') {
+               alert('Cancel order successful');
+               location.reload();
+            }else if(data.success==='Individualcancel'){
+              alert('Individualcancel order successful');
+               location.reload();
+            } else {
+               alert(data.message);
+            }
+         })
+         .catch((error) => {
+            console.log(error);
+         });
+   }
+}
+
 
 //---------------------------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded',()=>{
@@ -309,28 +351,14 @@ const myModal = new bootstrap.Modal(document.getElementById('returnOrderModal'))
 // });
   const returnOrderSubmit = document.querySelector('#returnOrderSubmit')
   const returnOrderForm = document.querySelector('#returnOrderForm')
-  const cancelOrderForm = document.querySelector('#cancelOrderModal')
+  const cancelOrderForm = document.querySelector('#cancelOrderForm');
 
-  if(cancelOrderForm){
-    cancelOrderForm.addEventListener('submit',(e)=>{
-        e.preventDefault();
-        // alert('check cancel ')
-        fetch(`/cancelOrder/${OrderId}`,{
-                        method:'POST',
-                    
-                    })
-                    .then((response)=>response.json())
-                    .then((data)=>{
-                        if(data.success){
-                            location.reload()
-                            
-                        }else{
-                            alert(data.message)
-                        }
-                    })
-        
-    })
-  }
+if (cancelOrderForm) {
+   cancelOrderForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      cancelOrderSubmit();
+   });
+}
 
   if(returnOrderForm){
     returnOrderForm.addEventListener('submit',(e)=>{
