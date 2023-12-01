@@ -35,7 +35,7 @@ const OrdersSchema = new Schema({
   Products: [{
     ProductId: { type: Schema.Types.ObjectId , ref: "products" },
     Quantity: { type: Number },
-    Status:{type:String},
+    Status:{type:String,default:'ordered'},
   }],
   PaymentMethod: {type: String},
   OrderDate: { type: String },

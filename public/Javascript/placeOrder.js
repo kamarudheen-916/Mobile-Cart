@@ -51,6 +51,13 @@ placeOrderForm.addEventListener('submit', (e) => {
                       location.href='/confirmOrderAndGetOrderSucess'
                     }else if(data.success==='OnliePayment'){
                         razOrPay(data)
+                    }else if(data.success ==='WalletAmountExeeded'){
+                      Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Wallet Amount Exeeded..!",
+                        
+                      });
                     }else if(data.success === 'WalletPayment'){
                       location.href = '/confirmOrderAndGetOrderSucess'
                     }else if(data.success ==='Quantity Exeeded'){

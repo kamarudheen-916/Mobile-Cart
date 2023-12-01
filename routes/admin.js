@@ -88,7 +88,8 @@ router.get('/admin/paymensts',adminAuth.verifyAdmin,adminPaymentControll.get_pay
 router.get('/admin/orders',adminAuth.verifyAdmin,adminOrderControll.get_orderView)
 router.get('/admin/get_OrderDetails/:id',adminAuth.verifyAdmin,adminOrderControll.get_OrderDetails)
 router.put('/updateOrderStatus/:productId',adminAuth.verifyAdmin,adminOrderControll.updateOrderStatus)
-router.get('/confirmOrderReturn/:OrderId',adminAuth.verifyAdmin,adminOrderControll.confirmOrderReturn)
+router.get('/fetchconfirmOrderReturnData',adminAuth.verifyAdmin,adminOrderControll.fetchconfirmOrderReturnData)
+router.post('/confirmOrderReturn',adminAuth.verifyAdmin,adminOrderControll.confirmOrderReturn)
 
 //admin coupen management page
 router.get('/admin/coupens',adminAuth.verifyAdmin, couponController.CouponManagement)

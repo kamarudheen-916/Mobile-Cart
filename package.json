@@ -40,5 +40,8 @@
     "passport-google-oauth20": "^2.0.0",
     "razorpay": "^2.9.2",
     "two-step-auth": "^1.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.54.0"
   }
 }

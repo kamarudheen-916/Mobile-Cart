@@ -24,6 +24,11 @@ try {
 
         const cartProducts = await cartCollection.findOne({userId:userData._id})
         
+        if(cartProducts === null){
+            res.redirect('/');
+        }
+        console.log('cartProducts============',cartProducts);
+        
         await Promise.all(cartProducts.Products.map(async (cartProduct) => {
             const product = await allProducts.findOne({ _id: cartProduct.ProductId });
 
@@ -68,11 +73,17 @@ const confirmOrder =async (req,res)=>{
                     const newToatal =  req.session.totalWithCoupon? req.session.totalWithCoupon: req.session.cartToatal
                     // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
                  if(req.session.confirmOrderBody.paymentMethods ==='CashOnDelivery'){
+                    console.log('----------**************/////////');
                     req.session.paymentStatus = 'CashOnDelivery'
                     res.json({success:'cahsOnDelevery'})
                 }else if(req.session.confirmOrderBody.paymentMethods ==='WalletPayment'){
                     req.session.paymentStatus = 'WalletPayment'
-                    res.json({success:'WalletPayment'}) 
+                    if(newToatal > userData.wallet.amount){
+                        res.json({success:'WalletAmountExeeded'})
+                    }else{
+                        res.json({success:'WalletPayment'}) 
+                    }
+                    
                 }else if(req.session.confirmOrderBody.paymentMethods ==='OnliePayment'){
                         // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
                         var order = {
@@ -190,7 +201,15 @@ const confirmOrderAndGetOrderSucess =  async (req,res)=>{
         }else if(req.session.paymentStatus ==='OnliePayment'){
             paymentStatus= 'Pament successfull(Online Payment)'
         }else if(req.session.paymentStatus ==='WalletPayment'){
-            userData.wallet -= newToatal
+            userData.wallet.amount -= newToatal
+            userData.wallet.transactions.push(
+                {
+                transactionAmount :newToatal,
+                transactionType : 'debit',
+                timeStamp : new Date(Date.now()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                description : 'Product Purchase.'
+                }
+                )
             userData.save();
             paymentStatus= 'Pament successfull(Wallet)'
         }
@@ -284,41 +303,6 @@ const get_Orders = async (req,res)=>{
     }
 }
 
-const cancelOrder = async (req,res)=>{
-    try {
-
-        const username = req.session.user
-        const OrderId = req.params.OrderId
-        console.log('OrderId:',OrderId); 
-        const orderData = await OrdersCollection.findOne({_id:OrderId}) 
-        const cancelOrderData =  req.body
-        console.log(cancelOrderData);
-        const IndividualcancelOrderData = cancelOrderData.products
-        console.log(IndividualcancelOrderData);
-        if('AllProducts' in cancelOrderData)
-        {  
-        if(orderData){
-            orderData.Status = 'Cancelled'
-            await orderData.save()
-        }
-        res.json({success:'AllProducts'})
-        }else{
-           
-            orderData.Products.forEach((product)=>{
-                
-                if(IndividualcancelOrderData.includes(product.ProductId.toString())){
-                    product.Status = 'Cancelled'
-                }
-            })
-            await orderData.save()
-        res.json({success:'Individualcancel'})
-        }
-    } catch (error) {
-        console.log('remove order error',error);
-        res.json({ success: false, message: 'User Order data not found' });
-    }
-}
-
 const fetchCancelOrderProducts = async (req,res)=>{
     try {
         const orderId = req.query.orderid
@@ -332,6 +316,87 @@ const fetchCancelOrderProducts = async (req,res)=>{
         res.json({success:false});
     }
 }
+
+const cancelOrder = async (req,res)=>{
+    try {
+
+        const username = req.session.user
+        const OrderId = req.params.OrderId
+        console.log('OrderId:',OrderId); 
+        const orderData = await OrdersCollection.findOne({_id:OrderId}).populate('Products.ProductId')
+        const userData = await userCollection.findOne({username})
+        const cancelOrderData =  req.body
+        console.log('cancelorderData:==============',cancelOrderData);
+        const IndividualcancelOrderData = cancelOrderData.products
+        console.log(IndividualcancelOrderData);
+        //here cancelOrderData is an object from req.body from frond end
+        if('AllProducts' in cancelOrderData){  
+        if(orderData){
+            orderData.Status = 'Cancelled'
+            
+            let AllCancelOrderData = []
+            if(!Array.isArray(cancelOrderData.products)){
+                AllCancelOrderData.push(cancelOrderData.products)
+            }else{
+                AllCancelOrderData = [...cancelOrderData.products]
+            }
+            
+            orderData.Products.forEach((prod)=>{
+                prod.Status = 'Cancelled'
+                if(AllCancelOrderData.includes(prod.ProductId._id.toString())){
+                    if(orderData.PaymentStatus !== 'Pending'){
+                    userData.wallet.amount += prod.ProductId.price
+                    userData.wallet.transactions.push(
+                        {
+                        transactionAmount :prod.ProductId.price ,
+                        transactionType : 'credit',
+                        timeStamp : new Date(Date.now()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                        description : 'Return from cancelation'
+                        }
+                        )
+
+                    }
+                }
+            })
+            
+            await userData.save()
+            await orderData.save()
+        }
+        res.json({success:'AllProducts'})
+        }else{
+           
+            orderData.Products.forEach((product)=>{
+                
+                if(IndividualcancelOrderData.includes(product.ProductId._id.toString())){
+                    product.Status = 'Cancelled'
+                    orderData.TotalPrice -= product.ProductId.price 
+                    if(orderData.PaymentStatus !== 'Pending'){
+                        console.log('******------------=========',orderData.PaymentStatus);
+                        userData.wallet.amount += product.ProductId.price
+
+                        userData.wallet.transactions.push(
+                            {
+                                transactionAmount :product.ProductId.price ,
+                            transactionType : 'credit',
+                            timeStamp : new Date(Date.now()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                            description : 'Return from cancelation'
+                            }
+                            )
+                    }
+
+                }
+            })
+            await userData.save()
+            await orderData.save()
+        res.json({success:'Individualcancel'})
+        }
+    } catch (error) {
+        console.log('remove order error',error);
+        res.json({ success: false, message: 'User Order data not found' });
+    }
+}
+
+
 const get_OrderDetails = async (req,res)=>{
     try {
         const orderId = req.params.id
@@ -414,18 +479,28 @@ const getInvoice = async (req,res)=>{
       }
 }
 
+const fetchReturnOrderProducts = async(req,res)=>{
+    try {
+        const orderId =  req.query.OrderId;
+        const userOrderData =  await OrdersCollection.findOne({_id:orderId}).populate('Products.ProductId')
+
+        res.json({success:true,userOrderData})
+    } catch (error) {
+        res.json({success:false})
+        console.log("fetchReturnOrderProducts : ",error);
+    }
+}
+
 const post_returnOrder = async(req,res)=>{
     try {
         const orderId =  req.params.OrderId
-        const Reason = req.body.Reason
-        const Message =  req.body.Message
-        // console.log('reason-----------',Reason);
-        // console.log('message----------',Message);
-        console.log(orderId);
+        const returnOrderData = req.body
+        console.log('returnOrderData===========',returnOrderData);
         const orderData  = await OrdersCollection.findOne({_id:orderId})
-        console.log('orderData=============',orderData);
+       
         if(orderData){
-
+          
+            
             if (!orderData.return) {
                 orderData.return = {
                     returnStatus: 'not returned',
@@ -434,15 +509,22 @@ const post_returnOrder = async(req,res)=>{
                     returnDate: '',
                 };
             }
-            orderData.return.returnStatus =  'Request for Return';
-            orderData.return.Reason =Reason;
-            orderData.return.Message = Message;
-            orderData.return.returnDate=new Date(Date.now()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                orderData.Products.forEach((product)=>{
+                    console.log('orderData=============');
+                if(returnOrderData.products.includes(product.ProductId._id.toString())){
+                    product.Status = 'Requested for return'
+                }
+                })
+            // orderData.return.returnStatus =  'Request for Return';
+            // orderData.return.Reason =Reason;
+            // orderData.return.Message = Message;
+            // orderData.return.returnDate=new Date(Date.now()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
             // console.log('reason-----------',orderData.return.Reason);
             // console.log('message----------',orderData.return.Message);
             orderData.save()
             // console.log(orderData,'orderData=============');
             res.json({success:true})
+            
         }else{
             console.log('there is no user data');
             res.json({success:false})
@@ -461,6 +543,7 @@ cancelOrder,
 fetchCancelOrderProducts,
 get_OrderDetails,
 getInvoice,
+fetchReturnOrderProducts,
 post_returnOrder,
 verify_payment,
 

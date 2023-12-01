@@ -18,6 +18,7 @@ const wishlist_controll =require('../controller/user controller/wishlist_control
 const cartControll =require('../controller/user controller/cartControll')
 const userProfileController = require('../controller/user controller/profileController')
 const userOrderControll = require('../controller/user controller/OrderControll.js')
+const userWallerControll = require('../controller/user controller/userWallerControll.js')
 //--------------------------------------------------------------------------------
 // user login route get
 router.get('/login',userAuth.userExist,loginControls.userLogin)
@@ -93,8 +94,11 @@ router.post('/cancelOrder/:OrderId',userAuth.verifyuser,userOrderControll.cancel
 router.get('/fetchCancelOrderProducts',userAuth.verifyuser,userOrderControll.fetchCancelOrderProducts)
 router.get('/get_OrderDetails/:id',userAuth.verifyuser,userOrderControll.get_OrderDetails)
 router.get('/getInvoice/:OrderId',userAuth.verifyuser,userOrderControll.getInvoice)
+router.get('/fetchReturnOrderProducts',userAuth.verifyuser,userOrderControll.fetchReturnOrderProducts)
 router.post('/returnOrder/:OrderId',userAuth.verifyuser,userOrderControll.post_returnOrder)
 
+//--------------------------------------------------------------------------------------------------------
+router.get('/get_wallet',userAuth.verifyuser,userWallerControll.get_wallet)
 
 
 

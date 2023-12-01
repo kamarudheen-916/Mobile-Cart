@@ -1,6 +1,16 @@
 const mongoose = require('mongoose')
 require('../../config/DBconnection')
 
+const TransactionSchema =  new mongoose.Schema({
+    
+        transactionAmount :{type:Number},
+        transactionType :{type:String,enum:['debit','credit']},
+        timeStamp:{type:String,default:Date.now},
+        description:{type:String}
+    
+
+})
+
 const userSchema = new mongoose.Schema({
 username:{type:String,required:true},
 email:{type:String,required:true},
@@ -19,9 +29,12 @@ Address: [{
     state: { type: String },
     mobileNumber: { type: Number },
  }],
-wallet:{type:Number,default:0},
+wallet:{
+    amount:{type:Number,default:0},
+    transactions :[TransactionSchema]
+},
 User_Id: { type: mongoose.Schema.Types.ObjectId, ref: 'users' }, 
- 
+  
 
 })
   

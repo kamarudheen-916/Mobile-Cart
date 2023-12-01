@@ -24,6 +24,11 @@ const updateOrderStatus =async (req,res)=>{
         const orderData =  await OrdersCollection.findOne({_id:productId})
         if(orderData){
             orderData.Status = newStatus
+            orderData.Products.forEach((product)=>{
+                if(product.Status!=='Cancelled'){
+                    product.Status = newStatus
+                }
+            })
             orderData.save()
             res.json({success:true,orderData})
         }
@@ -35,34 +40,72 @@ const updateOrderStatus =async (req,res)=>{
     }
 }
 
+const fetchconfirmOrderReturnData = async (req,res)=>{
+    try {
+        const orderId = req.query.orderId
+        // console.log('orderId=============',orderId);
+        const OrderReturnData  =  await OrdersCollection.findOne({_id:orderId}).populate('Products.ProductId')
+        console.log('orderId=============',OrderReturnData);
+        res.json({success:true,OrderReturnData})
+    } catch (error) {
+        res.json({success:false})
+        console.log('fetchconfirmOrderReturnData error',error);
+    }
+}
 const confirmOrderReturn = async(req,res)=>{
     try {
-        const OrderId = req.params.OrderId
+
+        const returnOrderId = req.body.RetunOderID
         
-        const orderData = await OrdersCollection.findOne({_id:OrderId})
+        const orderData = await OrdersCollection.findOne({_id:returnOrderId}).populate('Products.ProductId')
         const UserData =  await customer.findOne({_id:orderData.UserId})
         if(!UserData){
             console.log('there is no userdata ');
         }
         console.log('userData when confirm Order Return :',UserData);
-        UserData.wallet += orderData.TotalPrice
+        orderData.Products.forEach((product)=>{ 
+            console.log('===============------------------------');
+            if(product.Status === 'Requested for return'){
+             
+            product.Status = 'Returned'
+            console.log(product.Status);
+            UserData.wallet.amount += product.ProductId.price
+            console.log('===============------------------------*****************');
+            UserData.wallet.transactions.push(
+                { 
+                transactionAmount :product.ProductId.price ,
+                transactionType : 'credit',
+                timeStamp : new Date(Date.now()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                description : 'From  Return Product'
+                }
+                )
+            }
+        }) 
+        // orderData.save()
         UserData.save()
 
         if(!orderData){
-            res.status(400).json({status:false})
+            res.status(400).json({status:false}) 
         }
+
+        const isAllReturned =  orderData.Products.map((item)=>item.Status ==='Returned').every(Boolean)
+        if(isAllReturned){
         orderData.return.returnStatus='Returned'
+        
+        }
         orderData.save()
+       
         
         orderData.Products.forEach(async(product)=>{
+            if(product.Status === 'Returned'){
+                console.log('===============------------------------');
             const AllProducts = await allProducts.findOne({_id:product.ProductId})
-            console.log('AllProducts------------',AllProducts);
             const oldStock = AllProducts.stock
-            console.log('old stock------------',oldStock);
             AllProducts.stock = oldStock + product.Quantity
             AllProducts.save()
+            }
         })
-        res.json({success:true})
+        res.json({success:true}) 
     } catch (error) {
         console.log('confirmOrderReturn error',error);
     }
@@ -86,5 +129,6 @@ module.exports = {
     get_orderView,
     updateOrderStatus,
     confirmOrderReturn,
+    fetchconfirmOrderReturnData,
     get_OrderDetails,
 }

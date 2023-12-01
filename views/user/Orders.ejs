@@ -36,7 +36,8 @@
                                                 <div class="">
                                             <span class="small"><h6><span style="font-size:x-large ;">• </span><%=product.ProductId.name%></h6></span>
                                           
-                                            <span class="" style="font-size:small;font-weight: 700;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quatity : <%=product.Quantity%> </span>
+                                            <span class="" style="font-size:small;font-weight: 700;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quatity : <%=product.Quantity%> , </span>
+                                            <span class="" style="font-size:small;font-weight: 700; color: rgb(93, 96, 98);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status : <%=product.Status%> </span>
                                                   </div>
                                             <%})%>
                                           </div>
@@ -182,14 +183,18 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form id="returnOrderForm">
+                        <form id="returnOrderForm" onsubmit="returnOrderSubmit()">
+                          <div>
+                            <div>
+                              <input type="checkbox" name="returnAllProducts"  id="returnAllProductsId">
+                              <label for="">All Products</label>
+                            </div>
+                          <div id="returProductsContent">
+                          </div>  
+                          </div>
                           <div class="mb-3">
                             <label for="" class="col-form-label">Reason:</label>
                             <input type="text" name="Reason" class="form-control" id="">
-                          </div>
-                          <div class="mb-3">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea  name="Message" class="form-control" id="message-text"></textarea>
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -254,7 +259,75 @@ function returnOrder (orderId){
     const myModal = new bootstrap.Modal(document.getElementById('returnOrderModal'));
     myModal.show();
 
+    const returProductsContent = document.getElementById('returProductsContent');
+    
+    fetch(`/fetchReturnOrderProducts?OrderId=${orderId}`,{})
+    .then((res)=>res.json())
+    .then((data) => {
+                    if (data.success) {
+                     
+                      returProductsContent.innerHTML = '';
+                        document.getElementById('returnAllProductsId').value = data.userOrderData._id
+                        const userOrderData = data.userOrderData.Products;
+                       
+                        userOrderData.forEach((Product) => {
+                          console.log(Product.Status);
+                          if(Product.Status == 'Delivered'){
+                            const productHTML = `
+                                <div class="d-flex justify-content-between border rounded p-2">
+                                    <input type="checkbox"  class='returnProductCheckboxes' name='products' value='${Product.ProductId._id}' name="" id="">
+                                    <img style="width:50px;" src="/static/uploads/${Product.ProductId.image[0]}" alt="images.....">
+                                    <div>${Product.ProductId.name}</div>
+                                    <div>₹:<span>${Product.ProductId.price}</span></div>
+                                </div>
+                            `;
+                             
+                            returProductsContent.innerHTML += productHTML;
+
+                              }
+                        });
+
+                        const allProductsCheckbox = document.getElementById('returnAllProductsId')
+                        allProductsCheckbox.addEventListener('change',()=>{
+                          const productCheckboxes  = document.querySelectorAll('.returnProductCheckboxes')
+                          productCheckboxes.forEach((checkBox)=>{
+                            checkBox.checked = allProductsCheckbox.checked
+                          })
+                        })
+                    }
+                })
+    .catch((error)=>{
+      console.log(error);
+    })
+
 }
+//----------------------------------------------------------------------------------------------
+
+function returnOrderSubmit(){
+  const returnOrderForm =  document.getElementById('returnOrderForm')
+ 
+  if(returnOrderForm){
+    const returnOrderData = new URLSearchParams(new FormData(returnOrderForm))
+    // alert(';dlkjcnvlzkxjcnvz/ldnfvs/dlbm')
+    fetch(`/returnOrder/${OrderId}`,{
+        method:'POST',
+        headers: {
+        'Content-Type': 'application/x-www-form-urlencoded', // Set the content type
+      },
+      body:returnOrderData
+      })
+      .then((res)=>res.json())
+      .then((data)=>{
+        if(data.success){
+          // alert('check return order')
+          location.reload()
+        }else{
+          alert('This roduct cannot return!')
+        }
+      })
+  }
+}
+
 //----------------------------------------------------------------------------------------------
 function cancelOrder(orderid) {
     const myModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
@@ -282,8 +355,10 @@ function cancelOrder(orderid) {
                         cancelProductsContent.innerHTML = '';
                         document.getElementById('AllProductsId').value = data.userOrderData._id
                         const userOrderData = data.userOrderData.Products;
-
+                       
                         userOrderData.forEach((Product) => {
+                          console.log(Product.Status);
+                          if(Product.Status == 'ordered' || 'Order Placed' && Product.Status !== 'Cancelled'){
                             const productHTML = `
                                 <div class="d-flex justify-content-between border rounded p-2">
                                     <input type="checkbox"  class='productCheckboxes' name='products' value='${Product.ProductId._id}' name="" id="">
@@ -292,7 +367,10 @@ function cancelOrder(orderid) {
                                     <div>₹:<span>${Product.ProductId.price}</span></div>
                                 </div>
                             `;
+                             
                             cancelProductsContent.innerHTML += productHTML;
+
+                              }
                         });
 
                         const allProductsCheckbox = document.getElementById('AllProductsId')
@@ -325,7 +403,7 @@ function cancelOrderSubmit() {
          .then((data) => {
           alert(data.success)
             if (data.success==='AllProducts') {
-               alert('Cancel order successful');
+               alert('All Cancel order successful');
                location.reload();
             }else if(data.success==='Individualcancel'){
               alert('Individualcancel order successful');
@@ -341,15 +419,14 @@ function cancelOrderSubmit() {
 }
 
 
+
 //---------------------------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded',()=>{
-    const openModalBtn = document.getElementById('returnOrderButton');
+const openModalBtn = document.getElementById('returnOrderButton');
 const myModal = new bootstrap.Modal(document.getElementById('returnOrderModal'));
 
-// openModalBtn.addEventListener('click', function () {
-// myModal.show();
-// });
-  const returnOrderSubmit = document.querySelector('#returnOrderSubmit')
+
+  // const returnOrderSubmit = document.querySelector('#returnOrderSubmit')
   const returnOrderForm = document.querySelector('#returnOrderForm')
   const cancelOrderForm = document.querySelector('#cancelOrderForm');
 
@@ -363,22 +440,7 @@ if (cancelOrderForm) {
   if(returnOrderForm){
     returnOrderForm.addEventListener('submit',(e)=>{
       e.preventDefault()
-      fetch(`/returnOrder/${OrderId}`,{
-        method:'POST',
-        headers: {
-        'Content-Type': 'application/x-www-form-urlencoded', // Set the content type
-      },
-      body:new URLSearchParams(new FormData(returnOrderForm))
-      })
-      .then((res)=>res.json())
-      .then((data)=>{
-        if(data.success){
-          // alert('check return order')
-          location.reload()
-        }else{
-          alert('This roduct cannot return!')
-        }
-      })
+      returnOrderSubmit();
     })
   }
 })

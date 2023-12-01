@@ -1,0 +1,40 @@
+<%-include('../layout/head')-%>
+<%-include('../partials/user-header')-%>
+
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div style="height: 100vh; padding-top: 120px;">
+                        <div class=""><h4>Wallet : ₹ <%=userWallet.amount%></h4></div>
+                    <div>
+                        <table class="table table-striped  " >
+                           <tbody>
+                            <%if(userWallet.transactions.length>0){%>
+                            <%userWallet.transactions.forEach((val)=>{%>
+                            <tr class="">
+                                <td><%=val.description%></td>
+                                <%if(val.transactionType === 'credit'){%>
+
+                                <td class="text-success h4 px-5"> +<%=val.transactionAmount%></td>
+                                    <%}else{%>
+                                <td class="text-danger h4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -<%=val.transactionAmount%></td>
+                                    <%}%>
+                                <td class=" ps-5"><%=val.timeStamp%></td>
+                            </tr>
+                           <%})%>
+                           <%}else{%>
+                            <tr>
+                                <td><img style="background: rgb(255, 255, 255);" src="/static/images/empty_wallet.jpg" alt=""></td>
+                            </tr>
+                           <%}%>
+                           </tbody>
+                        </table>
+                    </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+<%-include('../partials/user-footer')-%>
+<%-include('../layout/footer')-%> 
