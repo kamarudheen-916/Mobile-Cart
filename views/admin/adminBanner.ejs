@@ -1,0 +1,60 @@
+<%-include('../layout/head')-%>
+
+<div>
+    <%-include('../partials/admin-header')-%>
+</div>
+
+<div class="container">
+    <div class="row d-flex justify-content-center align-items-center " style="height: 100vh;">
+        <div class=" col-md-6">
+           <div>
+                <div><video id="showBanner" src="/static/images/apple15.mp4"></video></div>
+                <div>
+                    <form id="addBannerSubmitForm" onsubmit="addBannerSubmit(event)">
+                        <input multiple onchange="addBanner()" type="file" name="banners" id="addBannerID">
+                        <button type="submit">Update and Save</button>
+                    </form>
+                </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addBanner() {
+        var input = document.getElementById('addBannerID');
+        var video = document.getElementById('showBanner');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                video.src = e.target.result;
+            };
+
+            // Read the selected file as a data URL
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function addBannerSubmit(event) {
+        event.preventDefault(); // Prevents the default form submission behavior
+
+        const formData = new FormData(document.getElementById('addBannerSubmitForm'));
+
+        fetch(`/admin/addBannerSubmit`, {
+            method: 'post',
+            body: formData,
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.success) {
+                alert('banner added successfully');
+            } else {
+                alert('banner add failed');
+            }
+        });
+    }
+</script>
+
+<%-include('../layout/footer')-%>

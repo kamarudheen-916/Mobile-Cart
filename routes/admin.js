@@ -19,6 +19,7 @@ const customer_controll = require('../controller/admin controller/admin_customer
 const category_controll = require('../controller/admin controller/admin_category_controll')
 const adminOrderControll = require('../controller/admin controller/adminOrderController')
 const couponController=require('../controller/admin controller/admin_coupen_controller')
+const bannerControll = require('../controller/admin controller/admin_bannerControll')
 
 
 // admin login
@@ -97,6 +98,9 @@ router.post('/admin/addNewCoupon',adminAuth.verifyAdmin, couponController.addCou
 router.delete('/admin/deleteCoupon/:couponId',adminAuth.verifyAdmin, couponController.deleteCoupon)
 router.get('/admin/editCoupon/:couponId',adminAuth.verifyAdmin, couponController.editcouponget)
 router.post('/admin/edit-coupon/:couponId',adminAuth.verifyAdmin, couponController.editCoupon)
+//admin banner page
+router.get('/admin/banners',adminAuth.verifyAdmin, bannerControll.get_banner)
+router.post('/admin/addBannerSubmit',adminAuth.verifyAdmin,upload.array('banners',3),bannerControll.addBannerSubmit)
 
 
 

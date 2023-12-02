@@ -95,7 +95,55 @@ const filterByCategory = async(req,res)=>{
     
 }
 
+const productListPagePriceFilter = async (req,res)=>{
+    try {
+        const minPriceInput = req.query.minPriceInput
+        const maxPriceInput = req.query.maxPriceInput
+        const category =   req.session.product_category
+        const Products = await allProducts.find({
+            $and: [  
+                { price: { $gte: minPriceInput, $lte: maxPriceInput } }
+            ]
+        });
+        
+        const username= req.session.user
+        // Fetch the user's cart data
+        const user = await userCollection.findOne({ username });
+        
+         // Fetch the user's cart data
+         const userCartData = await cartCollection.findOne({ userId: user._id });
+        
+ 
+         // Declare cartProductIds outside the if block
+         let cartProductIds = new Set();
+ 
+         // Check if userCartData is not null and has 'Products'
+         if (userCartData && userCartData.Products) {
+             // Create a Set of productIds that are in the cart
+             cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
+            //  console.log('------------------------cartProductIds', cartProductIds);
+         }
+         
+        //  console.log('------------------------cartProductIds', cartProductIds);
+         const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
+         const wishlist = wishlist_ ? wishlist_.Products : [];
+
+         console.log('========', minPriceInput);
+        console.log('========',maxPriceInput);  
+        if(Products){
+            res.json({success:true,Products,cartProductIds,wishlist})
+        }
+       
+        
+
+    } catch (error) {
+        res.json({success:false})
+        console.log(error);
+    }
+}
+
 module.exports={
     get_product_List, 
     filterByCategory,
+    productListPagePriceFilter,
 }

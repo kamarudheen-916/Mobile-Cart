@@ -54,6 +54,7 @@ router.get('/logout',(req,res)=>{  req.session.logedIn=false; res.redirect('/') 
 //--------------------------------------------------------------------------
 //user product list 
 router.get('/userProductList/:category',userAuth.verifyuser,productList_Controll.get_product_List)
+router.get('/productListPagePriceFilter',userAuth.verifyuser,productList_Controll.productListPagePriceFilter)
 router.get('/filterByCategory',userAuth.verifyuser,productList_Controll.filterByCategory)
 
 //user product detailes

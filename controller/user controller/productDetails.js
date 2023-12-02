@@ -50,4 +50,5 @@ const get_productDetails = async(req,res)=>{
 
 module.exports={
     get_productDetails, 
+    
 }

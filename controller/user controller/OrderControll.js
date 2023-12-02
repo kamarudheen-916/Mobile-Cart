@@ -371,7 +371,7 @@ const cancelOrder = async (req,res)=>{
                     product.Status = 'Cancelled'
                     orderData.TotalPrice -= product.ProductId.price 
                     if(orderData.PaymentStatus !== 'Pending'){
-                        console.log('******------------=========',orderData.PaymentStatus);
+                        // console.log('******------------=========',orderData.PaymentStatus);
                         userData.wallet.amount += product.ProductId.price
 
                         userData.wallet.transactions.push(
@@ -386,6 +386,11 @@ const cancelOrder = async (req,res)=>{
 
                 }
             })
+            const isAllReturned =  orderData.Products.map((item)=>item.Status ==='Cancelled').every(Boolean)
+            if(isAllReturned){
+            orderData.Status='Cancelled'
+            
+            }
             await userData.save()
             await orderData.save()
         res.json({success:'Individualcancel'})

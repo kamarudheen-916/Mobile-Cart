@@ -35,9 +35,9 @@ const get_order_data = async (req, res) => {
   const genereatesalesReport = async (req, res) => {
     try {
       console.log(req.body);
-      const startDate = req.body.startDate;
+      const startDate =new Date( req.body.startDate).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
       const format = req.body.downloadFormat;
-      const endDate = new Date(req.body.endDate);
+      const endDate = new Date(req.body.endDate).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
     //   endDate.setHours(23, 59, 59, 999);
         console.log(endDate,startDate);
       const orders = await Order.find({

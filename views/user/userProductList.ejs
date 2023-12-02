@@ -54,7 +54,7 @@
             
 
             <!-----------------------------------------------------------------------------------------------  -->
-            <!-- <div class="accordion-item">
+            <div class="accordion-item">
               <h2 class="accordion-header" id="headingThree">
                 <button
                   class="accordion-button text-dark bg-light"
@@ -69,33 +69,35 @@
               </h2>
               <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
                 <div class="accordion-body">
-                  <div class="range"> -->
-                    <!-- Range input for price -->
-                    <!-- <input type="range" class="form-range" id="customRange1" />
-                  </div>
-                  <div class="row mb-3"> -->
+                   <!-- Range input for price -->
+                  <!-- <div class="range">
+                   
+                    <input type="range" class="form-range" id="customRange1" />
+                  </div> -->
+                  <div class="row mb-3">
                     <!-- Minimum price input -->
-                    <!-- <div class="col-6">
+                    <div class="col-6">
                       <p class="mb-0">Min</p>
                       <div class="form-outline">
                         <input type="number" id="minPrice" class="form-control" />
-                        <label class="form-label" for="minPrice">₹ 0</label>
+                        <label class="form-label text-danger" id="minPriceError" for="minPrice"></label>
                       </div>
-                    </div> -->
+                    </div>
                     <!-- Maximum price input -->
-                    <!-- <div class="col-6">
+                    <div class="col-6">
                       <p class="mb-0">Max</p>
                       <div class="form-outline">
                         <input type="number" id="maxPrice" class="form-control" />
-                        <label class="form-label" for="maxPrice">₹ 1,0000</label>
+                        <label class="form-label text-danger" id="maxPriceError" for="maxPrice"></label>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
                   <!-- Apply button -->
-                  <!-- <button type="submit" class="btn btn-white w-100 border border-secondary">Apply</button>
+                  <span id="PriceCheck"></span>
+                  <button type="submit" onclick="priceFitering()" class="btn btn-white w-100 border border-secondary">Apply</button>
                 </div>
               </div>
-            </div> -->
+            </div>
            
           
           </div>
@@ -285,27 +287,121 @@
 
 
 //---------------------------------------------------------------
-const rangeInput = document.getElementById('customRange1');
-  const minPriceInput = document.getElementById('minPrice');
-  const maxPriceInput = document.getElementById('maxPrice');
+
+
 
   // Add an event listener to the range input
-  rangeInput.addEventListener('input', updateLabelValues);
+ 
 
   // Function to update label values based on the range input
-  function updateLabelValues() {
+  function priceFitering() {
     // Get the current value of the range input
-    const rangeValue = rangeInput.value;
+    alert()
+    const minPriceInput = document.getElementById('minPrice').value;
+    const maxPriceInput = document.getElementById('maxPrice').value;
+    const minPriceError = document.getElementById('minPriceError')
+    const maxPriceError = document.getElementById('maxPriceError')
+    if(minPriceInput =='' || maxPriceInput ==''){
+      if(minPriceInput =='' ){
+      minPriceError.innerText ='Required'
+    }
+    else{
+      minPriceError.innerText =''
+    }
+    if(maxPriceInput =='' ){
+      maxPriceError.innerText ='Required'
+    }else{
+      maxPriceError.innerText =''
+    }
+    }else if(maxPriceInput < minPriceInput){
+        Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Minimum  must be lesser than Maximum!",
+         });
+         
+    }else{
 
-    // Update the label values
-    minPriceInput.value = rangeValue*100;
-    maxPriceInput.value = parseInt(rangeValue) + 1000000; // Adjust this based on your price range
-    console.log('Min Price:', rangeInput.value);
-    console.log('Max Price:', maxPriceInput.value);
+      fetch(`/productListPagePriceFilter?minPriceInput=${minPriceInput}&maxPriceInput=${maxPriceInput}`,{})
+      .then((res)=>res.json())
+      .then((data)=>{
+        if (data.success) {
+          console.log(data.cartProductIds);
+          const product =  data.Products
+         const wishlist =  data.wishlist
+          let cartProductIds = data.cartProductIds instanceof Set ? data.cartProductIds : new Set();
 
-    // Update the label text
-    document.querySelector('label[for="minPrice"]').textContent = `₹ ${rangeValue*100}`;
-    document.querySelector('label[for="maxPrice"]').textContent = `₹ ${parseInt(rangeValue) + 1000000}`;
+          // Get the product list container
+          const productListContainer = document.getElementById('productList');
+
+          // Clear existing content in the container
+          productListContainer.innerHTML = '';
+
+          // Iterate through the products and append them to the productListDiv
+          data.Products.forEach((product) => {
+            const productHTML = `
+              <div class="row justify-content-center mb-3">
+                <div class="col-md-12">
+                  <div class="card shadow-0 border rounded-3">
+                    <div class="card-body">
+                      <div class="row g-0">
+                        <div class="col-xl-3 col-md-4 d-flex justify-content-center">
+                          <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
+                            <a href="/productDetails/${product._id}" class="text-decoration-none">
+                              <img src="/static/uploads/${product.image[0]}" class="w-50" />
+                            </a>
+                            <a href="#!">
+                              <div class="hover-overlay">
+                                <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="col-xl-6 col-md-5 col-sm-7">
+                          <a href="/productDetails/${product._id}" class="text-decoration-none">
+                            <h5 class="text-success">${product.name}</h5>
+                          </a>
+                          <p class="text mb-4 mb-md-0">${product.description}</p>
+                        </div>
+                        <div class="col-xl-3 col-md-3 col-sm-5">
+                          <div class="d-flex flex-row align-items-center mb-1">
+                            <h4 class="mb-1 me-1">₹${product.price}</h4>
+                          </div>
+                          <h6 class="text-success">Free shipping</h6>
+                          <div class="mt-4">
+                            ${
+                              cartProductIds.has(product._id.toString())
+                                ? `<a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a>`
+                                : `<a id="addToCartButton_${product._id}" class="btn btn-success" onclick="addToCart('${product._id}', 1)">Add To Cart</a>`
+                            }
+                            <button id="add_wishlist" type="button" onclick="toggleWishlist('${product._id}')" class="btn btn-success">
+                              <i class="fa fa-heart${
+                                wishlist.map((item) => item.Product_id.toString()).includes(product._id.toString())
+                                  ? ' text-danger'
+                                  : ''
+                              }" id="add_wishlist_icon" data-product-id="${product._id}"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+
+            // Append the productHTML to the productListDiv
+            productListContainer.innerHTML += productHTML;
+          });
+     // Show the product list after updating
+     document.getElementById('productList').style.display = 'block';
+
+}
+      })
+    }
+
+
+        
   }
 </script>
 <%-include('../layout/footer')-%> 

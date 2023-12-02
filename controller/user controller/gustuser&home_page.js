@@ -5,10 +5,12 @@ const WishlistCollection=require('../../model/user/wishlistSchema')
 const categoryCollection = require('../../model/admin/admin_categorySchema')
 const cartCollection =require('../../model/user/userCartSchema')
 const ObjectId = require('mongodb').ObjectId;
+const bannerSchema =  require('../../model/admin/admin_bannerSchema')
 
 const sendMail =require('../../controller/email&otp-Controller/emailController')
 const bcrypt = require('bcrypt')
 const { consumers } = require('nodemailer/lib/xoauth2')
+const banners = require('../../model/admin/admin_bannerSchema')
 
 //gust user
 const gustuser = async(req,res)=>{
@@ -45,6 +47,8 @@ const userHome = async (req, res) => {
             const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
             const wishlist = wishlist_ ? wishlist_.Products : [];
             //req.session.stockVariation ='' is used in the cart page and the confirm orderpage
+            const banner = await bannerSchema.find({})
+            console.log('*********************banner',banner[0].banner);
             req.session.stockVariation =''
             res.render('user/index', {
                 title: 'Mobile Cart',
@@ -52,6 +56,7 @@ const userHome = async (req, res) => {
                 username,
                 wishlist,
                 cartProductIds,
+                banner,
             });
         } else {
             res.redirect('/gustuser');
@@ -91,10 +96,10 @@ const search = async (req,res)=>{
             cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
             // console.log('------------------------cartProductIds', cartProductIds);
         }
-        
+        const allcategorys = await categoryCollection.find({},{name:1,_id:0})
         const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
         const wishlist = wishlist_ ? wishlist_.Products : [];
-        res.render('user/userSearch',{username,title:'Search Data',products,cartProductIds,wishlist,products_count,pageNumber})
+        res.render('user/userSearch',{username,title:'Search Data',products,allcategorys,cartProductIds,wishlist,products_count,pageNumber})
         // res.json({ success: true, results });
     } catch (error) {
         console.error('Search error:', error);

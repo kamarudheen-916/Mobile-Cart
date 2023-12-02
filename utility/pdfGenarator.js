@@ -44,22 +44,20 @@ module.exports = {
           ];
   
           let totalSalesAmount = 0;
-  
+          console.log('========************',orders);
           orders.forEach(order => {
           // console.log(orders);
-            order.Items.forEach(item => {
+            order.Products.forEach(item => {
               // console.log(item);
               worksheet.addRow({
                 orderId: order._id,
-                productName: item.productId.ProductName,
-                userId: order.UserID,
+                productName: item.ProductId.name,
+                userId: order.UserId,
                 date: order.OrderDate ? new Date(order.OrderDate).toLocaleDateString() : '',
-                totalamount: order.TotalPrice !== undefined ? order.TotalPrice.toFixed(2) : '',
-                paymentmethod: order.paymentMethod,
+                totalamount: item.ProductId.price !== undefined ? item.ProductId.price.toFixed(2) : '',
+                paymentmethod: order.PaymentMethod,
               });
-
-             
-              totalSalesAmount += order.TotalPrice !== undefined ? order.TotalPrice : 0;
+              totalSalesAmount += item.ProductId.price !== undefined ? item.ProductId.price : 0;
         
             });
           });
