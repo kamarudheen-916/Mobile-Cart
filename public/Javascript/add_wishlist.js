@@ -37,7 +37,7 @@ function toggleWishlist(productId) {
   
 
   function deleteWishlist(productId) {
-    //  alert((confirm,'somthing',productId));
+   
      console.log(productId);
     
       // Make an AJAX request to add the product to the wishlist

@@ -29,7 +29,12 @@
         // For example, check if the required field is not empty
         var categoryName = document.getElementById('categoryname').value;
         if (categoryName.trim() === '') {
-            alert('Please fill out the Category Name');
+          
+             Swal.fire({
+            title: "oops..!",
+            text: "Please fill out the Category Name!",
+            icon: "error"
+            });
             return false; // Prevent form submission
         }
 

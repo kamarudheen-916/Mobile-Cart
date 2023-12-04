@@ -308,7 +308,7 @@ function returnOrderSubmit(){
  
   if(returnOrderForm){
     const returnOrderData = new URLSearchParams(new FormData(returnOrderForm))
-    // alert(';dlkjcnvlzkxjcnvz/ldnfvs/dlbm')
+
     fetch(`/returnOrder/${OrderId}`,{
         method:'POST',
         headers: {
@@ -319,10 +319,11 @@ function returnOrderSubmit(){
       .then((res)=>res.json())
       .then((data)=>{
         if(data.success){
-          // alert('check return order')
+    
           location.reload()
         }else{
-          alert('This roduct cannot return!')
+          alert('This Product cannot return!')
+
         }
       })
   }
@@ -401,12 +402,20 @@ function cancelOrderSubmit() {
       })
          .then((response) => response.json())
          .then((data) => {
-          alert(data.success)
+          
             if (data.success==='AllProducts') {
-               alert('All Cancel order successful');
+               Swal.fire({
+      title: "Good job!",
+      text: "All Cancel order successful!",
+      icon: "success"
+    });
                location.reload();
             }else if(data.success==='Individualcancel'){
-              alert('Individualcancel order successful');
+              Swal.fire({
+      title: "Good job!",
+      text: "EIndividual cancel order successful!",
+      icon: "success"
+    });
                location.reload();
             } else {
                alert(data.message);

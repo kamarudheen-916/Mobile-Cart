@@ -5,10 +5,21 @@
 </div>
 
 <div class="container">
-    <div class="row d-flex justify-content-center align-items-center " style="height: 100vh;">
+    <div class="row p-5" style="height: 100vh;">
         <div class=" col-md-6">
-           <div>
-                <div><video id="showBanner" src="/static/images/apple15.mp4"></video></div>
+           <div  > 
+            <div class="d-flex justify-content-between ">
+                <%if(banners.length===0){%>
+                    <div>There is no Banners..!</div>
+                 <%}else{%>   
+                <%banners.forEach((banner)=>{%>
+                <div class="p-5" >
+                    <img style="width: 350px;"  src="/static/bannerImages/bannerCropedImage/<%= banner %>" alt="">
+                </div>
+                <%})%>
+                <%}%>
+
+            </div>
                 <div>
                     <form id="addBannerSubmitForm" onsubmit="addBannerSubmit(event)">
                         <input multiple onchange="addBanner()" type="file" name="banners" id="addBannerID">
@@ -49,9 +60,17 @@
         .then((res) => res.json())
         .then((data) => {
             if (data.success) {
-                alert('banner added successfully');
+                  Swal.fire({
+      title: "Good job!",
+      text: "Banner added Successfully!",
+      icon: "success"
+    });
             } else {
-                alert('banner add failed');
+                Swal.fire({
+          title: "oops..!",
+          text: "Banner added failed!",
+          icon: "error"
+        });
             }
         });
     }

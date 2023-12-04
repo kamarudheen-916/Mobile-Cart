@@ -22,13 +22,18 @@ function addNewCoupon (){
     .then((data)=>{
         console.log(data);
         if(data.success){
-            alert('Coupon Successfully Added..')    
+             
+            Swal.fire({
+              title: "Good job!",
+              text: "Coupon Successfully Added..!",
+              icon: "success"
+            });  
         }else{
            alert('ther is an error on return data form server')
         }
     })
     .catch((error)=>{
-       alert(error+'------------add')
+    
         console.log(error);
     })
 }
@@ -118,13 +123,18 @@ function editCouponSubmit (couponId){
     console.log(data);
     if(data.success){
       location.reload()
-        alert('Coupon Successfully Edited..')    
+            
+        Swal.fire({
+          title: "Good job!",
+          text: "Coupon Successfully Edited..",
+          icon: "success"
+        });
     }else{
        alert('ther is an error on return data form server')
     }
 })
 .catch((error)=>{
-   alert(error+'--------------edit')
+
     console.log(error);
 })
 }
@@ -137,7 +147,11 @@ function deleteCoupon(couponId){
   .then((data)=>{
     if(data.success){
       location.reload()
-      alert('Coupon Deleted Successfully')
+      Swal.fire({
+        title: "Good job!",
+        text: "Coupon Deleted Successfully!",
+        icon: "success"
+      });
     }
   })
 }

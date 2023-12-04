@@ -18,14 +18,20 @@
                 <span>Change Image</span> -->
               </label>
               <input id="file" type="file" name="userProfile" onchange="loadFile(event)"/>
+              <%if(userData.profile){%>
                 <img
                   class="rounded-circle  mt-2 ImageContainer"
                   width="150px"
-                  src="<%= userData.profile||'https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg' %>"
+                  src=" /static/profilePhoto/profileCropedPic/<%= userData.profile%>  "
                   id="output"
-                  alt='https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg'
+                  alt=''
                  
                   />
+                <%}else{%>
+                  <img 
+                  width="150px"
+                  src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" alt="">
+                  <%}%>
 
                 <span class="font-weight-bold"> <%=userData.username%> </span>
                 <span class="text-black-50"><%=userData.email%></span>

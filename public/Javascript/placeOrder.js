@@ -5,11 +5,20 @@ function validateForm() {
     var selectedPaymentMethod =  document.querySelector('input[name="paymentMethods"]:checked')
     const placeOrderForm = document.querySelector('placeOrderForm')
     if (!selectedAddress) {
-        alert("Please select an address!");
+        Swal.fire({
+          title: "oops..!",
+          text: "Please select an address!",
+          icon: "error"
+        });
         return false; // Prevent form submission
     }
     if(!selectedPaymentMethod){
-      alert('Please select a payment method')
+     
+      Swal.fire({
+        title: "oops..!",
+        text: "Please select a payment method!",
+        icon: "error"
+      });
       return false;
     }
   
@@ -96,7 +105,12 @@ placeOrderForm.addEventListener('submit', (e) => {
         location.href = '/confirmOrderAndGetOrderSucess'
       }else{
         // location.href = '/error'
-        alert('payment failuere')
+        
+        Swal.fire({
+          title: "oops..!",
+          text: "payment failuere!",
+          icon: "error"
+        });
       }
     }
   })
@@ -160,7 +174,12 @@ fetch(`/applyCoupon/?couponCode=${couponCode}`,{
       .then((data)=>{
           if(data.success){
             document.getElementById('AllTotal').innerHTML = data.discountAmount
-            alert('coupon success')
+          
+            Swal.fire({
+              title: "Good job!",
+              text: "coupon success!",
+              icon: "success"
+            });
           }else{
             alert(data.message)
           }

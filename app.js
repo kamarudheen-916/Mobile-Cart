@@ -3,7 +3,7 @@ const path = require('path');
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
 const session = require('express-session');
-const logger = require('morgan');
+// const logger = require('morgan');
 const cors = require('cors');
 const passport = require('passport');
 const nocache = require('nocache');
@@ -48,7 +48,7 @@ app.use(flash());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/static',express.static(path.join(__dirname,'/public')))
-app.use(logger());
+// app.use(logger());
 app.use(morgan('tiny'));
 
 app.use('/auth', authRoute);

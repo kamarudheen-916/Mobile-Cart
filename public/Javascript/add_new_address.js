@@ -42,7 +42,7 @@ function deleteAddress(addressId) {
       .then((response) => response.json())
       .then((data) => {
         if(data.success){
-          document.getElementById('output').src = data.filename;
+          document.getElementById('output').src = '/static/profilePhoto/profileCropedPic/'+data.filename;
         }
         // Update the image tag with the uploaded image URL
        
@@ -84,7 +84,12 @@ function deleteAddress(addressId) {
               
               resetPasswordSubmitButton.disabled  =true
               
-              alert('Reset Password Successful')
+
+              Swal.fire({
+                title: "Good job!",
+                text: "Reset Password Successful!",
+                icon: "success"
+              });
               location.reload()
           
             
@@ -120,7 +125,11 @@ function addAddress (){
   .then((data)=>{
     if(data.success){
       location.reload()
-      alert('add adress sucessful')
+      Swal.fire({
+        title: "Good job!",
+        text: "Add Adress successful!",
+        icon: "success"
+      });
       
     }
   })

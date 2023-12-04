@@ -5,7 +5,9 @@ const sendMail =require('../../controller/email&otp-Controller/emailController')
 const bcrypt = require('bcrypt')
 const ObjectId = require('mongodb').ObjectId;
 var mongoose = require('mongoose');
-
+const sharp=require('sharp')
+const path = require('path')
+const fs = require('fs')
 
 
 //user profile
@@ -147,8 +149,15 @@ const post_userProfile_update = async (req,res)=>{
         if(req.file){
             // console.log('profle route reached-------');
             const image = req.file
-            // console.log('profile image : --------: ',image);
-            const filename = '/static/uploads/'+image.filename
+            const imageBuffer = fs.readFileSync(image.path);
+            const croppedImageBuffer = await sharp(imageBuffer)
+                .resize({ width: 200, height: 200, fit: sharp.fit.cover })
+                .toBuffer();
+            const savePath = path.join(__dirname, '../../public/profilePhoto/profileCropedPic');
+            const filename =image.filename
+            fs.writeFileSync(path.join(savePath,filename), croppedImageBuffer);
+
+            // const filename = '/static/uploads/'+image.filename
             // console.log('-----------filename:',filename);
             const uploadProfile =  await userCollection.updateOne({username},
                 {$set:{profile:filename}})

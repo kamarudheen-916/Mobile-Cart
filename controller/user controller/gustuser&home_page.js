@@ -47,8 +47,8 @@ const userHome = async (req, res) => {
             const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
             const wishlist = wishlist_ ? wishlist_.Products : [];
             //req.session.stockVariation ='' is used in the cart page and the confirm orderpage
-            const banner = await bannerSchema.find({})
-            console.log('*********************banner',banner[0].banner);
+            const banner = await (await bannerSchema.find({})).reverse()
+            
             req.session.stockVariation =''
             res.render('user/index', {
                 title: 'Mobile Cart',

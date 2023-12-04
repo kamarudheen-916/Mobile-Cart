@@ -99,7 +99,7 @@ async function  chart(){
     }
     //-----------------------------------------------------------------------
     function showChart(uniquedate,totals){
-        //    alert(selectedDate.value)
+        
 
         const xValues =  uniquedate;
             const eachToatal =  totals

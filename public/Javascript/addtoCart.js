@@ -96,7 +96,7 @@ function addToCart(productId, count){
             if (data.message) {
                 console.log('------------------log');
                 console.log(data.message);
-                // alert('One Item Successfully Added To The Cart')
+                
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'bottom',
@@ -152,7 +152,6 @@ function removeFromCart(productId){
             .then((response)=>response.json())
             .then((data)=>{
                 if(data.success){
-                    //alert('Item Removed Successfully')
                    
                     location.reload();
 

@@ -122,14 +122,18 @@
         .then((res)=>res.json())
         .then((data)=>{
           if(data.success){
-            alert('enthenkilum')
+            Swal.fire({
+      title: "Good job!",
+      text: "Return Order Successfull!",
+      icon: "success"
+    });
           }
         })
         .catch((error)=>{
           console.log(error);
         })
 
-        alert('dlkcnvl;vcnjl')
+       
       }
     }
 </script>

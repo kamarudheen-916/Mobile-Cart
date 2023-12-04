@@ -8,7 +8,7 @@ function searchProducts(event) {
         .then(results => {
             // Update the DOM with search results
             displaySearchResults(results);
-            alert('test result')
+         
         })
         .catch(error => {
             console.log('Error during search:', error);
