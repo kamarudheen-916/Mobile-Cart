@@ -6,8 +6,13 @@ async function  chart(){
     fetch(`/admin/orderData`)
     .then((res)=>res.json())
     .then((Data)=>{
+     
         if(Data.success){
            
+            //call categoryChart function 
+            const keysArray = Object.keys(Data.categorywise);
+            const valuesArray = Object.values(Data.categorywise);
+            categoryChart(keysArray,valuesArray)
             //--------------------------------------------------------------------------
            if(selectedDate.value ==='day')
            {
@@ -20,7 +25,7 @@ async function  chart(){
             });
            
             uniquedate = date.filter((element, index, arr) => date.indexOf(element) === index);
-            console.log(uniquedate);
+            
 
             for(let i=0;i<uniquedate.length;i++)
             {
@@ -89,45 +94,68 @@ async function  chart(){
             }
            }
          
-           showChart(uniquedate,totals)
+           showallOrderSalesChart(uniquedate,totals)
         
         }
     })
     .catch((error)=>{
-        console.log(error);
+        console.error('Error in chart function:', error);
     })
     }
     //-----------------------------------------------------------------------
-    function showChart(uniquedate,totals){
+    function showallOrderSalesChart(uniquedate,totals){
         
 
         const xValues =  uniquedate;
             const eachToatal =  totals
-            console.log(xValues)
-            console.log(eachToatal)
-            console.log('xValues,eachToatal');
-            console.log(uniquedate);
-            console.log(eachToatal);
+       
             new Chart("acquisitions", {
-            type: "line",
+            type: "bar",
             data: {
                 labels: xValues,
                 datasets: [{ 
                 data:eachToatal,
+                backgroundColor: "green",
                 borderColor: "red",
                 fill: true
                 }]
             },
             options: {
-                legend: {display: false}
+                legend: {display: false},
+                
+
             }
             });
     }
-    //-----------------------------------------------------------------------
-    // (async function() {
-    //     chart()
+    
+
+    //--------------------------------------------------------
+   
+    function categoryChart(keysArray,valuesArray){
         
-    // })();
+        const xValues = [...keysArray];
+        const yValues = [...valuesArray];
+        const barColors = ["red", "green","blue","orange","brown"];
+        
+        new Chart("categoryChartId", {
+          type: "doughnut",
+          data: {
+            labels: xValues,
+            datasets: [{
+              backgroundColor: barColors,
+              data: yValues
+            }]
+          },
+          options: {
+            legend: {display: true},
+            title: {
+              display: true,
+              text: "World Wine Production 2018"
+            }
+          }
+        });
+    }
+    //===================================================================
     document.addEventListener('DOMContentLoaded',()=>{
-        chart()
+        chart()      
     })

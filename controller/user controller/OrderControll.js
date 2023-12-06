@@ -51,69 +51,71 @@ try {
 }
 }
 
-const confirmOrder =async (req,res)=>{
+
+const confirmOrder = async (req, res) => {
     try {
+        const username = req.session.user;
+        const userData = await userCollection.findOne({ username });
+        const cartProducts = await cartCollection.findOne({ userId: userData._id });
 
-            //check the stock of cart products
-            const username = req.session.user
-            const userData = await userCollection.findOne({username})
+        let response = null;
 
-            const cartProducts = await cartCollection.findOne({userId:userData._id})
-            
-            await Promise.all(cartProducts.Products.map(async (cartProduct) => {
-                const product = await allProducts.findOne({ _id: cartProduct.ProductId });
-    
-                if (cartProduct.Quantity > product.stock) {
+        for (const cartProduct of cartProducts.Products) {
+            const product = await allProducts.findOne({ _id: cartProduct.ProductId });
+
+            if (cartProduct.Quantity > product.stock) {
+                response = { success: 'Quantity Exceeded', QuantityError: `The available stock of ${product.name} is ${product.stock} only` };
+                break;
+            } else {
+                req.session.confirmOrderBody = req.body;
+                const newTotal = req.session.totalWithCoupon ? req.session.totalWithCoupon : req.session.cartToatal;
+
+                if (req.session.confirmOrderBody.paymentMethods === 'CashOnDelivery') {
+                    req.session.paymentStatus = 'CashOnDelivery';
+                    response = { success: 'CashOnDelivery' };
                   
-                    req.session.stockVariation ='The available stock of '+ product.name+' is ' + product.stock +' only ';
-                    res.json({success:'Quantity Exeeded',QuantityError:req.session.stockVariation});
-                    // res.redirect('/get_cart');
-                }else{
-                    req.session.confirmOrderBody =  req.body
-                    const newToatal =  req.session.totalWithCoupon? req.session.totalWithCoupon: req.session.cartToatal
-                    // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
-                 if(req.session.confirmOrderBody.paymentMethods ==='CashOnDelivery'){
-                    console.log('----------**************/////////');
-                    req.session.paymentStatus = 'CashOnDelivery'
-                    res.json({success:'cahsOnDelevery'})
-                }else if(req.session.confirmOrderBody.paymentMethods ==='WalletPayment'){
-                    req.session.paymentStatus = 'WalletPayment'
-                    if(newToatal > userData.wallet.amount){
-                        res.json({success:'WalletAmountExeeded'})
-                    }else{
-                        res.json({success:'WalletPayment'}) 
-                    }
-                    
-                }else if(req.session.confirmOrderBody.paymentMethods ==='OnliePayment'){
-                        // console.log('req.session.confirmOrderBody.paymentMethods',req.session.confirmOrderBody.paymentMethods)
-                        var order = {
-                            amount: newToatal*100,  // amount in the smallest currency unit
-                            currency: "INR",
-                            receipt: req.session.cartId,
-                          };
-                          await razorpay 
-                          .createRazorpayOrder(order)
-                          .then((createdOrder)=>{
-                            req.session.paymentStatus = 'OnliePayment'
-                          res.json({success:'OnliePayment',createdOrder,order});
-                          })
-                          .catch((error) => {
-                            console.error('Razorpay error:', error);
-                            res.status(500).json({ error: 'Internal Server Error' });
-                        })
+                    break;
+                } else if (req.session.confirmOrderBody.paymentMethods === 'WalletPayment') {
+                    req.session.paymentStatus = 'WalletPayment';
+                    if (newTotal > userData.wallet.amount) {
+                        response = { success: 'WalletAmountExceeded' };
                         
-                          
+                        break;
+                    } else {
+                        response = { success: 'WalletPayment' };
+                        break;
+                    }
+                } else if (req.session.confirmOrderBody.paymentMethods === 'OnliePayment') {
+                    try {
+                        
+                        const order = {
+                            amount: newTotal * 100,  // amount in the smallest currency unit
+                            currency: 'INR',
+                            receipt: req.session.cartId,
+                        };
+
+                        const createdOrder = await razorpay.createRazorpayOrder(order);
+                        req.session.paymentStatus = 'OnlinePayment';
+                        response = { success: 'OnlinePayment', createdOrder, order };
+                        break;
+                    } catch (error) {
+                        console.error('Razorpay error:', error);
+                        response = { error: 'Internal Server Error' };
+                        break;
                     }
                 }
-            }));
+            }
+        }
 
+        // Send the final response
+        res.json(response || { success: false });
 
-           
     } catch (error) {
-        console.log('confirmOrder:',error)
-        // res.json({success:false})
+        console.log('confirmOrder:', error);
+        res.json({ success: false });
     }
-}
+};
+
 
 const applyCoupon = async(req,res)=>{
     try {
@@ -132,9 +134,10 @@ const applyCoupon = async(req,res)=>{
             }else {
                 console.log('************//////////////////');
             const discountAmount  =  req.session.cartToatal - CouponData.discountAmount
+            const couponAmount = CouponData.discountAmount
             req.session.totalWithCoupon =  discountAmount
             req.session.couponAmount =  CouponData.discountAmount
-            res.json({success:true,discountAmount})
+            res.json({success:true,discountAmount,couponAmount})
             }
         }
        

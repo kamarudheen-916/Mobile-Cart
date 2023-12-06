@@ -13,7 +13,8 @@ const get_banner = async(req,res)=>{
     try {
         const banner = await (await bannerSchema.find({})).reverse()
         let banners = []
-        if(banner){
+        console.log('banner------------',banner);
+        if(banner.length > 0){
              banners =  banner[0].banner
         }
         else{

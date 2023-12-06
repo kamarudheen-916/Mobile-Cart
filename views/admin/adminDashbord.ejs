@@ -1,81 +1,140 @@
-    <%-include('../layout/head')-%>
-
+<%-include('../layout/head')-%>
+    
     <div>
         <%-include('../partials/admin-header')-%>
     </div>
 
-    <div class="container">
-            <div class="row d-flex justify-content-center align-items-center  " style="height: 100vh; padding-top: 70px;">
-                <div class="p-4">
-                    <h1>Dashboard</h1>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                    Download Report
-                                </button>
-                    
-                            <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Select Date Range</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form id="salesReport" method="post" action="/admin/download-sales-report">
-            <label for="startDate">Start Date:</label>
-            <input type="date"  name="startDate" id="startDate" required>
-            <label for="endDate">End Date:</label>
-            <input type="date" name="endDate" id="endDate" required>
-           
-            <div class="row mt-5">
-                <div class="col-sm-6"> 
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="downloadFormat" value="pdf" id="pdfCheckbox" checked>
-                        <label class="form-check-label" for="pdfCheckbox">
-                            PDF
-                        </label>
-                    </div>
-                </div>
-                <div class="col-sm-6"> 
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="downloadFormat" value="excel" id="excelCheckbox">
-                        <label class="form-check-label" for="excelCheckbox">
-                            Excel
-                        </label>
+    <div class="container ">
+        <div class="row d-flex justify-content-center align-items-center  mb-5" style="height: 100vh; padding-top: 70px;">
+            <div class="p-4">
+                <h1>Dashboard</h1>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Download Report
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Select Date Range</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="salesReport" method="post" action="/admin/download-sales-report">
+                                    <label for="startDate">Start Date:</label>
+                                    <input type="date" name="startDate" id="startDate" required>
+                                    <label for="endDate">End Date:</label>
+                                    <input type="date" name="endDate" id="endDate" required>
+
+                                    <div class="row mt-5">
+                                        <div class="col-sm-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="downloadFormat"
+                                                    value="pdf" id="pdfCheckbox" checked>
+                                                <label class="form-check-label" for="pdfCheckbox">
+                                                    PDF
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="downloadFormat"
+                                                    value="excel" id="excelCheckbox">
+                                                <label class="form-check-label" for="excelCheckbox">
+                                                    Excel
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-dark" id="generateReportBtn">Generate
+                                    Report</button>
+                            </div>
+
+                            </form>
+
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            
-
-        </div>
-        
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-dark" id="generateReportBtn">Generate Report</button>
-        </div>
-        
-    </form>
-
-      </div>
-    </div>
-  </div>
-                </div>
-                <div class="shadow">
-                    <select name="date" class="btn btn-secondary m-3" onchange="chart()" id="date">
-                        <option value="day">day</option>
-                        <option value="month">month </option>
-                        <option value="year">year</option>
-                    </select>
-                    <div style="width: 1000px;"><canvas  id="acquisitions"></canvas></div>
+            <div class="shadow p-4" style="background: #d3d3d3;">
+                <select name="date" class="btn btn-secondary m-3 w-100" onchange="chart()" id="date">
+                    <option value="day">day</option>
+                    <option value="month">month </option>
+                    <option value="year">year</option>
+                </select>
+                <div class="d-flex ">
+                            <div style="width: 800px; "><canvas id="acquisitions"></canvas></div>
+                        <div style="width: 1000px; "><canvas id="categoryChartId"></canvas></div>
                 </div>
             </div>
-            
-    </div>
-        
-<script>
+           <!-- ... Your existing HTML code ... -->
 
-</script>
+<div class=" shadow p-4  mt-5 mb-5" id="bestSoldItemShowDiv" style="background: #d3d3d3;">
+    <div class="">
+        <h3 class="bg-secondary p-2 rounded">Best Sellers</h3>
+        <div>
+            <table class="w-100 "  id="bestSellerTable">
+                <thead>
+                    <tr class="h4 border">
+                        <td>Image</td>
+                        <td>Product</td>
+                        <td>Price</td>
+                        <td>Stock</td>
+                        <td>Sold</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%bestSeller.forEach((best, index) => {%>
+                    <tr class="<%= index % 2 === 0 ? 'hash-color' : '' %> border">
+                        <td>
+                            <img width="80px" src="/static/uploads/<%=best.productDetails.image[0]%>" alt="">
+                        </td>
+                        <td><%=best.productDetails.name%></td>
+                        <td>₹ : <%=best.productDetails.price%></td>
+                        <td><%=best.productDetails.stock%></td>
+                        <td><%=best.totalCount%></td>
+                    </tr>
+                    <%})%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ... Your existing HTML code ... -->
+
+        </div>
+
+        
+
+    </div>
+
+    <script>
+        // JavaScript code to alternate row background color
+        const tableRows = document.querySelectorAll('#bestSellerTable tbody tr');
+    
+        tableRows.forEach((row, index) => {
+            if (index % 2 === 0) {
+                row.classList.add('hash-color');
+            }
+        });
+    </script>
+    <style>
+        .hash-color {
+            background-color: #d3cece; /* Replace with your desired hash color */
+        }
+    </style>
+    
 
     <%-include('../layout/footer')-%>

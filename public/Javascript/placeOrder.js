@@ -56,11 +56,13 @@ placeOrderForm.addEventListener('submit', (e) => {
                 .then(data => {
                     // Handle the response as needed
                     console.log(data);
-                    if(data.success==='cahsOnDelevery'){
+           
+                    if(data.success==='CashOnDelivery'){
                       location.href='/confirmOrderAndGetOrderSucess'
-                    }else if(data.success==='OnliePayment'){
+                    }else if(data.success==='OnlinePayment'){
+                      
                         razOrPay(data)
-                    }else if(data.success ==='WalletAmountExeeded'){
+                    }else if(data.success ==='WalletAmountExceeded'){
                       Swal.fire({
                         icon: "error",
                         title: "Oops...",
@@ -108,7 +110,7 @@ placeOrderForm.addEventListener('submit', (e) => {
         
         Swal.fire({
           title: "oops..!",
-          text: "payment failuere!",
+          text: "Online payment failed ! Choose another payment Option.",
           icon: "error"
         });
       }
@@ -165,7 +167,13 @@ Toast.fire({
 // apply Cuopon 
 function applyCoupon(){
 
+  const oldTotalDiv = document.getElementById('oldTotalDiv')
+  const coupon_amount = document.getElementById('coupon_amount')
+  const newTotal = document.getElementById('newTotal')
+
+  
 const couponCode = document.getElementById('couponCode').value
+
 fetch(`/applyCoupon/?couponCode=${couponCode}`,{
         method:'post',
         
@@ -173,7 +181,9 @@ fetch(`/applyCoupon/?couponCode=${couponCode}`,{
       .then((res)=>res.json())
       .then((data)=>{
           if(data.success){
-            document.getElementById('AllTotal').innerHTML = data.discountAmount
+            oldTotalDiv.style.display = 'block'
+            coupon_amount.innerText  = data.couponAmount
+            newTotal.innerText = data.discountAmount
           
             Swal.fire({
               title: "Good job!",

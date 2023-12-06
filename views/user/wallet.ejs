@@ -10,7 +10,7 @@
                         <table class="table table-striped  " >
                            <tbody>
                             <%if(userWallet.transactions.length>0){%>
-                            <%userWallet.transactions.forEach((val)=>{%>
+                            <%userWallet.transactions.reverse().forEach((val)=>{%>
                             <tr class="">
                                 <td><%=val.description%></td>
                                 <%if(val.transactionType === 'credit'){%>

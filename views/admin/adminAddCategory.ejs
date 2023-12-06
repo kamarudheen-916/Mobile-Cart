@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row d-flex justify-content-center align-items-center " style="height: 100vh;">
         <div class="leftPart col-md-6">
-            <form id="sample" class="border border-success rounded p-4" action="/admin/add-new-catogeries" method="post" onsubmit="return validateForm()">
+            <form id="sample" class="border border-success rounded p-4" action="/admin/add-new-catogeries" method="post" onsubmit="return validateCategoryForm()">
                 <div class="mb-3">
                     <input type="text" id="categoryname" required name="name" placeholder="Category Name" class="form-control border border-success rounded">
                     <span id="categoryname_error" class="text-danger"><%=duplicate_category_name%></span>
@@ -24,7 +24,7 @@
 </div>
 
 <script>
-    function validateForm() {
+    function validateCategoryForm() {
         // Perform your form validation here
         // For example, check if the required field is not empty
         var categoryName = document.getElementById('categoryname').value;
