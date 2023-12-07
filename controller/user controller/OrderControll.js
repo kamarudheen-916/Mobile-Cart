@@ -132,7 +132,7 @@ const applyCoupon = async(req,res)=>{
                
                 res.json({success:false,message:`Coupon only can be used above ₹ ${CouponData.MinimumPurchaseAmount} !!!`})
             }else {
-                console.log('************//////////////////');
+                
             const discountAmount  =  req.session.cartToatal - CouponData.discountAmount
             const couponAmount = CouponData.discountAmount
             req.session.totalWithCoupon =  discountAmount

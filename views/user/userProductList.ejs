@@ -123,7 +123,7 @@
           </div>
 
         <!-- item shows here -->
-         
+        <div id="mainProductShow">
          <%for(let i=0;i<products.length;i++){%>
         <div class="row justify-content-center mb-3" id="productListMain">
           <div class="col-md-12">
@@ -176,7 +176,7 @@
         </div>
 
        <%}%>	
-
+      </div>
         <!-- Pagination -->
         
         <%for(let i=0;i<products_count;i++){%>
@@ -207,6 +207,7 @@
     // Hide the product list while fetching and updating
     document.getElementById('productList').style.display = 'none';
 
+    document.getElementById('mainProductShow').style.display = 'none';
     fetch(`/filterByCategory?category=${category}`)
       .then((res) => res.json())
       .then((data) => {

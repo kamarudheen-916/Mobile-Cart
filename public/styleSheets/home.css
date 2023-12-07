@@ -11,6 +11,7 @@ header{
     width: 100%;
     
 }
+
 #logo{
    max-width: 70%;
    height: 8%;
@@ -32,7 +33,7 @@ video{
     display: flex;
     justify-content: center;
     color: aliceblue;
-    height: 100vh;
+    /* height: 100vh; */
     
     
     }
@@ -74,3 +75,15 @@ video{
     transition: .2s;
     text-decoration: underline;
    }
+#header2{
+    display: none;
+}
+   @media (max-width: 1000px) {
+    #header1 {
+      display: none;
+    }
+    #header2{
+        display: block;
+    }
+
+  }

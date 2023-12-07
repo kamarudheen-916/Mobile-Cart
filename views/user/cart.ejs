@@ -5,10 +5,10 @@
     <%-include('../partials/user-header')-%>
 
         <section id="cart">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row  ">
-                    <div class="d-flex gap-4 ">
-                        <div class="col-md-8">
+                    <div class=" gap-4 ">
+                        <div class="col-lg-12 col-sm-12">
                             <div class="diplayCartIems shadow-lg ">
                                 <%if(cartItems.length>0){%>
                                 <%cartItems.forEach((item)=>{%>
@@ -42,8 +42,14 @@
                                 </div>
                                 <%})%>
                                 <%}else{%>
-                                    <div class="p-4 d-flex justify-content-center text-danger ">
-                                        <h4>Your Cart is empty.</h4>
+                                    <div class="p-4 d-flex justify-content-center  text-danger ">
+                                        <div >
+                                            <h4>Your Cart is empty.</h4>
+                                            <img src="/static/images/cartEmptyImage.jpg" alt="">
+                                        </div>
+                                        <div>
+                                            
+                                        </div>
                                     </div>
                                  <%}%>   
 
@@ -55,7 +61,7 @@
                             </div>
                             <%}%>   
                         </div>
-                        <div class="priceDetails col-md-4 ">
+                        <div class="priceDetails col-lg-12  col-sm-12 mt-3 mb-3">
 
                             <div class="border p-3 shadow-lg">
                                 <div class="priceDetails_div">

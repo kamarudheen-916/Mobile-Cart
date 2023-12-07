@@ -7,7 +7,7 @@
 
 
 <!-- show banner -->
-<div class="row" style="padding-top: 100px;">
+<div class="container-fluid" style="padding-top: 100px;">
   <div id="carouselExampleIndicators" class="carousel slide col-md-12 text-center bg-black p-2" data-ride="carousel">
     <ol class="carousel-indicators">
       <% for (let i = 0; i < banner[0].banner.length; i++) { %>
@@ -19,7 +19,7 @@
       <% for (let i = 0; i < banner[0].banner.length; i++) { %>
         <div class="carousel-item <% if (i === 0) { %>active<% } %>">
           <!-- Image or content for the current item -->
-          <img src="/static/bannerImages/bannerCropedImage/<%= banner[0].banner[i] %>" alt="">
+          <img class="col-md-12 col-12" src="/static/bannerImages/bannerCropedImage/<%= banner[0].banner[i] %>" alt="">
         </div>
       <% } %>
     </div>
@@ -44,8 +44,8 @@
   <section>
     <div class="row">
       <%for(let i=0;i<products.length;i++){%>
-        <div class="col-md-3 mt-5  mb-5 ">
-              <div id="product_view" class="card d-flex align-items-center border border-0 shadow ">
+        <div class=" col-lg-4 col-12 col-sm-6 mt-5  mb-5 d-flex justify-content-center ">
+              <div id="product_view" style="width: 18rem;" class="card  d-flex align-items-center border border-0 shadow ">
                   
                     <a id="product_list_link" class="text-decoration-none text-dark " href="/userProductList/<%=products[i].category%>">
                             <div id="image_user">
@@ -60,7 +60,7 @@
                             </div>
                             <div  class="card-body " >
                                 <div id="product_name_homepage">
-                                  <h6 class="card-title"><%=products[i].name%></h6>
+                                  <h6 class="card-title "><%=products[i].name%></h6>
                                 </div>
                                       <!-- <p class="card-text"><%=products[i].description%></p> -->
                                 <div id="product_price_homepage">

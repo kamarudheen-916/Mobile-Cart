@@ -22,9 +22,12 @@
                     <% if (orderData && orderData.Products && Array.isArray(orderData.Products)) { %>
                         <% orderData.Products.forEach((x) => { %>
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-2 d-flex flex-column">
                       <img src="/static/uploads/<%=x.ProductId.image[0]%>"
                         class="img-fluid w-50" alt="Phone">
+                        <%if(x.Status!=='ordered'){%>
+                          <div class="fw-bold mt-2"><%=x.Status%></div>
+                          <%}%>
                     </div>
                     <div class="col-md-6 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0 h6"><%= x.ProductId.name %> </p>
@@ -91,8 +94,19 @@
             </div>
             <div class="card-footer border-0 px-4 py-5"
               style="background-color: #105b09; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-              <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-            <span class="h2 mb-0 ms-2">  ₹ <%= orderData.TotalPrice %></span></h5>
+              <div class="d-flex justify-content-between border-bottom p-2">
+                <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total</h5>
+                <h5><span id="TotalWithCoupon" class="h2 mb-0 ms-2 text-white">  : </span></h5>
+              </div>
+              <div class="d-flex justify-content-between border-bottom p-2">
+                <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Coupon</h5>
+                <h5><span id="couponAmount" class="h2 mb-0 ms-2 text-white">   <%= orderData.couponAmount %></span></h5>
+              </div>
+              <div class="d-flex justify-content-between border-bottom p-2">
+                <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">All Total</h5>
+                <h5><span id="AllToatalAmount" class="h2 mb-0 ms-2 text-white">   <%= orderData.TotalPrice %></span></h5>
+              </div>
+
             </div>
           </div>
         </div>
@@ -100,6 +114,23 @@
     </div>
   </section>
 
- 
+
+
+<script>
+  // Get references to the elements
+  const totalWithCouponElement = document.getElementById("TotalWithCoupon");
+  const couponAmount = document.getElementById('couponAmount').innerText
+  const allTotalAmount =  document.getElementById('AllToatalAmount').innerText
+  console.log(couponAmount);
+  console.log(allTotalAmount);
+  // Calculate the sum
+  const sum = Number(couponAmount) + Number(allTotalAmount);
+
+  // Update the content of the span with the calculated sum
+  totalWithCouponElement.innerText = sum;
+</script>
+
+<!-- Your existing HTML code ... -->
+
  <!-- user footer partials -->
 <%-include('../layout/footer')-%>

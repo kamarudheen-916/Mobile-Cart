@@ -48,10 +48,7 @@ const get_product_List = async(req,res)=>{
 
         res.render('user/userProductList',
         {title:'Product List Page',username,products,products_count,category,pageNumber,wishlist,cartProductIds,allcategorys})
-        // res.json({
-        //     success:true,
-        //     products,
-        // })
+       
         } catch (error) {
             console.log('----------product list  error:----',error);
         }

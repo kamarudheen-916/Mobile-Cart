@@ -191,7 +191,12 @@ fetch(`/applyCoupon/?couponCode=${couponCode}`,{
               icon: "success"
             });
           }else{
-            alert(data.message)
+            Swal.fire({
+              title: "oops!",
+              text: data.message,
+              icon: "error"
+            });
+            // alert(data.message)
           }
       })
 }

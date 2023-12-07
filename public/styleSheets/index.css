@@ -13,7 +13,7 @@
     transform: scale(.98);
 }
 #product_list_link{
-    height: 30rem;
+    /* height: 30rem; */
     width: 15rem;
     margin-left: 50px;
     
@@ -21,7 +21,7 @@
 
 #image_user{
     width: 100%;
-    height: 60%;
+   
     position: relative;
     
 }

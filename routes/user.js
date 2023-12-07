@@ -34,7 +34,7 @@ router.get('/otp',userAuth.userExist,otpControls.user_get_otp)
 //user home redirect
 router.post('/otp',userAuth.userExist,otpControls.userOtp_post)
 //user resend otp
-router.get('/user/otp/resend_otp',userAuth.userExist,otpControls.get_resendOTP)
+router.get('/user/otp/resend_otp',userAuth.userExist,otpControls.get_resendOTP) 
 //--------------------------------------------------------------------------------------
 //user signup get
 router.get('/signup',userAuth.userExist,signUpControls.signup_get) 
@@ -48,9 +48,9 @@ router.get('/gustuser',userAuth.userExist,gustuser_home_Controll.gustuser)
 // home route
 router.get('/',userAuth.verifyuser,gustuser_home_Controll.userHome)
 //user Search
-router.get('/search',userAuth.verifyuser,gustuser_home_Controll.search)
+router.get('/search',userAuth.verifyuser,gustuser_home_Controll.search) 
 //user logout
-router.get('/logout',(req,res)=>{  req.session.logedIn=false; res.redirect('/') })
+router.get('/logout',(req,res)=>{  req.session.logedIn=false; res.redirect('/') }) 
 //--------------------------------------------------------------------------
 //user product list 
 router.get('/userProductList/:category',userAuth.verifyuser,productList_Controll.get_product_List)

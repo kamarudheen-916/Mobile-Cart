@@ -48,7 +48,7 @@ const addBannerSubmit = async (req, res) => {
             for (let i = 0; i < banners.length; i++) {
                 const imageBuffer = fs.readFileSync(banners[i].path);
                 const croppedImageBuffer = await sharp(imageBuffer)
-                .resize({ width: 1050, height: 579, fit: sharp.fit.cover })
+                .resize({ width: 800, height: 300, fit: sharp.fit.cover })
                 .toBuffer();
                 console.log(croppedImageBuffer, "image cropp image success................................");
                 const fileName = banners[i].filename;

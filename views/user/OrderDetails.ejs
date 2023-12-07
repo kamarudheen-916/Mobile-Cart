@@ -91,15 +91,40 @@
               </div>
             </div>
             <div class="card-footer border-0 px-4 py-5"
-              style="background-color: #105b09; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-              <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-            <span class="h2 mb-0 ms-2">  ₹ <%= orderData.TotalPrice %></span></h5>
+            style="background-color: #105b09; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+            <div class="d-flex justify-content-between border-bottom p-2">
+              <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total</h5>
+              <h5><span id="TotalWithCoupon" class="h2 mb-0 ms-2 text-white">   </span></h5>
             </div>
+            <div class="d-flex justify-content-between border-bottom p-2">
+              <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Coupon</h5>
+              <h5><span id="couponAmount" class="h2 mb-0 ms-2 text-white">   <%= orderData.couponAmount %></span></h5>
+            </div>
+            <div class="d-flex justify-content-between border-bottom p-2">
+              <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">All Total</h5>
+              <h5><span id="AllToatalAmount" class="h2 mb-0 ms-2 text-white">   <%= orderData.TotalPrice %></span></h5>
+            </div>
+
+          </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <script>
+    // Get references to the elements
+    const totalWithCouponElement = document.getElementById("TotalWithCoupon");
+    const couponAmount = document.getElementById('couponAmount').innerText
+    const allTotalAmount =  document.getElementById('AllToatalAmount').innerText
+    console.log(couponAmount);
+    console.log(allTotalAmount);
+    // Calculate the sum
+    const sum = Number(couponAmount) + Number(allTotalAmount);
+  
+    // Update the content of the span with the calculated sum
+    totalWithCouponElement.innerText = sum;
+  </script>
 
  <%-include('../partials/user-footer')-%>
  <!-- user footer partials -->

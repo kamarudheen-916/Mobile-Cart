@@ -4,10 +4,10 @@
 
     <section>
         <section class="vh-100" style="background-color: #eee; ">
-            <div class="container py-5 h-100">
-              <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="container-fluid py-5 ">
+              <div class="row d-flex justify-content-center align-items-center">
                 <div class="col">
-                  <div class="card card-stepper shadow" style="border-radius: 10px; height: 500px;margin-top: 100px; overflow-y: scroll; ">
+                  <div class="card card-stepper shadow" style="border-radius: 10px; max-height: 400px;margin-top: 100px; overflow-y: scroll; ">
                   <%if(userOrderData.length>0){%>
                     
                     <%userOrderData.reverse().forEach((order)=>{%>
@@ -15,10 +15,10 @@
                         
                                                   
 
-                        <section class="vh-100" style="background-color: #eee;">
-                            <div class="container py-5 h-100">
-                              <div class="row d-flex justify-content-center align-items-center h-100">
-                                <div class="col">
+                        <section class="" style="background-color: #eee;">
+                            <div class=" py-5 ">
+                              <div class="row d-flex justify-content-center align-items-center ">
+                                <div class="col-lg-11 col-md-12 col-sm-12">
                                   <div class="card card-stepper" style="border-radius: 10px;">
                                     <div class="card-body p-4">
                           
@@ -33,8 +33,8 @@
                                             </span>
 
                                             <%order.Products.forEach((product)=>{%>
-                                                <div class="">
-                                            <span class="small"><h6><span style="font-size:x-large ;">• </span><%=product.ProductId.name%></h6></span>
+                                                <div class="  p-1">
+                                            <span class="small  "><h6 class=""> • <%=product.ProductId.name%></h6></span>
                                           
                                             <span class="" style="font-size:small;font-weight: 700;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quatity : <%=product.Quantity%> , </span>
                                             <span class="" style="font-size:small;font-weight: 700; color: rgb(93, 96, 98);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status : <%=product.Status%> </span>
@@ -43,7 +43,7 @@
                                           </div>
                                           
                                         <div>
-                                          <a href="/get_OrderDetails/<%=order._id%>" class="btn btn-outline-primary" type="button">Track order details</a>
+                                          <a href="/get_OrderDetails/<%=order._id%>" class="btn btn-outline-primary" type="button">Track  details</a>
                                         </div>
                                       </div>
                                       <%if(order.Status!='Cancelled'){%>
@@ -81,16 +81,16 @@
                                       <div class="d-flex flex-row justify-content-between align-items-center ">
                                         
                                           <div  class="d-flex flex-column justify-content-center">
-                                            <span class="btn btn-secondary">Pending</span>
+                                            <span class="btn ">Pending</span>
                                         </div>
                                         <div class="d-flex flex-column justify-content-center align-items-center">
-                                            <span class="btn btn-secondary">Order Placed</span>
+                                            <span class="btn ">Order Placed</span>
                                         </div>
                                         <div class="d-flex flex-column align-items-center">
-                                            <span class="btn btn-secondary">Shipped</span>
+                                            <span class="btn ">Shipped</span>
                                         </div>
                                         <div class="d-flex flex-column align-items-end">
-                                            <span class="btn btn-success">Delivered</span>
+                                            <span class="btn ">Delivered</span>
                                         </div>
                                       
                                       </div>
@@ -227,7 +227,7 @@
                               <input type="checkbox" name="AllProducts"  id="AllProductsId">
                               <label for="">All Products</label>
                             </div>
-                          <div id="cancelProductsContent">
+                          <div id="cancelProductsContent" class="p-2">
                            
                           </div>  
                           </div>
@@ -274,11 +274,13 @@ function returnOrder (orderId){
                           console.log(Product.Status);
                           if(Product.Status == 'Delivered'){
                             const productHTML = `
-                                <div class="d-flex justify-content-between border rounded p-2">
-                                    <input type="checkbox"  class='returnProductCheckboxes' name='products' value='${Product.ProductId._id}' name="" id="">
-                                    <img style="width:50px;" src="/static/uploads/${Product.ProductId.image[0]}" alt="images.....">
-                                    <div>${Product.ProductId.name}</div>
-                                    <div>₹:<span>${Product.ProductId.price}</span></div>
+                               
+
+                                <div class="d-flex justify-content-between border rounded p-1">
+                                    <input class='mx-2' type="checkbox"  class='productCheckboxes' name='products' value='${Product.ProductId._id}' name="" id="">
+                                    <img class='mx-2' style="width:50px;" src="/static/uploads/${Product.ProductId.image[0]}" alt="images.....">
+                                    <div class='mx-2 text-truncate w-100  p-2' >${Product.ProductId.name}</div>
+                                    <div class='p-2 w-50'>₹: ${Product.ProductId.price}</div>
                                 </div>
                             `;
                              
@@ -361,11 +363,11 @@ function cancelOrder(orderid) {
                           console.log(Product.Status);
                           if(Product.Status == 'ordered' || 'Order Placed' && Product.Status !== 'Cancelled'){
                             const productHTML = `
-                                <div class="d-flex justify-content-between border rounded p-2">
-                                    <input type="checkbox"  class='productCheckboxes' name='products' value='${Product.ProductId._id}' name="" id="">
-                                    <img style="width:50px;" src="/static/uploads/${Product.ProductId.image[0]}" alt="images.....">
-                                    <div>${Product.ProductId.name}</div>
-                                    <div>₹:<span>${Product.ProductId.price}</span></div>
+                                <div class="d-flex justify-content-between border rounded p-1">
+                                    <input class='mx-2' type="checkbox"  class='productCheckboxes' name='products' value='${Product.ProductId._id}' name="" id="">
+                                    <img class='mx-2' style="width:50px;" src="/static/uploads/${Product.ProductId.image[0]}" alt="images.....">
+                                    <div class='mx-2 text-truncate w-100  p-2' >${Product.ProductId.name}</div>
+                                    <div class='p-2 w-50'>₹: ${Product.ProductId.price}</div>
                                 </div>
                             `;
                              
