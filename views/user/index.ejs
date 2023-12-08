@@ -74,7 +74,7 @@
                         <a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a>
                       <% } else { %>
                        
-                        <a id="addToCartButton_<%= products[i]._id %>" class="btn btn-success" onclick="addToCart('<%= products[i]._id %>', 1)">Add To Cart</a>
+                        <button id="addToCartButton_<%= products[i]._id %>" class="btn btn-success" onclick="addToCart('<%= products[i]._id %>', 1)">Add To Cart</button>
 
                       <% } %>
                       <%}else{%>
@@ -97,7 +97,58 @@
 </section>
 </div>
 <!-- show products -->
+<script>
+  function addToCart(productId, count){
+      // Rest of your code
+   
+      
+      fetch(`/add-addToCart/${count}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message) {
+                console.log('------------------log');
+                console.log(data.message);
+                
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'bottom',
+                    iconColor: 'black',
+                    titleColor:'black',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'colored-toast',
+                      },
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    },
+                    didClose: () => {
+                        // Reload the page after the toast is closed
+                        location.reload();
+                    },
+                });
+                Toast.fire({
+                    icon: 'success',
+                    title: 'One Item Successfully Added To The Cart',
+                });
 
+            } else {
+                console.log('Error on adding to wishlist');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+</script>
 <!-- user footer partials -->
 <%-include('../partials/user-footer')-%>
 <!-- user footer partials -->

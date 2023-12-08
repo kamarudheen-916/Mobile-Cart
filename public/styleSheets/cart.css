@@ -1,6 +1,6 @@
 #cart{
     display: flex;
-    padding-top: 150px;
+    padding-top: 80px;
 }
 .diplayCartIems{
     width: 100%;
@@ -47,7 +47,8 @@
     align-items: center;
 }
 .cart_image img{
-    width: 30%;
+    width: 100px; 
+    padding: 10px;
 }
 
 
