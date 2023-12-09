@@ -45,8 +45,7 @@ const get_dashbord=async(req,res)=>{
         },
       ]);
 
-      // const categorywise =  await Order.find({PaymentStatus:{$ne:'Pending'}}).populate('Products.ProductId')
-      // console.log('===================/////////////',categorywise[0].Products[0].ProductId);
+    
       
       if (!bestSeller) throw new Error("No Data Found");
 
@@ -69,7 +68,7 @@ const get_order_data = async (req, res) => {
             orderData.forEach((order)=>{
               order.Products.forEach((product)=>{
                 let keyToCheck = product.ProductId.category;
-                console.log(product );
+             
                 categorywise[keyToCheck] = categorywise.hasOwnProperty(keyToCheck) ? categorywise[keyToCheck] + product.ProductId.price :  product.ProductId.price;
               }) 
             })
@@ -83,12 +82,11 @@ const get_order_data = async (req, res) => {
   
   const genereatesalesReport = async (req, res) => {
     try {
-      // console.log(req.body);
+
       const startDate =new Date( req.body.startDate).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
       const format = req.body.downloadFormat;
       const endDate = new Date(req.body.endDate).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
-    //   endDate.setHours(23, 59, 59, 999);
-        // console.log(endDate,startDate);
+   
       const orders = await Order.find({
         PaymentStatus: { $in: ["Online Payment", "Pending",'Pament successfull(Wallet)'] },
         OrderDate: {

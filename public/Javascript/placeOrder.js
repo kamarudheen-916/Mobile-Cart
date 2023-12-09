@@ -55,7 +55,7 @@ placeOrderForm.addEventListener('submit', (e) => {
                 .then(response => response.json())
                 .then(data => {
                     // Handle the response as needed
-                    console.log(data);
+                  
            
                     if(data.success==='CashOnDelivery'){
                       location.href='/confirmOrderAndGetOrderSucess'

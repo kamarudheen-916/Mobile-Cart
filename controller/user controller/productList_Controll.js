@@ -125,8 +125,7 @@ const productListPagePriceFilter = async (req,res)=>{
          const wishlist_ = await WishlistCollection.findOne({ User_Id: user._id });
          const wishlist = wishlist_ ? wishlist_.Products : [];
 
-         console.log('========', minPriceInput);
-        console.log('========',maxPriceInput);  
+          
         if(Products){
             res.json({success:true,Products,cartProductIds,wishlist})
         }

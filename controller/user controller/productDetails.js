@@ -10,7 +10,7 @@ const get_productDetails = async(req,res)=>{
     try {
         const productId= req.params.id
         
-        console.log('----------productId:',productId);
+       
         const username= req.session.user
         if(req.session.logedIn){
             const products =await allProducts.findOne({_id:new ObjectId(productId)})
@@ -18,11 +18,11 @@ const get_productDetails = async(req,res)=>{
 
               // Fetch the user's cart data
         const user = await userCollection.findOne({ username });
-        console.log('------------------------userCartData', user);
+      
 
         // Fetch the user's cart data
         const userCartData = await cartCollection.findOne({ userId: user._id });
-        console.log('------------------------userCartData', userCartData);
+        
 
         // Declare cartProductIds outside the if block
         let cartProductIds = new Set();
@@ -31,7 +31,7 @@ const get_productDetails = async(req,res)=>{
         if (userCartData && userCartData.Products) {
             // Create a Set of productIds that are in the cart
             cartProductIds = new Set(userCartData.Products.map(item => item.ProductId.toString()));
-            console.log('------------------------cartProductIds', cartProductIds);
+    
         }
             res.render('user/productDetails',{title:'Product Details',username,products,cartProductIds})
 

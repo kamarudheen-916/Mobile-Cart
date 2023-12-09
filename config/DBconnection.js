@@ -9,7 +9,7 @@ mongoose.connect(MONGODB_URI,{
 })
 .then(()=>{
     console.log('mongodb connected');
-    console.log(MONGODB_URI);
+    // console.log(MONGODB_URI);
 })
 .catch(()=>{
     console.log('mongodb failed to connect');

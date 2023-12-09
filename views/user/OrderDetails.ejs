@@ -2,9 +2,9 @@
     <!-- user header partial -->
  <%-include('../partials/user-header')-%>
 
- <section class="h-100 gradient-custom shadow " style="padding-top: 80px;">
-    <div class="container py-5 h-100 ">
-      <div class="row d-flex justify-content-center align-items-center h-100">
+ <section class=" gradient-custom shadow " style="padding-top: 80px;">
+    <div class="container py-5">
+      <div class="row d-flex justify-content-center align-items-center ">
         <div class="col-lg-10 col-xl-8">
           <div class="card shadow" style="border-radius: 10px;">
             <div class="card-header px-4 py-5">
@@ -117,8 +117,7 @@
     const totalWithCouponElement = document.getElementById("TotalWithCoupon");
     const couponAmount = document.getElementById('couponAmount').innerText
     const allTotalAmount =  document.getElementById('AllToatalAmount').innerText
-    console.log(couponAmount);
-    console.log(allTotalAmount);
+   
     // Calculate the sum
     const sum = Number(couponAmount) + Number(allTotalAmount);
   

@@ -61,7 +61,7 @@ const post_add_new_categories =  async (req,res)=>{
                 req.session.duplicate_category_name = true 
                 res.redirect('/admin/add-new-catogeries')
             }else{
-                console.log('----------categoryData:',categoryData);
+             
                 await categoryCollection.create(categoryData)
                 
                 res.redirect('/admin/categories')
@@ -80,11 +80,11 @@ const post_add_new_categories =  async (req,res)=>{
 const get_block_category = async (req,res)=>{
     
     try {
-        console.log('-------------test');
+ 
         if(req.session.adminLoggedin){
             const categoryId = req.params.id
             const categoryData= await categoryCollection.findById(categoryId)
-            console.log('------------categoryData:',categoryData); 
+            
             categoryData.isBlocked= !categoryData.isBlocked
             if(categoryData.isBlocked){
                 categoryData.status ='Blocked'
@@ -106,16 +106,15 @@ const   post_search_catogery = async (req,res)=>{
         let i=0;
         if(req.session.adminLoggedin){
             const searchData = req.body.search
-            console.log('-------------------searchData',searchData);
+           
             const searchCategoryData = await categoryCollection.find
             (
                 {name:{$regex:'^'+searchData,$options:'i'}}
             )
-                console.log(searchCategoryData);
             req.session.searchCategoryData= searchCategoryData
             req.session.categorySearched = true
             res.redirect('/admin/categories')
-            console.log('-----------test');
+          
         }else{
             console.log('admin not loggedIn');
             res.redirect('/admin')

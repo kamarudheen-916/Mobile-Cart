@@ -38,7 +38,7 @@ function toggleWishlist(productId) {
 
   function deleteWishlist(productId) {
    
-     console.log(productId);
+
     
       // Make an AJAX request to add the product to the wishlist
       fetch(`/delete-wishlist/${productId}`, {
@@ -46,7 +46,7 @@ function toggleWishlist(productId) {
         method: 'DELETE',
       })
         .then((response) => {
-          console.log(response,"----res");
+          
           if(response.ok){
             console.log('-----------',response);
             window.location.reload();

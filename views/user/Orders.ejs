@@ -271,7 +271,7 @@ function returnOrder (orderId){
                         const userOrderData = data.userOrderData.Products;
                        
                         userOrderData.forEach((Product) => {
-                          console.log(Product.Status);
+                          
                           if(Product.Status == 'Delivered'){
                             const productHTML = `
                                
@@ -360,7 +360,7 @@ function cancelOrder(orderid) {
                         const userOrderData = data.userOrderData.Products;
                        
                         userOrderData.forEach((Product) => {
-                          console.log(Product.Status);
+                         
                           if(Product.Status == 'ordered' || 'Order Placed' && Product.Status !== 'Cancelled'){
                             const productHTML = `
                                 <div class="d-flex justify-content-between border rounded p-1">

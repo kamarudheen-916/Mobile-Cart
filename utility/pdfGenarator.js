@@ -11,10 +11,10 @@ module.exports = {
       const formattedEndDate = dateFormat(new Date(endDate), 'yyyy-MM-dd');
       try {
         const totalAmount = parseInt(totalSales)
-        console.log('Total Sales:', totalAmount);
+        
         const template = fs.readFileSync('utility/template.ejs', 'utf-8');
         const html = ejs.render(template, { orders, startDate, endDate, totalAmount });
-        console.log(typeof(totalAmount));
+        
         if (format === 'pdf') {
           const pdfOptions = {
             format: 'Letter',
@@ -44,7 +44,7 @@ module.exports = {
           ];
   
           let totalSalesAmount = 0;
-          console.log('========************',orders);
+          
           orders.forEach(order => {
           // console.log(orders);
             order.Products.forEach(item => {

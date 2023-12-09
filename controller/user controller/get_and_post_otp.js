@@ -14,24 +14,17 @@ const user_get_otp =(req,res)=>{
 const userOtp_post =async (req,res)=>{  
     req.session.logedIn=false;
     try {
-        const arr =[]
-        arr.push(req.body.otp1)
-        arr.push(req.body.otp2)
-        arr.push(req.body.otp3)
-        arr.push(req.body.otp4)
-        //takig the user entered otp
-        let fullOtp= arr.map(Number)
-        fullOtp=Number(arr.join("")) 
-        console.log('full otp :'+typeof(fullOtp)+':'+fullOtp)
+    
+        fullOtp=Number(req.body.otp1) 
+
         if(fullOtp===  req.session.newOtp){
-           // const newUser = new userCollection(signUp_userData)
+         
            if(req.session.userSignup){
             signUp_userData=req.session.signUp_userData
             await userCollection.insertMany([signUp_userData])
         }
             req.session.logedIn=true
-            
-            // console.log('---------------'+req.session.logedIn);
+    
             res.redirect('/')
         }else{
             req.session.OTPerrorMessage = true;

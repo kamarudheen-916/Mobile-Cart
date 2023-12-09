@@ -18,7 +18,7 @@ const get_wallet = async(req,res)=>{
         const  username = req.session.user;
         const userData = await userCollection.findOne({username})
         const userWallet = userData.wallet
-        console.log('======userWallet',userWallet);
+
         res.render('user/wallet',{username,title:'User Wallet',userWallet})
     } catch (error) {
         console.log('userWallerControll:-',error);

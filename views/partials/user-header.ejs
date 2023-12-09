@@ -5,7 +5,15 @@
            
             <img id="logo" src="/static/images/logo3.png" alt="">
           </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button 
+          class="navbar-toggler" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#navbarSupportedContent" 
+          aria-controls="navbarSupportedContent" 
+          aria-expanded="false" 
+          aria-label="Toggle navigation">
+          
             <span class="navbar-toggler-icon  rounded "></span>
           </button>
           <div class="collapse navbar-collapse px-5" id="navbarSupportedContent">
@@ -34,7 +42,7 @@
             </ul>
           </div>
           
-
+          
 
           <div class="search px-5 ">  
             <form action="/search" id="searchForm" class="d-flex" role="search">
@@ -42,8 +50,17 @@
               <button  class="btn btn-outline-success" type="submit">Search</button>
           </form>
           </div>
-          <div class="login pb-4">
-            
+          <div class="dropdown  " style="margin-right: 0px; ">
+            <button class="btn border border-success btn-secondary bg-black dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+           <%=username?username:"user"%>
+            </button>
+            <ul class="dropdown-menu  " style="width: 50%; background: #6d6a6a; color: #fcfcfc;">
+              <%if(username){%>
+                <li class="mr-5"><a class="dropdown-item "  style="width: 50%; background: #6d6a6a; color: #fcfcfc;" href="/logout">LogOut</a></li>
+              <%}else{%>
+              <li class="mr-5"><a class="dropdown-item "  style="width: 50%; background: #6d6a6a; color: #fcfcfc;" href="/login">LogIn</a></li>
+              <%}%>
+            </ul>
           </div>
         </div>
       </nav>
@@ -59,23 +76,33 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active text-light head_hover" aria-current="page" href="/">
-              <i class="fa-solid fa-house " style="color: #ffffff;font-size: x-large;"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active text-light" aria-current="page" href="/wishlist"><i class="fa-regular fa-heart head_hover " style="color: #ffffff;font-size: x-large"></i></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light " href="/get_cart"><i class="fa-solid fa-cart-shopping head_hover " style="color: #ffffff;font-size: x-large;"></i></a>  
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/get_profile"><i class="fa-solid fa-user head_hover" style="color: #ffffff;font-size: x-large"></i></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/get_wallet"><i class="fa-solid fa-wallet head_hover" style="color: #ffffff;font-size: x-large"></i></a>
-          </li>
+          <div class="d-flex justify-content-between mt-3">
+            <li class="nav-item">
+              <a class="nav-link active text-light head_hover" aria-current="page" href="/">
+                <i class="fa-solid fa-house " style="color: #ffffff;font-size: x-large;"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active text-light head_hover" aria-current="page" href="/wishlist">
+                <i class="fa-regular fa-heart head_hover " style="color: #ffffff;font-size: x-large"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light head_hover " href="/get_cart">
+                <i class="fa-solid fa-cart-shopping head_hover " style="color: #ffffff;font-size: x-large;"></i>
+              </a>  
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light head_hover" href="/get_profile">
+                <i class="fa-solid fa-user head_hover" style="color: #ffffff;font-size: x-large"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light head_hover" href="/get_wallet">
+                <i class="fa-solid fa-wallet head_hover" style="color: #ffffff;font-size: x-large"></i>
+              </a>
+            </li>
+          </div>
           <li>
             <div class="dropdown  " style="margin-right: 0px; ">
               <button class="btn border border-success btn-secondary bg-black dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

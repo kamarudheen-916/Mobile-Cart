@@ -24,13 +24,13 @@ const user_cart = async(req,res)=>{
           
         const cartData = await cartCollection.findOne({userId:user._id}).populate('Products.ProductId')
         
-        console.log(cartData);
+     
 
-        // console.log('req.session.stockVariatoin ///***', req.session.stockVariation );
+    
         
         const stockVariation = req.session.stockVariation;
         req.session.stockVariation='';
-        // req.session.stockVariation =''
+     
 
         if (!cartData) {
             return res.status(200).render('user/cart', {
@@ -42,7 +42,6 @@ const user_cart = async(req,res)=>{
             });
           }
           req.session.cartData = cartData.Products
-          console.log('-----------------------username',username);
           let total=0
           cartData.Products.forEach((item)=>{
           total+= (item.ProductId.price*item.Quantity)
@@ -51,11 +50,10 @@ const user_cart = async(req,res)=>{
           req.session.cartToatal=total
           req.session.cartId =  cartData._id
           req.session.cartProducts =  cartData
-          console.log('req.session.cartProducts==========',req.session.cartProducts);
-            // console.log('-------------total',total);
+         
              const cart_=  await cartCollection.findOneAndUpdate(
             {userId:user._id},{$set:{TotalAmount:total}})
-            // console.log('----------------cart_',cart_);
+   
            cartData.save()
            
            res.status(200).render('user/cart', {
@@ -77,7 +75,7 @@ const  increaseCartQuantity = async (req,res)=>{
     try {
         const productId = req.query.productId
         const productDetails =  await allProducts.findById(productId)
-        console.log('productId =============',productDetails);
+       
         res.json({success:true,stock:productDetails.stock})
     } catch (error) {
         console.log('error');
@@ -87,8 +85,7 @@ const  increaseCartQuantity = async (req,res)=>{
 }
 
 const   add_to_Cart =async (req,res)=>{
-    try {
-    //    console.log('========test');
+    try { 
         const count = req.params.count
         const { productId } = req.body;
         
@@ -108,29 +105,29 @@ const   add_to_Cart =async (req,res)=>{
 
                  
                 let quantity = req.query.quantity;
-                // console.log('quantity------',quantity);
+                
                 quantity =Number(quantity)+Number(count)
 
                 
                 const productDetails =  await allProducts.findById(productId)
-                // console.log('-----------------count--------------',count);
+            
                 if(Number(count)===1 &&  productDetails.stock  >= quantity){
-                // console.log('userdata------',userCartData);
+       
                
                 await cartCollection.updateOne(
                     {userId:user._id,'Products.ProductId':productId},{$set:{'Products.$.Quantity':quantity}})
-                console.log('there is data on cart collection --------------');
+                
                 }else if(Number(count)===-1 && quantity > 0){
-                    // console.log('userdata------',userCartData);
+
                     await cartCollection.updateOne(
                         {userId:user._id,'Products.ProductId':productId},{$set:{'Products.$.Quantity':quantity}})
-                    console.log('there is data on cart collection --------------');
+                   
                 }
                
             }else{  
                 await cartCollection.updateOne(
                     {userId:user._id},{$push:{Products:{ProductId:productId}}},{upsert:true})
-                console.log('no data----------- new data');
+               
             }
 
                 const cartData = await cartCollection.findOne({userId:user._id}).populate('Products.ProductId')
@@ -139,7 +136,7 @@ const   add_to_Cart =async (req,res)=>{
           total+= (item.ProductId.price*item.Quantity)
           })
 
-        //   console.log('********---------////',total);
+      
           await cartCollection.updateOne(
             {userId:user._id},{$set:{TotalAmount:total}})
         
@@ -147,7 +144,7 @@ const   add_to_Cart =async (req,res)=>{
                 success:true,
                 message:'it is success  '
             })
-        // console.log('---------------product id:',productId); 
+
 
     } catch (error) {
         console.log('addto cart error:',error);
@@ -157,7 +154,7 @@ const   add_to_Cart =async (req,res)=>{
 const removeFromCart = async (req, res) => {
     try {
         const productId = req.params.productId;
-        // console.log('---------------productId',productId);
+   
         const username = req.session.user
         const userdata = await userCollection.findOne({username})
         if(!userdata){
@@ -166,9 +163,9 @@ const removeFromCart = async (req, res) => {
 
         const userCartData = await cartCollection.findOne({userId:userdata._id});
 
-        // console.log('---------------userCartData',userCartData);
+        
         if (userCartData) {
-            // Update the document to remove the specified item
+
 
          
            
@@ -176,8 +173,8 @@ const removeFromCart = async (req, res) => {
                 {userId:userdata._id},
                 { $pull: { Products: { ProductId: productId } } }
             );
-
-            // console.log('---------------updatedCart',updatedCart);
+  
+ 
 
             if (updatedCart.modifiedCount > 0) {
                 console.log('Item removed from cart successfully.');

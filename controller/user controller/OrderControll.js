@@ -27,7 +27,7 @@ try {
         if(cartProducts === null){
             res.redirect('/');
         }
-        console.log('cartProducts============',cartProducts);
+     
         
         await Promise.all(cartProducts.Products.map(async (cartProduct) => {
             const product = await allProducts.findOne({ _id: cartProduct.ProductId });
@@ -122,7 +122,7 @@ const applyCoupon = async(req,res)=>{
         const couponCode =  req.query.couponCode
         req.session.couponCode =  couponCode
         const CouponData =  await Coupon.findOne({couponCode})
-        console.log(CouponData);
+       
         if(!CouponData){
             res.json({success:false,message:'Wrong Coupon Code!!!'})
         }else{
@@ -312,7 +312,7 @@ const fetchCancelOrderProducts = async (req,res)=>{
             // const orderData = await OrdersCollection.findOne({_id:productId})
             const userOrderData = await OrdersCollection.findOne({_id:orderId}).populate('Products.ProductId')
             
-        console.log('userOrderData---------------****lllll',userOrderData);
+       
         res.json({success:true,userOrderData})
     } catch (error) {
         console.log('fetchCancelOrderProducts error:',error);
@@ -325,13 +325,13 @@ const cancelOrder = async (req,res)=>{
 
         const username = req.session.user
         const OrderId = req.params.OrderId
-        console.log('OrderId:',OrderId); 
+    
         const orderData = await OrdersCollection.findOne({_id:OrderId}).populate('Products.ProductId')
         const userData = await userCollection.findOne({username})
         const cancelOrderData =  req.body
-        console.log('cancelorderData:==============',cancelOrderData);
+ 
         const IndividualcancelOrderData = cancelOrderData.products
-        console.log(IndividualcancelOrderData);
+      
         //here cancelOrderData is an object from req.body from frond end
         if('AllProducts' in cancelOrderData){  
         if(orderData){
@@ -503,7 +503,7 @@ const post_returnOrder = async(req,res)=>{
     try {
         const orderId =  req.params.OrderId
         const returnOrderData = req.body
-        console.log('returnOrderData===========',returnOrderData);
+       
         const orderData  = await OrdersCollection.findOne({_id:orderId})
        
         if(orderData){
@@ -518,7 +518,7 @@ const post_returnOrder = async(req,res)=>{
                 };
             }
                 orderData.Products.forEach((product)=>{
-                    console.log('orderData=============');
+                  
                 if(returnOrderData.products.includes(product.ProductId._id.toString())){
                     product.Status = 'Requested for return'
                 }

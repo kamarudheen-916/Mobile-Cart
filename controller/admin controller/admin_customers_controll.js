@@ -38,16 +38,16 @@ const get_customers = async (req,res)=>{
           let i=0;
           if(req.session.adminLoggedin){
               const searchData = req.body.search
-              console.log('-------------------searchData',searchData);
+            
               const searchCustomerData = await customer.find
               (
                   {username:{$regex:'^'+searchData,$options:'i'}}
               )
-                  console.log(searchCustomerData);
+                
               req.session.searchCustomerData= searchCustomerData
               req.session.customerSearched = true
               res.redirect('/admin/customers')
-              console.log('-----------test');
+              
           }else{
               console.log('admin not loggedIn');
               res.redirect('/admin')
@@ -75,11 +75,11 @@ const get_customers = async (req,res)=>{
               blockCustomers.isBlocked = !blockCustomers.isBlocked
               if(blockCustomers.isBlocked){
                   blockCustomers.status='Blocked'
-                  console.log('customer blocked')
+                  
               }else{
                
                   blockCustomers.status='Activated'
-                  console.log('customer activated');
+                  
               }
               await blockCustomers.save()
               res.redirect('/admin/customers') 

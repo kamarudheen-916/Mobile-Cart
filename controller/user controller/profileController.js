@@ -225,7 +225,7 @@ const viewCoupon=async(req,res)=>{
       if(!Coupons){
         res.render('error')
       }
-      console.log(Coupons);
+      
       const date = new Date()
      
       res.render('user/coupon',{title:'User Coupon',coupon:Coupons,username,date})

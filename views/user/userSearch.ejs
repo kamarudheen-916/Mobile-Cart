@@ -172,16 +172,28 @@
                       <span class="text-danger"><s>$49.99</s></span>
                     </div>
                     <h6 class="text-success">Free shipping</h6>
-                    <div class="mt-4">
+                    <div id="home_Addtocart" class="d-flex justify-content-evenly">
+                      <%if(products[i].stock>0){%>
                       <% if (cartProductIds.has(products[i]._id.toString())) { %>
-                        <a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a>
+                      <div>  <a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a></div>
                       <% } else { %>
-                        <a id="addToCartButton_<%= products[i]._id %>" class="btn btn-success" onclick="addToCart('<%= products[i]._id %>', 1)">Add To Cart</a>
-
+                       
+                        
+                          <button id="addToCartButton_<%= products[i]._id %>" class="btn btn-success" onclick="addToCart('<%= products[i]._id %>', 1)">Add To Cart</button>
+                           <a class="text-light btn btn-secondary" style="display: none; " id="GoToCart_fromIndex<%= products[i]._id %>" href="/get_cart">Go To Cart</a>
+                        
                       <% } %>
+                      <%}else{%>
+                        <button class="btn" disabled>Add To Cart</button>
+                        <%}%>          
+                      
+                     <div class="mx-1">
                       <button id="add_wishlist" type="button" onclick="toggleWishlist('<%= products[i]._id %>')" class="btn btn-success">
                         <i class="fa fa-heart<% if (wishlist.map(item => item.Product_id.toString()).includes(products[i]._id.toString())) { %> text-danger<% } %>" id="add_wishlist_icon" data-product-id="<%= products[i]._id %>"></i>
                       </button>
+                     </div>
+                      
+                    
                     </div>
                   </div>
                 </div>
@@ -225,7 +237,7 @@
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          console.log(data.cartProductIds);
+    
           const product =  data.Products
          const wishlist =  data.wishlist
           let cartProductIds = data.cartProductIds instanceof Set ? data.cartProductIds : new Set();
@@ -343,7 +355,7 @@
         
           const product =  data.Products
          const wishlist =  data.wishlist
-         console.log('product');
+         
           let cartProductIds = data.cartProductIds instanceof Set ? data.cartProductIds : new Set();
 
           // Get the product list container
@@ -424,7 +436,8 @@
 <script>
   function addToCart(productId, count){
       // Rest of your code
-   
+      let addToCartButton =  document.getElementById(`addToCartButton_${productId}`)
+    let GoToCart_fromIndexButton  = document.getElementById(`GoToCart_fromIndex${productId}`)
       
       fetch(`/add-addToCart/${count}`, {
         method: 'POST',
@@ -436,8 +449,9 @@
         .then((response) => response.json())
         .then((data) => {
             if (data.message) {
-                console.log('------------------log');
-                console.log(data.message);
+                 
+              addToCartButton.style.display = 'none'
+                GoToCart_fromIndexButton.style.display =  'block'
                 
                 const Toast = Swal.mixin({
                     toast: true,
@@ -456,7 +470,7 @@
                     },
                     didClose: () => {
                         // Reload the page after the toast is closed
-                        location.reload();
+                        // location.reload();
                     },
                 });
                 Toast.fire({

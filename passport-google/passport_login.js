@@ -15,7 +15,7 @@ passport.use(
       scope: ['profile', 'email'],
     },
     function (accessToken, refreshToken, profile, done) {
-            console.log('-------------------------------------profile:',profile);
+  
             done(null,profile)  
     })
   );

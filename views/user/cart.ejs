@@ -36,6 +36,7 @@
                                         <button id="PlusButton" onclick="changeQuantity('<%=item.ProductId._id%>',1)" >+</button>
                                         
                                     </div>
+                                    
                                     <div class="p-2" style="text-align: center;">
                                         <button onclick=" removeFromCart('<%=item.ProductId._id%>')" class="btn btn-secondary">Remove</button>
                                     </div>
@@ -213,7 +214,7 @@ function changeQuantity(productId, count) {
            .then((data) => {
                if (data.success) {
                   location.reload()
-                   console.log('Item Quatity Successfully Changed');
+                  
                } else {
                    console.log('Error on adding to wishlist');
                }

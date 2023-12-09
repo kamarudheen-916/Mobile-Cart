@@ -1,58 +1,74 @@
 <%-include('../layout/head')-%>
 <%-include('../partials/user-header')-%>
-<div class="">
-    <div class="row d-flex flex-column align-items-center justify-content-center  "  >
-        <div class="rightPart d-flex justify-content-center align-items-center p-5" >
-            <form class="border-bottom border-success rounded p-5 mt-5"   action="/admin/add-new-products" method="post" enctype="multipart/form-data">
-                  <div class="d-flex ">
-                    <div class="mb-3 col-md-6 d-flex justify-content-center align-items-center">
-                      <div class="col-md-6 ">
-                        <%for(let i=0;i<products.image.length;i++){%>
-                          <div class="products_images p-2"  >
-                            <img  id="original_image" src="/static/uploads/<%=products.image[i]%>"  style="width: 20%;" alt="">
-                          </div>
-                          <%}%>
-                      </div>
-                   <div class="col-md-6">
-                    <div id="img-container" style=" z-index: 5; width: 400px;">
-                      <img  id="display_image" src="/static/uploads/<%=products.image[0]%>"  style="width: 50%;" alt="">
-                    </div>
-                        <div class="d-flex flex-column m-5">
-                          <div>
-                            <% if (cartProductIds.has(products._id.toString())) { %>
-                              <a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a>
-                            <% } else { %>
-                              <a id="addToCartButton_<%=products._id%>" class="btn btn-success" onclick="addToCart('<%= products._id %>', 1)">Add To Cart</a>
-      
-                            <% } %>
-                          </div>
-                         
-                        </div>
-                      </div>
-                  </div>
-                    <div class="mb-3 col-md-6  d-flex flex-column  justify-content-center">
-                            <h3 id="previewName"><%=products.name%></h3>
-                            <h6 class="text-success">Extra 46000 off</h6>
-                            <h2> <span>₹ </span><%=products.price%></h2>
-                            <h6 style="text-decoration: underline;">Highlights</h6>
-                            <ul style="  list-style-type: square">
-                                <li><%=products.Highlight1%></li>
-                                <li>  <%=products.Highlight2%></li>
-                                <li> <%=products.Highlight3%></li>
-                                <li> <%=products.Highlight4%></li>
-                                <li><%=products.Highlight5%></li>
-                                <li><%=products.Highlight6%></li>
-                            </ul>
-                            <h4 style="text-decoration: underline;">Description</h4>
-                                <p><%=products.description%></p>
 
-
-                    </div>
-             </div>
-            </form>
+  
+  <!-- content -->
+  <section class="" style="padding-top: 100px;">
+    <div class="container">
+      <div class="row gx-5">
+        <aside class="col-lg-6">
+          <div class="border rounded-4 mb-3 d-flex justify-content-center">
+            <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/detail1/big.webp">
+              <img style="max-width: 70%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="/static/uploads/<%=products.image[0]%>" />
+            </a>
           </div>
+          <div class="d-flex justify-content-center mb-3">
+            <%for(let i=0;i<products.image.length;i++){%>
+            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" class="item-thumb">
+              <img width="60" height="60" class="rounded-2" src="/static/uploads/<%=products.image[i]%>" />
+            </a>
+            <%}%> 
+          </div>
+          <!-- thumbs-wrap.// -->
+          <!-- gallery-wrap .end// -->
+        </aside>
+        <main class="col-lg-6">
+          <div class="ps-lg-3">
+            <h3 id="previewName"><%=products.name%></h3>
+            <div class="d-flex flex-row my-3">
+              <span class="text-success ms-2">In stock</span>
+            </div>
+  
+            <div class="mb-3">
+            <span>₹ <%=products.price%></span>
+            </div>
+            
+            <p><%=products.description%></p>
+  
+            <div class="row">
+                <h6 style="text-decoration: underline;">Highlights</h6>
+                <ul style="  list-style-type: square">
+                    <li><%=products.Highlight1%></li>
+                    <li>  <%=products.Highlight2%></li>
+                    <li> <%=products.Highlight3%></li>
+                    <li> <%=products.Highlight4%></li>
+                    <li><%=products.Highlight5%></li>
+                    <li><%=products.Highlight6%></li>
+                </ul>
+            </div>
+  
+            <hr />
+  
+            <div class="row mb-4">
+              <div class="col-md-4 col-6 mb-3">
+                <label class="mb-2 d-block">Quantity</label>
+               
+              </div>
+            </div>
+            
+            <% if (cartProductIds.has(products._id.toString())) { %>
+                <a class="text-light btn btn-secondary mb-3" href="/get_cart">Go To Cart</a>
+              <% } else { %>
+                <a id="addToCartButton_<%=products._id%>" class="btn btn-success mb-3" onclick="addToCart('<%= products._id %>', 1)">Add To Cart</a>
+              <% } %>
+          </div>
+        </main>
+      </div>
     </div>
-</div>
+  </section>
+  <!-- content -->
+  
+ 
 <%-include('../partials/user-footer')-%>
 <script>
  
@@ -92,8 +108,7 @@ new ImageZoom(document.getElementById("img-container"), options);
         .then((response) => response.json())
         .then((data) => {
             if (data.message) {
-                console.log('------------------log');
-                console.log(data.message);
+               
                 
                 const Toast = Swal.mixin({
                     toast: true,
@@ -101,7 +116,7 @@ new ImageZoom(document.getElementById("img-container"), options);
                     iconColor: 'black',
                     titleColor:'black',
                     showConfirmButton: false,
-                    timer: 1000,
+                    timer: 800,
                     timerProgressBar: true,
                     customClass: {
                         popup: 'colored-toast',

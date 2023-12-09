@@ -20,7 +20,7 @@ function addNewCoupon (){
         body:new URLSearchParams(new FormData(addNewCouponForm))
     }).then((res)=>res.json())
     .then((data)=>{
-        console.log(data);
+      
         if(data.success){
              
             Swal.fire({
@@ -120,7 +120,7 @@ function editCouponSubmit (couponId){
     body:new URLSearchParams(new FormData(editCouponForm))
 }).then((res)=>res.json())
 .then((data)=>{
-    console.log(data);
+   
     if(data.success){
       location.reload()
             

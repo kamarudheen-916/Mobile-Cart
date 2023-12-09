@@ -10,7 +10,7 @@ const products = require('../../model/admin/productSchema')
 const get_orderView = async (req,res)=>{
     try {
         const orderData =  await OrdersCollection.find()
-      console.log('orderData--------',orderData);
+    
         res.render('admin/adminOrderView',{title:'Admin Order View',orderData})
     } catch (error) {
         console.log('admin get_orderView error',error);
@@ -32,7 +32,7 @@ const updateOrderStatus =async (req,res)=>{
             orderData.save()
             res.json({success:true,orderData})
         }
-      console.log('orderData--------',orderData);
+    
        
         
     } catch (error) {
@@ -43,9 +43,9 @@ const updateOrderStatus =async (req,res)=>{
 const fetchconfirmOrderReturnData = async (req,res)=>{
     try {
         const orderId = req.query.orderId
-        // console.log('orderId=============',orderId);
+  
         const OrderReturnData  =  await OrdersCollection.findOne({_id:orderId}).populate('Products.ProductId')
-        console.log('orderId=============',OrderReturnData);
+
         res.json({success:true,OrderReturnData})
     } catch (error) {
         res.json({success:false})
@@ -64,13 +64,13 @@ const confirmOrderReturn = async(req,res)=>{
         }
         console.log('userData when confirm Order Return :',UserData);
         orderData.Products.forEach((product)=>{ 
-            console.log('===============------------------------');
+      
             if(product.Status === 'Requested for return'){
              
             product.Status = 'Returned'
-            console.log(product.Status);
+           
             UserData.wallet.amount += product.ProductId.price
-            console.log('===============------------------------*****************');
+    
             UserData.wallet.transactions.push(
                 { 
                 transactionAmount :product.ProductId.price ,
@@ -98,7 +98,7 @@ const confirmOrderReturn = async(req,res)=>{
         
         orderData.Products.forEach(async(product)=>{
             if(product.Status === 'Returned'){
-                console.log('===============------------------------');
+               
             const AllProducts = await allProducts.findOne({_id:product.ProductId})
             const oldStock = AllProducts.stock
             AllProducts.stock = oldStock + product.Quantity
@@ -117,7 +117,7 @@ const get_OrderDetails = async (req,res)=>{
 
         const orderData = await OrdersCollection.findOne({_id:orderId}).populate('Products.ProductId')
          
-        // console.log('orderData with id ------------',orderData.Products[0].ProductId);
+        
         const username = req.session.user
 
         res.render('admin/adminOrderDetails',{title:"Admin Order Details",username,orderData})

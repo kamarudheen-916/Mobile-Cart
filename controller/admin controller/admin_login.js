@@ -26,7 +26,7 @@ const admin_login_post = async(req,res)=>{
         const username = req.body.username
         const admindata = await admin.findOne({username});
          
-        console.log("admin:------",admindata);
+       
          if(admindata){
             bcrypt.compare(req.body.password,admindata.password).then((status)=>{
              if (status) {

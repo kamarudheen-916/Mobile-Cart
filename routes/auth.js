@@ -21,7 +21,7 @@ router.get('/login/failed',(req,res)=>{
         message:'Log In failure'
        
     })
-    console.log('----------------------------------');
+
 })
 
 
@@ -51,7 +51,7 @@ router.get("/google/callback",(req, res, next) => {
             req.session.googleExistingUser =true
             return res.redirect("/login"); // Redirect to a failure page
           }
-          console.log(user);
+          
           let userInformation = {
             username: user.displayName,
             email: user.emails[0].value,
@@ -59,12 +59,12 @@ router.get("/google/callback",(req, res, next) => {
             status:"Active",
             timeStamp:Date.now(),
           };
-          console.log(userInformation);
+       
     
           const insert=await users.insertMany([userInformation])
     
           if(insert){
-            console.log("inserted");
+        
             // Manually set a session variable with user data
           req.session.useremail = user.emails[0].value;
       
@@ -111,7 +111,6 @@ router.get("/google-login/callback",(req, res, next) => {
           req.flash("errmsg","existing user,please login")
           return res.redirect("/login"); // Redirect to a failure page
         }
-        console.log('---------------user:',user);
         let userInformation = {
           username: user.displayName,
           email: user.emails[0].value,
@@ -119,7 +118,7 @@ router.get("/google-login/callback",(req, res, next) => {
           status:"Active",
           timeStamp:Date.now(),
         };
-        console.log(userInformation);
+        
   
         // const insert=await users.insertMany([userInformation])
         const username = await users.findOne({username:userInformation.username})

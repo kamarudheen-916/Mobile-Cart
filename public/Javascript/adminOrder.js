@@ -43,7 +43,7 @@ function verifyReturnOrder(orderId) {
       if (data.success) {
         const returnOrderRequestModalBody = document.getElementById('returnOrderRequestModalBody');
         data.OrderReturnData.Products.forEach((product) => {
-          console.log(product);
+          
           document.getElementById('RetunOderID').value =  orderId
           if(product.Status == 'Requested for return'){
           const productContainer = document.createElement('div');
