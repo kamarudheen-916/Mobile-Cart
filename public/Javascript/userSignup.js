@@ -34,11 +34,5 @@ function signup_validation() {
       document.getElementById("ConformPassword_error_signUp").textContent = "Passwords do not match";
       return false;
     }
-
-    Swal.fire({
-      title: "Good job!",
-      text: "Email Send Successfully!",
-      icon: "success"
-    });
     return true; // If all validation passes, allow form submission
   }
