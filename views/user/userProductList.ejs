@@ -70,31 +70,13 @@
               <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
                 <div class="accordion-body">
                    <!-- Range input for price -->
-                  <!-- <div class="range">
-                   
-                    <input type="range" class="form-range" id="customRange1" />
-                  </div> -->
-                  <div class="row mb-3">
-                    <!-- Minimum price input -->
-                    <div class="col-6">
-                      <p class="mb-0">Min</p>
-                      <div class="form-outline">
-                        <input type="number" id="minPrice" class="form-control" />
-                        <label class="form-label text-danger" id="minPriceError" for="minPrice"></label>
-                      </div>
-                    </div>
-                    <!-- Maximum price input -->
-                    <div class="col-6">
-                      <p class="mb-0">Max</p>
-                      <div class="form-outline">
-                        <input type="number" id="maxPrice" class="form-control" />
-                        <label class="form-label text-danger" id="maxPriceError" for="maxPrice"></label>
-                      </div>
-                    </div>
+                  <div class=" d-flex flex-column">
+                      <button class="btn btn-outline-secondary mb-4" onclick="priceFiltering('low')">Low to heigh <span class="h5 mx-5"><i class="fa-solid fa-arrow-up-short-wide "></i></span></button>
+                      <button class="btn btn-outline-secondary" onclick="priceFiltering('heigh')">Heigh to low  <span class="h5 mx-5"><i class="fa-solid fa-arrow-down-short-wide"></i></span></button>
+                    <!-- <input type="range" class="form-range" id="customRange1" /> -->
                   </div>
+                  
                   <!-- Apply button -->
-                  <span id="PriceCheck"></span>
-                  <button type="submit" onclick="priceFitering()" class="btn btn-white w-100 border border-secondary">Apply</button>
                 </div>
               </div>
             </div>
@@ -109,12 +91,9 @@
       <div class="col-lg-8">
         <div class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
           <strong class="d-block py-2">Product list </strong>
-          <div class="ms-auto">
-            
-            
-          </div>
         </div>
         <!-- item shows here -->
+        <div><input  type="text" id="categoryFromIndex" style="display: none;" value="<%=category%>"></div>
        <!-- Product List -->
           <div class="col-lg-12">
               <div id="productList">
@@ -123,82 +102,19 @@
           </div>
 
         <!-- item shows here -->
-        <div id="mainProductShow">
-         <%for(let i=0;i<products.length;i++){%>
-        <div class="row justify-content-center mb-3" id="productListMain">
-          <div class="col-md-12">
-            <div class="card shadow-0 border rounded-3">
-              <div class="card-body">
-                <div class="row g-0">
-                  <div class="col-xl-3 col-md-4 d-flex justify-content-center">
-                    <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
-                      <a href="/productDetails/<%=products[i]._id%>" class="text-decoration-none">
-                        <img  src="/static/uploads/<%=products[i].image[0]%>"class="w-50" />
-                      </a>
-                      <a href="#!">
-                        <div class="hover-overlay">
-                          <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-xl-6 col-md-5 col-sm-7">
-                    <a href="/productDetails/<%=products[i]._id%>" class="text-decoration-none">
-                       <h5 class="text-success"><%=products[i].name%></h5>
-                    </a>
-
-                    <p class="text mb-4 mb-md-0">
-                      <%=products[i].description%>
-                    </p>
-                  </div>
-                  <div class="col-xl-3 col-md-3 col-sm-5">
-                    <div class="d-flex flex-row align-items-center mb-1">
-                      <h4 class="mb-1 me-1">₹<%=products[i].price%></h4>
-                   
-                    </div>
-                    <h6 class="text-success">Free shipping</h6>
-                    <div id="home_Addtocart" class="d-flex justify-content-evenly">
-                      <%if(products[i].stock>0){%>
-                      <% if (cartProductIds.has(products[i]._id.toString())) { %>
-                      <div>  <a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a></div>
-                      <% } else { %>
-                       
-                        
-                          <button id="addToCartButton_<%= products[i]._id %>" class="btn btn-success" onclick="addToCart('<%= products[i]._id %>', 1)">Add To Cart</button>
-                           <a class="text-light btn btn-secondary" style="display: none; " id="GoToCart_fromIndex<%= products[i]._id %>" href="/get_cart">Go To Cart</a>
-                        
-                      <% } %>
-                      <%}else{%>
-                        <button class="btn" disabled>Add To Cart</button>
-                        <%}%>          
-                      
-                     <div class="mx-1">
-                      <button id="add_wishlist" type="button" onclick="toggleWishlist('<%= products[i]._id %>')" class="btn btn-success">
-                        <i class="fa fa-heart<% if (wishlist.map(item => item.Product_id.toString()).includes(products[i]._id.toString())) { %> text-danger<% } %>" id="add_wishlist_icon" data-product-id="<%= products[i]._id %>"></i>
-                      </button>
-                     </div>
-                      
-                    
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-       <%}%>	
-      </div>
-        <!-- Pagination -->
         
-        <%for(let i=0;i<products_count;i++){%>
-          <%if(i===pageNumber){%>
-          <a name="pageInationNumber" onclick="pageInationButton()" id="pageInationButton<%=i%>" class="btn btn-secondary m-2" href="/userProductList/<%=products[0].category%>?page=<%=i%>"><%=i+1%></a>
-         <%}else{%>
-          <a name="pageInationNumber" onclick="pageInationButton()" id="pageInationButton<%=i%>" class="btn btn-success m-2" href="/userProductList/<%=products[0].category%>?page=<%=i%>"><%=i+1%></a>
+        <!-- Pagination -->
 
-          <%}%>
-          <%}%>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li> -->
+          <div id="PaginationForProductList" class="d-flex">
+              
+          </div>
+          <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+        </ul>
+  </nav>
+        
         <!-- Pagination -->
       </div>
     </div>
@@ -208,149 +124,65 @@
 
 <%-include('../partials/user-footer')-%>
 <script>
-  function filterByCategory(category) {
-   
+  document.addEventListener('DOMContentLoaded',()=>{
+      const categoryFromIndex =  document.getElementById('categoryFromIndex').value
+      
+      filterByCategory(categoryFromIndex,1)
+
+  })
+</script>
+<script>
+  let global_cartProductIds =  new Set() 
+  let global_wishlist = []  
+  let AllProducts = []
+  function filterByCategory(category,pageNumber) {
     document.querySelectorAll('.category-link').forEach((element) => {
         element.style.backgroundColor = ''; // Set to an empty string to remove inline style
     });
     // Change the color of the clicked category link
     document.getElementById(category).style.backgroundColor = 'gray'
-   
-    // Hide the product list while fetching and updating
-    document.getElementById('productList').style.display = 'none';
-
-    document.getElementById('mainProductShow').style.display = 'none';
     fetch(`/filterByCategory?category=${category}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-       
-          const product =  data.Products
+           AllProducts =  data.Products
          const wishlist =  data.wishlist
+         global_wishlist = wishlist
           let cartProductIds = data.cartProductIds instanceof Set ? data.cartProductIds : new Set();
+          global_cartProductIds =  cartProductIds
+        
+          displayProducts (AllProducts,pageNumber=1,cartProductIds,wishlist)
 
-          // Get the product list container
-          const productListContainer = document.getElementById('productList');
-
-          // Clear existing content in the container
-          productListContainer.innerHTML = '';
-
-          // Iterate through the products and append them to the productListDiv
-          data.Products.forEach((product) => {
-            const productHTML = `
-              <div class="row justify-content-center mb-3">
-                <div class="col-md-12">
-                  <div class="card shadow-0 border rounded-3">
-                    <div class="card-body">
-                      <div class="row g-0">
-                        <div class="col-xl-3 col-md-4 d-flex justify-content-center">
-                          <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
-                            <a href="/productDetails/${product._id}" class="text-decoration-none">
-                              <img src="/static/uploads/${product.image[0]}" class="w-50" />
-                            </a>
-                            <a href="#!">
-                              <div class="hover-overlay">
-                                <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
-                              </div>
-                            </a>
-                          </div>
-                        </div>
-                        <div class="col-xl-6 col-md-5 col-sm-7">
-                          <a href="/productDetails/${product._id}" class="text-decoration-none">
-                            <h5 class="text-success">${product.name}</h5>
-                          </a>
-                          <p class="text mb-4 mb-md-0">${product.description}</p>
-                        </div>
-                        <div class="col-xl-3 col-md-3 col-sm-5">
-                          <div class="d-flex flex-row align-items-center mb-1">
-                            <h4 class="mb-1 me-1">₹${product.price}</h4>
-                          </div>
-                          <h6 class="text-success">Free shipping</h6>
-                          <div class="mt-4">
-                            ${
-                              cartProductIds.has(product._id.toString())
-                                ? `<a class="text-light btn btn-secondary" href="/get_cart">Go To Cart</a>`
-                                : `<a id="addToCartButton_${product._id}" class="btn btn-success" onclick="addToCart('${product._id}', 1)">Add To Cart</a>`
-                            }
-                            <button id="add_wishlist" type="button" onclick="toggleWishlist('${product._id}')" class="btn btn-success">
-                              <i class="fa fa-heart${
-                                wishlist.map((item) => item.Product_id.toString()).includes(product._id.toString())
-                                  ? ' text-danger'
-                                  : ''
-                              }" id="add_wishlist_icon" data-product-id="${product._id}"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            `;
-
-            // Append the productHTML to the productListDiv
-            productListContainer.innerHTML += productHTML;
-          });
-     // Show the product list after updating
-     document.getElementById('productList').style.display = 'block';
+          document.getElementById('PaginationForProductList').innerHTML = ""
+    
+      // pageination ====================================================
+    if(AllProducts.length>5){
+      for(let i=1;i<=Math.ceil(AllProducts.length / 5);i++){
+      document.getElementById('PaginationForProductList').innerHTML += 
+    `
+      <li class="page-item"><button onclick='pageination(${i})' class="page-link">${i}</button></li>
+    `
+    }
+  }
 
 }
 });
 }
 
-//---------------------------------------------------------------
+function pageination (pageNumber){
 
+    displayProducts(AllProducts,pageNumber)
+}
 
-
-  // Add an event listener to the range input
- 
-
-  // Function to update label values based on the range input
-  function priceFitering() {
-    // Get the current value of the range input
-
-    const minPriceInput = document.getElementById('minPrice').value;
-    const maxPriceInput = document.getElementById('maxPrice').value;
-    const minPriceError = document.getElementById('minPriceError')
-    const maxPriceError = document.getElementById('maxPriceError')
-    if(minPriceInput =='' || maxPriceInput ==''){
-      if(minPriceInput =='' ){
-      minPriceError.innerText ='Required'
-    }
-    else{
-      minPriceError.innerText =''
-    }
-    if(maxPriceInput =='' ){
-      maxPriceError.innerText ='Required'
-    }else{
-      maxPriceError.innerText =''
-    }
-    }else if(maxPriceInput < minPriceInput){
-        Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Minimum  must be lesser than Maximum!",
-         });
-         
-    }else{
-
-      fetch(`/productListPagePriceFilter?minPriceInput=${minPriceInput}&maxPriceInput=${maxPriceInput}`,{})
-      .then((res)=>res.json())
-      .then((data)=>{
-        if (data.success) {
-         
-          const product =  data.Products
-         const wishlist =  data.wishlist
-          let cartProductIds = data.cartProductIds instanceof Set ? data.cartProductIds : new Set();
-
-          // Get the product list container
-          const productListContainer = document.getElementById('productList');
-
-          // Clear existing content in the container
-          productListContainer.innerHTML = '';
-
-          // Iterate through the products and append them to the productListDiv
-          data.Products.forEach((product) => {
+function displayProducts (products,pageNumber){
+let wishlist = global_wishlist
+let cartProductIds = global_cartProductIds
+const productListContainer = document.getElementById('productList');
+productListContainer.innerHTML = '';
+const start =  (pageNumber-1) * 5
+const end = start + 5
+  const displayProducts =  products.slice(start,end)
+  displayProducts.forEach((product) => {
             const productHTML = `
               <div class="row justify-content-center mb-3">
                 <div class="col-md-12">
@@ -405,16 +237,24 @@
             // Append the productHTML to the productListDiv
             productListContainer.innerHTML += productHTML;
           });
-     // Show the product list after updating
-     document.getElementById('productList').style.display = 'block';
+}
+
+function priceFiltering(sortMode){
+  let sortProducts  = AllProducts,sortedPrducts =[]
+
+  if(sortMode ===  'low'){
+
+    sortedPrducts =  sortProducts.sort((a,b)=> a.price - b.price)
+  }else if(sortMode === 'heigh'){
+ 
+    sortedPrducts =  sortProducts.sort((a,b)=>  b.price - a.price)
+  }
+
+  AllProducts =  sortedPrducts
+  displayProducts (AllProducts,1)
 
 }
-      })
-    }
 
-
-        
-  }
 </script>
 
 <script>

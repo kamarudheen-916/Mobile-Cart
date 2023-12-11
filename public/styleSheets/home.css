@@ -47,7 +47,7 @@ video{
     list-style: none;
    }
    #home_group li a{
-    width: 95px;
+    /* width: 95px; */
    }
    footer{
     background: #000;
@@ -78,7 +78,7 @@ video{
 #header2{
     display: none;
 }
-   @media (max-width: 1000px) {
+   @media (max-width: 950px) {
     #header1 {
       display: none;
     }

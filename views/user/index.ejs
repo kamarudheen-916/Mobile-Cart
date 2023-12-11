@@ -40,12 +40,12 @@
 <!-- show banner -->
 
 <!-- show products -->
-<div class="container mt-5">
+<div class="container-fluid mt-5">
   <section>
     <div class="row">
       <%for(let i=0;i<products.length;i++){%>
-        <div class=" col-lg-4 col-12 col-sm-6 mt-5  mb-5 d-flex justify-content-center ">
-              <div id="product_view" style="width: 18rem;" class="card  d-flex align-items-center border border-0 shadow ">
+        <div class=" col-lg-4 col-12 col-sm-12 mt-5  mb-5 d-flex justify-content-center ">
+              <div id="product_view"  class="card  d-flex align-items-center border border-0 shadow ">
                   
                     <a id="product_list_link" class="text-decoration-none text-dark " href="/userProductList/<%=products[i].category%>">
                             <div id="image_user">

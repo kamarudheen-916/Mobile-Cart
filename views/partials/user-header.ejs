@@ -1,6 +1,6 @@
 <header id="header1">
     <nav  class="navbar  navbar-expand-lg navbar-dark bg-black">
-        <div id="nav" class="container-fluid d-flex justify-content-between ">
+        <div id="nav" class="container-fluid d-flex justify-content-evenly ">
           <a  class="navbar-brand col-md-2 text-warnig" href="#">
            
             <img id="logo" src="/static/images/logo3.png" alt="">
@@ -16,12 +16,12 @@
           
             <span class="navbar-toggler-icon  rounded "></span>
           </button>
-          <div class="collapse navbar-collapse px-5" id="navbarSupportedContent">
-            <ul id="home_group" class="navbar-nav me-auto mb-2 mb-lg-0">
+          <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul id="home_group" class="navbar-nav me-auto mb-2 ">
             </ul>
           </div>
-          <div class="collapse navbar-collapse px-5" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto ">
               <li class="nav-item">
                 <a class="nav-link active text-light head_hover" aria-current="page" href="/">
                   <i class="fa-solid fa-house " style="color: #ffffff;font-size: x-large;"></i>
@@ -42,25 +42,25 @@
             </ul>
           </div>
           
-          
-
-          <div class="search px-5 ">  
-            <form action="/search" id="searchForm" class="d-flex" role="search">
-              <input id="searchInput" name="searchInput" class="form-control me-2 bg-black text-light border border-success" type="search" placeholder="Search" aria-label="Search">
-              <button  class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-          </div>
-          <div class="dropdown  " style="margin-right: 0px; ">
+          <div class="dropdown  " style="margin-right: 20px; ">
             <button class="btn border border-success btn-secondary bg-black dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-           <%=username?username:"user"%>
+           user
             </button>
-            <ul class="dropdown-menu  " style="width: 50%; background: #6d6a6a; color: #fcfcfc;">
+            <ul class="dropdown-menu  " style="width: 50%; background: #090909; color: #fcfcfc;">
+              <li class="mr-5 p-1 border-bottom"><%=username?username:"user"%></li>
               <%if(username){%>
-                <li class="mr-5"><a class="dropdown-item "  style="width: 50%; background: #6d6a6a; color: #fcfcfc;" href="/logout">LogOut</a></li>
+                <li class="mr-5 border-bottom rounded "><a class="dropdown-item "  style="width: 50%; background: #000000; color: #fcfcfc;" href="/logout">LogOut</a></li>
               <%}else{%>
-              <li class="mr-5"><a class="dropdown-item "  style="width: 50%; background: #6d6a6a; color: #fcfcfc;" href="/login">LogIn</a></li>
+              <li class="mr-5 border-bottom rounded"><a class="dropdown-item "  style="width: 50%; background: #000000; color: #fcfcfc;" href="/login">LogIn</a></li>
               <%}%>
             </ul>
+          </div>
+
+          <div class="search me-2">  
+            <form action="/search" id="searchForm" class="d-flex" role="search">
+              <input id="searchInput" style="min-width: 180px;" name="searchInput" class="form-control me-2 bg-black text-light border border-success" type="search" placeholder="Search" aria-label="Search">
+              <button  class="btn btn-outline-success" type="submit">Search</button>
+          </form>
           </div>
         </div>
       </nav>
@@ -68,7 +68,10 @@
 <header id="header2" >
   <nav class="navbar navbar-expand-lg navbar-dark bg-black">
     <div class="container-fluid">
-      <a class="navbar-brand text-light"   href="#">Mobile Cart</a>
+      <a  class="navbar-brand col-md-2 text-warnig" href="#">
+           
+        <img id="logo" width="250px" src="/static/images/logo3.png" alt="">
+      </a>
 
       
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
