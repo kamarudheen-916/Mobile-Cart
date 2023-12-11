@@ -50,10 +50,11 @@ const userLogin_post = async(req,res)=>{
             if(status)
             {
                 console.log('login success');
-                req.session.user=req.body.username
+                req.session.user=req.body.username 
                 req.session.logedIn=true
                 const userEmail = user.email
                 req.session.userEmail = userEmail;
+                // localStorage.setItem("UserEmail", userEmail);
 
                 // req.session.newOtp = Number(sendMail(req,res,userEmail))
                 // console.log('-----------------neqwOtp :',req.session.newOtp);

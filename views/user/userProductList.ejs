@@ -1,25 +1,44 @@
 <%-include('../layout/head')-%>
 <%-include('../partials/user-header')-%>
 
+<style>
+
+#sidebarOnBelow1000PX{
+    display: none;
+}
+
+
+@media (max-width: 992px) {
+    #sidebarOnBelow1000PX {
+ 
+      display: block;
+    }
+    #sidebarOnAbove1000PX{
+      display: none;
+    }
+
+  }
+</style>
+
 <section class="" style="padding-top: 125px;">
   <div class="container">
     <div class="row">
       <!-- sidebar -->
-      <div class="col-lg-3 mt-5">
+      <div class="col-lg-3 mt-5" id="sidebarOnAbove1000PX">
         <!-- Toggle button -->
         <button
                 class="btn btn-outline-secondary mb-3 w-100 d-lg-none"
                 type="button"
                 data-mdb-toggle="collapse"
-                data-mdb-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
+                data-mdb-target="#FilterInProductListContent"
+                aria-controls="FilterInProductListContent"
                 aria-expanded="false"
                 aria-label="Toggle navigation"
                 >
           <span>Show filter</span>
         </button>
         <!-- Collapsible wrapper -->
-        <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
+        <div class="collapse card d-lg-block mb-5" id="FilterInProductListContent">
           <div class="accordion" id="accordionPanelsStayOpenExample">
             <div class="accordion-item">
               <h2 class="accordion-header" id="headingOne">
@@ -86,7 +105,85 @@
         </div>
       </div>
       <!-- sidebar -->
-      
+      <!-- sidebar on below 1000px -->
+      <div id="sidebarOnBelow1000PX" class="">
+        <button type="button" class="btn btn-secondary w-100" data-toggle="collapse" data-target="#demo">Show Filters</button>
+        <div id="demo" class="collapse">
+              <!-- sidebar -->
+              <div class="col-lg-3 mt-5">
+                <!-- Toggle button -->
+         
+                <!-- Collapsible wrapper -->
+                <div class=" card d-lg-block mb-5" id="FilterInProductListContent">
+                  <div class="accordion" id="accordionPanelsStayOpenExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button
+                                class="accordion-button text-dark bg-light" 
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#panelsStayOpen-collapseOne"
+                                aria-expanded="false"
+                                aria-controls="panelsStayOpen-collapseOne"
+                                >
+                          Categories
+                        </button>
+                      </h2>
+                      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
+                        <div class="accordion-body">
+                          <ul class="list-unstyled">
+                            <% allcategorys.forEach(category => { %>
+                              <li>
+                                <a onclick="filterByCategory('<%= category.name %>')" id="<%=category.name%>" class="text-dark category-link"  style="text-decoration: none; cursor: pointer;">
+                                  <%= category.name %>
+                                </a>
+                              </li>
+                            <% }); %>
+                            
+                            
+                            
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    
+
+                    <!-----------------------------------------------------------------------------------------------  -->
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingThree">
+                        <button
+                          class="accordion-button text-dark bg-light"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#panelsStayOpen-collapseThree"
+                          aria-expanded="false"
+                          aria-controls="panelsStayOpen-collapseThree"
+                        >
+                          Price
+                        </button>
+                      </h2>
+                      <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
+                        <div class="accordion-body">
+                          <!-- Range input for price -->
+                          <div class=" d-flex flex-column">
+                              <button class="btn btn-outline-secondary mb-4" onclick="priceFiltering('low')">Low to heigh <span class="h5 mx-5"><i class="fa-solid fa-arrow-up-short-wide "></i></span></button>
+                              <button class="btn btn-outline-secondary" onclick="priceFiltering('heigh')">Heigh to low  <span class="h5 mx-5"><i class="fa-solid fa-arrow-down-short-wide"></i></span></button>
+                            <!-- <input type="range" class="form-range" id="customRange1" /> -->
+                          </div>
+                          
+                          <!-- Apply button -->
+                        </div>
+                      </div>
+                    </div>
+                  
+                  
+                  </div>
+                </div>
+              </div>
+              <!-- sidebar -->
+    </div>
+  </div>
+      <!-- sidebar on below 1000px -->
       <!-- content -->
       <div class="col-lg-8">
         <div class="d-sm-flex align-items-center border-bottom mb-4 pb-3">

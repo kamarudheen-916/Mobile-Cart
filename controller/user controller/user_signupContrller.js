@@ -26,8 +26,9 @@ const userSignup_post_generate_otp = async (req,res)=>{
       if(signUp_username!==username && signup_email!==userEmail ){
           req.session.duplicateUserNameMessage = ''
           const userEmail = req.body.email
+          req.session.userEmail =  req.body.email
           req.session.newOtp = Number(sendMail(req,res,userEmail))
-          req.session.user=req.body.username
+          req.session.user=req.body.username 
           req.session.OTPerrorMessage = false;
           // console.log(req.session.user);
       

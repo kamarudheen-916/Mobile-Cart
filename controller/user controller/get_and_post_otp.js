@@ -40,7 +40,9 @@ const userOtp_post =async (req,res)=>{
 //user resend OTP get
 const get_resendOTP = (req,res)=>{
     try {
-        email= req.session.userEmail;
+        let email= req.session.userEmail;
+        // let email = localStorage.getItem("UserEmail");
+
         console.log('--------------------------------Email resend otp',email);
         req.session.newOtp = Number(sendMail(req,res,email))
        console.log('resend otp successful');
