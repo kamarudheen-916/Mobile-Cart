@@ -38,6 +38,7 @@
     "otp-generator": "^4.0.1",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
+    "pdfkit": "^0.14.0",
     "razorpay": "^2.9.2",
     "sharp": "^0.32.6",
     "two-step-auth": "^1.1.2"

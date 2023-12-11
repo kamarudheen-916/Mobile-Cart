@@ -1,8 +1,9 @@
 const ejs = require('ejs');
-const pdf = require('html-pdf');
+
 const fs = require('fs');
 const exceljs = require('exceljs');
 const dateFormat = require('date-fns/format');
+const salesPdf = require('./salesPdfgenerator')
 
 
 module.exports = {
@@ -10,26 +11,19 @@ module.exports = {
       const formattedStartDate = dateFormat(new Date(startDate), 'yyyy-MM-dd');
       const formattedEndDate = dateFormat(new Date(endDate), 'yyyy-MM-dd');
       try {
-        const totalAmount = parseInt(totalSales)
         
-        const template = fs.readFileSync('utility/template.ejs', 'utf-8');
-        const html = ejs.render(template, { orders, startDate, endDate, totalAmount });
         
         if (format === 'pdf') {
-          const pdfOptions = {
-            format: 'Letter',
-            orientation: 'portrait',
-          };
-  
-          const filePath = `public/salesReport/pdf/sales-report-${formattedStartDate}-${formattedEndDate}.pdf`;
-          pdf.create(html, pdfOptions).toFile(filePath, (err, response) => {
-            if (err) {
-              console.error('Error generating PDF:', err);
-              res.status(500).send('Internal Server Error');
-            } else {
-              res.status(200).download(response.filename);
-            }
-          });
+         
+          const pdfGenarate=await  salesPdf(orders,startDate,endDate)
+          console.log("pdf generated successfully");
+          res.setHeader("Content-Type", "application/pdf");
+          res.setHeader(
+            "Content-Disposition",
+            "attachment; filename=sales Report.pdf"
+          );
+          console.log('pdf....');
+          res.status(200).end(pdfGenarate);
         } else if (format === 'excel') {
           const workbook = new exceljs.Workbook();
           const worksheet = workbook.addWorksheet('Sales Report');
