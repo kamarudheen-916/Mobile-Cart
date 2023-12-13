@@ -45,7 +45,7 @@ router.get("/google/callback",(req, res, next) => {
           }
        
           if (!user) {
-            // Handle authentication failure
+            
             console.error("Authentication failed:", info.message);
             req.flash("errmsg","existing user,please login")
             req.session.googleExistingUser =true
